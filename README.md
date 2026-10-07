@@ -16,6 +16,13 @@ and this repository is the human-readable source of that copy. Each vendored
 release is tagged here (`v1.1.0`, …); the version is `const VERSION` in
 `php/includes/load.php`, so you can check out the matching tag.
 
+**Download:** [`bfields.zip`](https://github.com/bPlugins/bfields/releases/latest/download/bfields.zip)
+(latest release) — exactly what a plugin unzips into `lib/bfields/`: `php/`,
+`build/`, `languages/`, `README.md`, `LICENSE` and `composer.json`. Every
+version, with its source archive and checksum, is on the
+[Releases](https://github.com/bPlugins/bfields/releases) page; a specific one is
+`https://github.com/bPlugins/bfields/releases/download/v1.1.0/bfields.zip`.
+
 | Shipped in `lib/bfields/` | Built from |
 | --- | --- |
 | `php/` | itself — plain PHP, not compiled |
