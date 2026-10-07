@@ -1,0 +1,35 @@
+{
+    "unique": "_bp3dimages_",
+    "note": "Written by the free plugin: bp_3d_decoder and a flat bp3d_model_src (undeclared here), no Pro keys.",
+    "value": {
+        "currentViewer": "modelViewer",
+        "bp_3d_model_type": "mcycle",
+        "bp_3d_src_type": "upload",
+        "bp_3d_src": {
+            "url": "http://dev.local/wp-content/uploads/2026/02/RobotExpressive.glb",
+            "id": "31",
+            "width": "",
+            "height": "",
+            "thumbnail": "http://dev.local/wp-includes/images/media/default.svg",
+            "alt": "",
+            "title": "RobotExpressive",
+            "description": ""
+        },
+        "bp_camera_control": "1",
+        "bp_3d_zooming": "1",
+        "bp_3d_loading": "auto",
+        "bp_3d_progressbar": "0",
+        "bp_3d_width": {
+            "width": "96",
+            "unit": "%"
+        },
+        "bp_3d_height": {
+            "height": "400",
+            "unit": "px"
+        },
+        "bp_3d_align": "center",
+        "bp_model_bg": "#8224e3",
+        "bp_3d_decoder": "draco",
+        "bp3d_model_src": "https://example.com/models/free.glb"
+    }
+}

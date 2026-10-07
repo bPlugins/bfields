@@ -1,0 +1,384 @@
+/*
+ * bfields — the page frame (`'frame' => 'page'`, ui/layout/EditorShell.tsx).
+ *
+ * The one sheet allowed outside `.bfields-app` (base.css rule 1): it hands the
+ * post editor SCREEN to the design, so it restyles wp-admin's own page. Every
+ * rule is keyed on body.bfields-page-editor (Metabox::body_class()); the
+ * notice bars also on body.bfields-screen (OptionsPage::body_class()).
+ *
+ * Hiding WordPress's editor also needs `body.js`, and stops as soon as the
+ * framework gives up (the fallback turned `is-stuck`, or the error boundary
+ * drew): the stock editor then comes back, so the post can still be saved.
+ */
+
+/* ---- the page ---- */
+
+html:has(> body.bfields-page-editor),
+body.bfields-page-editor {
+	background: #f8f9fa;
+}
+
+/* The design's column: 1185px with 48px gutters in the 1280px content well. */
+body.bfields-page-editor #wpcontent,
+body.bfields-page-editor #wpfooter {
+	padding-left: 48px;
+	padding-right: 48px;
+}
+
+body.bfields-page-editor #wpbody-content .wrap {
+	/* --bfields-page-width: the page-edge handles, with `resizable` on. */
+	max-width: var(--bfields-page-width, 1185px);
+	margin: 10px auto 0;
+}
+
+body.bfields-page-editor.bfields-page-align-start #wpbody-content .wrap {
+	margin-left: 0;
+}
+
+@media screen and (max-width: 782px) {
+	body.bfields-page-editor #wpcontent {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+
+/* ---- WordPress's editor gives way ----
+ * Only what the frame redraws is hidden: the heading, the title box and the
+ * Publish box (#submitdiv). EditorShell moves the rest of the side column into
+ * the frame's sidebar; #post-body-content keeps other plugins' output
+ * (edit_form_after_title / _after_editor) under the frame. */
+
+body.js.bfields-page-editor:not(:has(.bfields-fallback.is-stuck, .bfields-boundary)) :is(
+	.wrap > .wp-heading-inline,
+	.wrap > .page-title-action,
+	#titlediv > #titlewrap,
+	#titlediv > .inside,
+	#submitdiv,
+	#postbox-container-1
+) {
+	display: none;
+}
+
+/* One column: other plugins' main boxes stay, full width, under the editor. */
+body.js.bfields-page-editor:not(:has(.bfields-fallback.is-stuck, .bfields-boundary)) #poststuff #post-body.columns-2 {
+	margin-right: 0;
+}
+
+body.js.bfields-page-editor:not(:has(.bfields-fallback.is-stuck, .bfields-boundary)) #poststuff #post-body.columns-2 #postbox-container-2 {
+	float: none;
+	width: 100%;
+	margin-right: 0;
+}
+
+/* Nothing left under the frame (no visible main box, no other output in the content column): no empty band. */
+body.js.bfields-page-editor:not(:has(.bfields-fallback.is-stuck, .bfields-boundary)) #poststuff:not(:has(#postbox-container-2 .postbox:not(.hide-if-js):not([hidden]))):not(:has(#post-body-content > :not(#titlediv, script, style, template, input[type="hidden"], .hidden, .hide-if-js, br))) {
+	display: none;
+}
+
+body.js.bfields-page-editor:not(:has(.bfields-fallback.is-stuck, .bfields-boundary)) #post-body-content:not(:has(> :not(#titlediv, script, style, template, input[type="hidden"], .hidden, .hide-if-js, br))) {
+	margin-bottom: 0;
+}
+
+body.bfields-page-editor #poststuff {
+	margin-top: 24px;
+}
+
+/* ---- notices: one line each — ./notices.css ---- */
+
+/* ---- inside the root ---- */
+
+/* The host's own markup fills the stage (a live viewer, not a poster). */
+.bfields-app .bfields-stagecard--host .bfields-stagecard__stage {
+	display: block;
+	aspect-ratio: auto;
+	min-height: 408px;
+	background: #f1f4f8;
+	color: inherit;
+}
+
+.bfields-app .bfields-stagecard--host .bfields-stagecard__stage > * {
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.bfields-app .bfields-stagecard--host .bfields-stagecard__actions {
+	display: flex;
+	gap: 14px;
+	padding: 16px 17px 20px;
+}
+
+/* The Preview tab puts Publish first (Figma "Model (4)"). */
+.bfields-app .bfields-side--stage > .bfields-publish {
+	order: -1;
+}
+
+/* ---- shortcode chip: drawn at the title's end and under Publish until one is picked ---- */
+
+/* The field box moves from the input to the wrapper so the chip sits inside it. */
+.bfields-app .bfields-title-field {
+	margin-top: 23px;
+}
+
+.bfields-app .bfields-title-field .bfields-title-input {
+	margin-top: 0;
+}
+
+.bfields-app .bfields-title-field--chip {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	height: 52px;
+	padding-right: 8px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: #fff;
+}
+
+.bfields-app .bfields-title-field--chip:has(> .bfields-title-input:focus-visible) {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: -1px;
+}
+
+.bfields-app .bfields-title-field--chip .bfields-title-input {
+	flex: 1;
+	min-width: 0;
+	height: 50px;
+	border: 0;
+	background: transparent;
+}
+
+.bfields-app .bfields-title-field--chip .bfields-title-input:focus-visible {
+	outline: 0;
+}
+
+.bfields-app .bfields-shortcode__chip--title,
+.bfields-app .bfields-shortcode__chip--side {
+	justify-content: flex-start;
+	gap: 10px;
+	border: 1px solid var(--bfields-border);
+	background: var(--bfields-field);
+	color: var(--bfields-row-title);
+	font-size: 13px;
+	font-weight: 500;
+	text-align: start;
+	cursor: pointer;
+}
+
+.bfields-app .bfields-shortcode__chip--title {
+	flex: none;
+	max-width: 50%;
+	height: 36px;
+	padding: 0 4px 0 12px;
+}
+
+.bfields-app .bfields-shortcode__chip--title .bfields-shortcode__icon {
+	width: 26px;
+	height: 26px;
+}
+
+/* Grey so the primary button stays the column's only blue; the hint is its tooltip. */
+.bfields-app .bfields-shortcode__chip--side {
+	width: 100%;
+	height: auto;
+	min-height: 45px;
+	padding: 6px 7px 6px 12px;
+}
+
+.bfields-app .bfields-shortcode__chip--title:hover,
+.bfields-app .bfields-shortcode__chip--side:hover {
+	border-color: var(--bfields-primary);
+}
+
+.bfields-app .bfields-shortcode__chip--title:focus-visible,
+.bfields-app .bfields-shortcode__chip--side:focus-visible {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: 1px;
+}
+
+.bfields-app .bfields-shortcode__label {
+	flex: none;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-shortcode__chip--title code,
+.bfields-app .bfields-shortcode__chip--side code {
+	flex: 1;
+	min-width: 0;
+	padding: 0;
+	background: none;
+	font-family: var(--bfields-font-mono);
+	font-size: 12.5px;
+	color: inherit;
+	overflow-wrap: anywhere;
+	white-space: normal;
+}
+
+.bfields-app .bfields-shortcode__chip--title code {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.bfields-app .bfields-shortcode__icon {
+	flex: none;
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 6px;
+	background: #fff;
+	color: #374151;
+}
+
+.bfields-app .bfields-publish__trash {
+	align-self: center;
+	margin-top: 2px;
+	font-size: 13px;
+	color: #b32d2e;
+	text-decoration: none;
+}
+
+.bfields-app .bfields-publish__trash:hover,
+.bfields-app .bfields-publish__trash:focus-visible {
+	color: #8a2424;
+	text-decoration: underline;
+}
+
+/* Update in place: progress on the button, a short "Saved" beside it. */
+.bfields-app .bfields-btn[aria-busy="true"] {
+	cursor: progress;
+}
+
+.bfields-app .bfields-btn__spinner {
+	flex: none;
+	width: 15px;
+	height: 15px;
+	border: 2px solid currentColor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	animation: bfields-spin 0.7s linear infinite;
+}
+
+@keyframes bfields-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.bfields-app .bfields-btn__spinner {
+		animation-duration: 2s;
+	}
+}
+
+.bfields-app .bfields-publish__saved {
+	align-self: center;
+	font-size: 13px;
+	color: #007017;
+}
+
+/* Update in place: the block editor's snackbar look (toast.ts). */
+.bfields-app .bfields-toast {
+	position: fixed;
+	z-index: 100000;
+	bottom: 24px;
+	left: 50%;
+	max-width: min(480px, calc(100vw - 32px));
+	box-sizing: border-box;
+	padding: 12px 20px;
+	border-radius: 4px;
+	background: #1e1e1e;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+	color: #fff;
+	font-family: var(--bfields-font);
+	font-size: 13px;
+	line-height: 1.5;
+	transform: translateX(-50%);
+	cursor: pointer;
+	animation: bfields-toast-in 200ms ease-out;
+}
+
+@keyframes bfields-toast-in {
+	from {
+		opacity: 0;
+		transform: translate(-50%, 12px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.bfields-app .bfields-toast {
+		animation: none;
+	}
+}
+
+.bfields-app .bfields-publish__unsaved {
+	align-self: center;
+	padding: 0;
+	border: 0;
+	background: none;
+	font: inherit;
+	font-size: 13px;
+	color: #d63638;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.bfields-app .bfields-publish__unsaved:hover,
+.bfields-app .bfields-publish__unsaved:focus-visible {
+	color: #8a2424;
+}
+
+.bfields-app .bfields-publish__unsaved:focus-visible {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: 1px;
+}
+
+.bfields-app .bfields-side__slot:empty {
+	display: none;
+}
+
+/* Other plugins' side boxes, moved in from #postbox-container-1 (EditorShell).
+   #submitdiv stays hidden by the rule above. */
+.bfields-app .bfields-side__boxes:not(:has(.postbox:not(#submitdiv, .hide-if-js, [hidden]))) {
+	display: none;
+}
+
+/* edit.css keys these on #poststuff, which the boxes have left. */
+.bfields-app .bfields-side__boxes .postbox {
+	margin: 0 0 16px;
+	border-radius: 8px;
+}
+
+.bfields-app .bfields-side__boxes .postbox-header h2 {
+	margin: 0;
+	padding: 8px 12px;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+.bfields-app .bfields-side__boxes .inside {
+	margin: 6px 0 0;
+}
+
+.bfields-app .bfields-side__boxes .meta-box-sortables {
+	min-height: 0;
+}
+
+/* A stuck sidebar taller than the window would hide those boxes' lower half: it scrolls inside itself instead. */
+@media (min-width: 1101px) {
+	.bfields-app .bfields-editor--sticky > .bfields-side:has(> .bfields-side__boxes .postbox:not(#submitdiv, .hide-if-js, [hidden])) {
+		max-height: calc(100vh - var(--wp-admin--admin-bar--height, 32px) - 108px);
+		overflow-y: auto;
+		scrollbar-width: thin;
+	}
+
+	.bfields-app .bfields-panel--sidebar .bfields-editor--sticky > .bfields-side:has(> .bfields-side__boxes .postbox:not(#submitdiv, .hide-if-js, [hidden])) {
+		max-height: calc(100vh - var(--wp-admin--admin-bar--height, 32px) - 34px);
+	}
+}

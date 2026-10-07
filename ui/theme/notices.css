@@ -1,0 +1,274 @@
+/*
+ * bfields — admin notices as one-line bars.
+ *
+ * Part of the main bundle (bfields screens: body.bfields-page-editor,
+ * body.bfields-screen) and also built alone as the `notices` bundle, which a
+ * host enqueues on its own screens (Assets::enqueue_notices() adds
+ * body.bfields-notices). Like page.css, it styles wp-admin's page, outside
+ * .bfields-app, so every rule is keyed on one of those body classes.
+ */
+
+/* ---- notices: one line each ----
+ * Any notice markup is flattened into one row: containers become rows, text
+ * blocks end in an ellipsis (pageNotices.ts adds the full text as a tooltip
+ * and a "Show more" button), button groups keep their size at the end.
+ * `.inline` notices belong to a form and are left alone; hidden ones stay
+ * hidden. A notice with a control or a trailing link is never clipped (see
+ * "notices that wrap" at the end). Settings pages (body.bfields-screen) get
+ * the same bars.
+ */
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	box-sizing: border-box;
+	min-height: 52px;
+	margin: 0 0 12px;
+	padding: 8px 16px;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: none;
+	font-size: 13px;
+	line-height: 20px;
+	color: #374151;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+/* Settings pages: the bars take the column's width and edges. #wpbody-content
+   starts 28px left of the column (the app bleeds 20px into #wpcontent's
+   gutter, then pads 48px) and ends 48px right of it. */
+body.bfields-screen #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) {
+	--bfields-notice-width: min(100% - 76px, var(--bfields-screen-width, 100vw));
+	width: var(--bfields-notice-width);
+	/* 12px above too: the first bar no longer touches the admin bar (siblings' margins collapse to 12px). */
+	margin: 12px 0 12px calc(28px + (100% - 76px - var(--bfields-notice-width)) / 2 * var(--bfields-screen-center, 1));
+}
+
+body.bfields-screen #wpbody-content .tutor-user-registration-notice-wrapper {
+	margin: 0;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline):is(.is-dismissible, .e-notice--dismissible) {
+	padding-right: 44px;
+}
+
+/* The type, as the design's round mark instead of wp-admin's left bar. */
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline)::before {
+	content: "i";
+	position: static;
+	display: inline-grid;
+	flex: none;
+	place-items: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: #dbeafe;
+	color: #2563eb;
+	font-weight: 700;
+	font-size: 13px;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline):is(.notice-warning, .update-nag)::before {
+	content: "!";
+	background: #fef3c7;
+	color: #d97706;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline):is(.notice-error, .error)::before {
+	content: "!";
+	background: #fee2e2;
+	color: #dc2626;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline):is(.notice-success, .updated)::before {
+	content: "\2713";
+	background: #dcfce7;
+	color: #16a34a;
+}
+
+/* A notice with its own mark keeps that one. */
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline):has(img, svg, .dashicons, [class*="icon"])::before {
+	display: none;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) :is(p, h1, h2, h3, h4, li, div, form, ul) {
+	flex: 1 1 auto;
+	min-width: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 13px;
+	line-height: 20px;
+}
+
+/* Text blocks: one line, cut with an ellipsis. */
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) :is(p, h1, h2, h3, h4, li, div:not(:has(> :is(div, p, h1, h2, h3, h4, ul, form)))) {
+	display: block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* Containers: a row. */
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) :is(div, form, ul):has(> :is(div, p, h1, h2, h3, h4, ul, form, li)) {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) :is(h1, h2, h3, h4) {
+	flex: none;
+	font-weight: 600;
+}
+
+/* A mark's own box does not grow. */
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) div:has(img, svg, i):not(:has(p, h1, h2, h3, h4, strong, a, .button, button)) {
+	display: flex;
+	flex: none;
+}
+
+/* Buttons keep their size, at the end. */
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) :is(p, div):has(> :is(.button, button, .e-button)),
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline).tutor-user-registration-notice > div:last-child {
+	display: flex;
+	flex: none;
+	align-items: center;
+	gap: 8px;
+	overflow: visible;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) :is(br, hr) {
+	display: none;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) :is(img, svg) {
+	flex: none;
+	max-height: 28px;
+	width: auto;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) :is(.button, .e-button) {
+	flex: none;
+	min-height: 32px;
+	margin: 0;
+	line-height: 30px;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) :is(.notice-dismiss, .e-notice__dismiss) {
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+/* Tutor LMS draws its notice without .notice. */
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content .tutor-user-registration-notice-wrapper {
+	margin-top: 0;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline).tutor-user-registration-notice > div {
+	padding: 0;
+	margin: 0;
+	border: 0;
+	font-size: 13px;
+	color: #374151;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline).tutor-user-registration-notice > div:first-child img {
+	margin: 0;
+	max-height: 24px;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline).tutor-user-registration-notice > div:last-child {
+	flex-direction: row;
+	align-self: center;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline).tutor-user-registration-notice > div:last-child a {
+	width: auto;
+	height: auto;
+	padding: 6px 14px;
+	border-radius: 6px;
+	font-size: 13px;
+	text-decoration: none;
+}
+
+/* Elementor's side band would be a 50px stripe on a one-line bar. */
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) .e-notice__aside {
+	width: auto;
+	padding: 0;
+	background: none;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline).tutor-user-registration-notice > div:last-child a:first-child {
+	background: #1b5cf0;
+	color: #fff;
+}
+
+/* A host screen that is not a bfields screen: wp-admin's own column. Bars
+   directly in #wpbody-content keep the 20px right gutter .wrap has; inside
+   .wrap they fill it. */
+body.bfields-notices:not(.bfields-screen, .bfields-page-editor) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) {
+	margin: 12px 20px 12px 0;
+}
+
+body.bfields-notices:not(.bfields-screen, .bfields-page-editor) #wpbody-content .wrap :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) {
+	margin-inline: 0;
+}
+
+/* ---- notices that wrap ----
+ * A notice holding a form control, a button or a link that ends a paragraph
+ * keeps the bar's look but wraps, so nothing in it is cut off or unclickable.
+ * The same rules unclip a notice its "Show more" button expanded.
+ */
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline):is(:has(form, input:not([type="hidden"]), select, textarea, .button, .button-primary, .button-secondary, p > a:last-child), .bfields-notice--expanded) {
+	white-space: normal;
+	overflow: visible;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline):is(:has(form, input:not([type="hidden"]), select, textarea, .button, .button-primary, .button-secondary, p > a:last-child), .bfields-notice--expanded) :is(p, h1, h2, h3, h4, li, div) {
+	overflow: visible;
+	text-overflow: clip;
+	white-space: normal;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline):is(:has(form, input:not([type="hidden"]), select, textarea, .button, .button-primary, .button-secondary, p > a:last-child), .bfields-notice--expanded) :is(div, form, ul):has(> :is(div, p, h1, h2, h3, h4, ul, form, li)) {
+	flex-wrap: wrap;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline):is(:has(form, input:not([type="hidden"]), select, textarea, .button, .button-primary, .button-secondary, p > a:last-child), .bfields-notice--expanded) :is(p, div):has(> :is(.button, button, .e-button)) {
+	flex-wrap: wrap;
+	max-width: 100%;
+}
+
+/* A phone-wide bar: its parts stack instead of squeezing the text to a column. */
+@media screen and (max-width: 600px) {
+	:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline):is(:has(form, input:not([type="hidden"]), select, textarea, .button, .button-primary, .button-secondary, p > a:last-child), .bfields-notice--expanded) {
+		flex-wrap: wrap;
+	}
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) > .bfields-notice__more {
+	flex: none;
+	min-height: 0;
+	margin: 0;
+	padding: 0 2px;
+	border: 0;
+	background: none;
+	font: inherit;
+	font-weight: 500;
+	color: #2271b1;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) > .bfields-notice__more:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+	border-radius: 2px;
+}
+
+:is(body.bfields-page-editor, body.bfields-screen, body.bfields-notices) #wpbody-content :is(.notice, div.updated, div.error, div.update-nag, .tutor-user-registration-notice):not(.hidden, .hide-if-js, .inline) > .bfields-notice__more[hidden] {
+	display: none;
+}

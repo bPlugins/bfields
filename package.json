@@ -1,0 +1,45 @@
+{
+  "name": "@bplugins/bfields",
+  "version": "1.1.0",
+  "description": "bPlugins settings and meta-box framework \u2014 TypeScript types and schema authoring helpers. NOT the runtime.",
+  "license": "GPL-2.0-or-later",
+  "author": "bPlugins (https://bplugins.com)",
+  "homepage": "https://github.com/bPlugins/bfields#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bPlugins/bfields.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bPlugins/bfields/issues"
+  },
+  "type": "module",
+  "main": "ui/core/index.ts",
+  "types": "ui/core/index.ts",
+  "files": [
+    "ui/core"
+  ],
+  "scripts": {
+    "start": "wp-scripts start --webpack-src-dir=ui --output-path=build",
+    "build": "wp-scripts build --webpack-src-dir=ui --output-path=build",
+    "start:demo": "wp-scripts start --webpack-src-dir=demo/ui --output-path=demo/build",
+    "build:demo": "wp-scripts build --webpack-src-dir=demo/ui --output-path=demo/build",
+    "static:icons": "node demo/static/dump-icons.mjs",
+    "check-types": "tsc -p tsconfig.json --noEmit",
+    "lint:js": "wp-scripts lint-js ui",
+    "test:unit": "wp-scripts test-unit-js --config jest.config.cjs",
+    "i18n": "wp i18n make-pot . languages/bfields.pot.tmp --domain=bfields --include=php,build/index.js --exclude=node_modules,tests,demo,ui,dist,docs,lib,vendor,bfields-3dv-demo.php --skip-audit --package-name=bfields --headers='{\"Project-Id-Version\":\"bfields '$npm_package_version'\"}' && sed '/^#\\. .* of the plugin$/,/^$/d' languages/bfields.pot.tmp > languages/bfields.pot && rm languages/bfields.pot.tmp",
+    "dist": "./bin/dist.sh",
+    "test": "./bin/test.sh"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/wordpress__components": "^23.0.11",
+    "@wordpress/api-fetch": "^7.55.0",
+    "@wordpress/element": "^8.7.0",
+    "@wordpress/i18n": "^6.28.0",
+    "@wordpress/scripts": "^30.7.0",
+    "typescript": "^5.6.3"
+  }
+}

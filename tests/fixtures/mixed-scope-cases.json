@@ -1,0 +1,235 @@
+{
+	"about": "Mixed-scope rule sets: one row-local rule AND one global (4th 'all') rule, as 3D Viewer's modern_dependency on the hotspot link fields (HotspotFields::\\$styleRule). Hand-written from the scope spec; replayed by tests/ts/dependency.test.ts and tests/php/dependency-replay.php, so both engines must give `expected`.",
+	"dependency": [
+		[
+			"type",
+			"==",
+			"link"
+		],
+		[
+			"hotspot_style",
+			"!=",
+			"style-1",
+			"all"
+		]
+	],
+	"cases": [
+		{
+			"rules": [
+				{
+					"controller": "type",
+					"condition": "==",
+					"value": "link",
+					"scope": "local"
+				},
+				{
+					"controller": "hotspot_style",
+					"condition": "!=",
+					"value": "style-1",
+					"scope": "global"
+				}
+			],
+			"values": {
+				"hotspot_style": "style-2"
+			},
+			"row": {
+				"type": "link"
+			},
+			"expected": true,
+			"origin": "row is a link, root style is not style-1"
+		},
+		{
+			"rules": [
+				{
+					"controller": "type",
+					"condition": "==",
+					"value": "link",
+					"scope": "local"
+				},
+				{
+					"controller": "hotspot_style",
+					"condition": "!=",
+					"value": "style-1",
+					"scope": "global"
+				}
+			],
+			"values": {
+				"hotspot_style": "style-1"
+			},
+			"row": {
+				"type": "link"
+			},
+			"expected": false,
+			"origin": "row is a link, root style is style-1"
+		},
+		{
+			"rules": [
+				{
+					"controller": "type",
+					"condition": "==",
+					"value": "link",
+					"scope": "local"
+				},
+				{
+					"controller": "hotspot_style",
+					"condition": "!=",
+					"value": "style-1",
+					"scope": "global"
+				}
+			],
+			"values": {
+				"hotspot_style": "style-2"
+			},
+			"row": {
+				"type": "info"
+			},
+			"expected": false,
+			"origin": "row is not a link"
+		},
+		{
+			"rules": [
+				{
+					"controller": "type",
+					"condition": "==",
+					"value": "link",
+					"scope": "local"
+				},
+				{
+					"controller": "hotspot_style",
+					"condition": "!=",
+					"value": "style-1",
+					"scope": "global"
+				}
+			],
+			"values": {
+				"hotspot_style": "style-2",
+				"type": "info"
+			},
+			"row": {
+				"type": "link"
+			},
+			"expected": true,
+			"origin": "local rule reads the row before the root"
+		},
+		{
+			"rules": [
+				{
+					"controller": "type",
+					"condition": "==",
+					"value": "link",
+					"scope": "local"
+				},
+				{
+					"controller": "hotspot_style",
+					"condition": "!=",
+					"value": "style-1",
+					"scope": "global"
+				}
+			],
+			"values": {
+				"hotspot_style": "style-2",
+				"type": "link"
+			},
+			"row": {
+				"type": "info"
+			},
+			"expected": false,
+			"origin": "local rule never falls back past a row value"
+		},
+		{
+			"rules": [
+				{
+					"controller": "type",
+					"condition": "==",
+					"value": "link",
+					"scope": "local"
+				},
+				{
+					"controller": "hotspot_style",
+					"condition": "!=",
+					"value": "style-1",
+					"scope": "global"
+				}
+			],
+			"values": {
+				"hotspot_style": "style-2",
+				"type": "link"
+			},
+			"row": {},
+			"expected": true,
+			"origin": "local rule falls back to the root when the row lacks the key"
+		},
+		{
+			"rules": [
+				{
+					"controller": "type",
+					"condition": "==",
+					"value": "link",
+					"scope": "local"
+				},
+				{
+					"controller": "hotspot_style",
+					"condition": "!=",
+					"value": "style-1",
+					"scope": "global"
+				}
+			],
+			"values": {
+				"hotspot_style": "style-1"
+			},
+			"row": {
+				"type": "link",
+				"hotspot_style": "style-2"
+			},
+			"expected": false,
+			"origin": "global rule ignores the row's same-named key"
+		},
+		{
+			"rules": [
+				{
+					"controller": "type",
+					"condition": "==",
+					"value": "link",
+					"scope": "local"
+				},
+				{
+					"controller": "hotspot_style",
+					"condition": "!=",
+					"value": "style-1",
+					"scope": "global"
+				}
+			],
+			"values": {
+				"hotspot_style": "style-2"
+			},
+			"row": {
+				"type": "link",
+				"hotspot_style": "style-1"
+			},
+			"expected": true,
+			"origin": "global rule reads only the root"
+		},
+		{
+			"rules": [
+				{
+					"controller": "type",
+					"condition": "==",
+					"value": "link",
+					"scope": "local"
+				},
+				{
+					"controller": "hotspot_style",
+					"condition": "!=",
+					"value": "style-1",
+					"scope": "global"
+				}
+			],
+			"values": {},
+			"row": {
+				"type": "link"
+			},
+			"expected": true,
+			"origin": "unset global controller compares as empty"
+		}
+	]
+}

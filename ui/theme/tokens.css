@@ -1,0 +1,76 @@
+/*
+ * bfields — design tokens.
+ *
+ * Ported verbatim from bPlugins/3d-viewer-new-ui (src/styles/admin.css and
+ * src/styles/tokens.css), where every value was measured off the 1x Figma
+ * exports in assets/images/figma/. Only the prefix changed: --bp3d-* became
+ * --bfields-*, because two plugins may load this stylesheet at once and the
+ * tokens must not belong to one product (plan 4.6).
+ *
+ * The brand tokens (--bfields-primary, --bfields-save) are overridden INLINE on
+ * .bfields-root by PHP from each host's `brand` argument, so 3D Viewer keeps its
+ * blues and HTML5 Video Player can use its own.
+ *
+ * DO NOT "tidy" these numbers. 15.9px row padding and 41px toggle tracks look
+ * like mistakes and are not: they are what the exports measure.
+ */
+
+.bfields-app {
+	/* ---- surfaces ---- */
+	--bfields-bg: #f8f9fa;
+	--bfields-card: #ffffff;
+	--bfields-border: #e5e7eb;
+	--bfields-radius: 10px;
+	/* Every value control in a row matches the text field; a card's match its 44px one. */
+	--bfields-control-h: 40px;
+	--bfields-card-control-h: 44px;
+
+	/* ---- layout ---- */
+	--bfields-container: 1185px;
+	--bfields-gutter: 48px;
+
+	/* ---- brand (host-overridable) ---- */
+	--bfields-primary: #1b5cf0;
+	--bfields-primary-hover: #1450d8;
+	--bfields-save: #3b52f6;
+	--bfields-strip: #f5f8ff;
+
+	/* ---- text ---- */
+	--bfields-title: #111827;
+	--bfields-heading: #0f172a;
+	--bfields-row-title: #24242b;
+	--bfields-row-desc: #69707e;
+	--bfields-muted: #717176;
+	--bfields-placeholder: #6e7788;
+
+	/* ---- state ----
+	   Darkened from the export's hues to WCAG AA (Raju, 2 Oct 2026): 4.5:1 for
+	   text (*-fg) and 3:1 for tracks, ticks and borders, on their backgrounds. */
+	--bfields-on: #0ea473;
+	--bfields-on-fg: #0b835c;
+	--bfields-off: #ef4444;
+	--bfields-off-fg: #e41414;
+	--bfields-off-soft: #fb5f72;
+	--bfields-warn-bg: #fdf4e3;
+	--bfields-warn-fg: #996607;
+	--bfields-reset-bg: #e5fff1;
+	--bfields-reset-fg: #00843d;
+	--bfields-danger-bg: #fcdddd;
+	--bfields-danger-fg: #cc1111;
+	--bfields-info-bg: #eff6ff;
+	--bfields-field: #f3f4f6;
+
+	/* Exposure / Shadow Intensity fill + thumb — deliberately NOT
+	   --bfields-primary; the export uses a different blue. */
+	--bfields-slider: #2563eb;
+
+	/* Checked MIME tile. Also its own green, not --bfields-on. */
+	--bfields-check: #00a36a;
+
+	/* An unchecked box or radio's ring (3:1 on white). */
+	--bfields-control-border: #7f97b5;
+
+	/* ---- type ---- */
+	--bfields-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	--bfields-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}

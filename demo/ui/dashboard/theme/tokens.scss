@@ -1,0 +1,95 @@
+/*
+ * Design tokens for the bPlugins admin UI, measured off the Figma exports.
+ * Scoped to .bp3d-app, never :root, so wp-admin never sees them.
+ */
+.bp3d-app {
+  /* ---- surfaces ---- */
+  --bp3d-ob-page-bg: #eef1fa;
+  --bp3d-ob-card-bg: #ffffff;
+  --bp3d-ob-card-border: #cdeeff;
+
+  /* ---- layout ---- */
+  --bp3d-ob-card-w: 740px;      /* screen 1 exported at 686px — normalised so the card cannot resize between steps */
+  --bp3d-ob-card-pad: 38px;
+  --bp3d-ob-card-radius: 12px;
+  --bp3d-ob-pill-top: 42px;     /* page top -> brand pill */
+  --bp3d-ob-pill-gap: 48px;     /* brand pill bottom -> card top */
+
+  /* ---- type colours ---- */
+  --bp3d-ob-text-heading: #0f172a;
+  --bp3d-ob-text-title: #25262b;
+  --bp3d-ob-text-eyebrow: #475569;
+  --bp3d-ob-text-eyebrow-muted: #94a3b8;
+  --bp3d-ob-text-body: #828282;
+  --bp3d-ob-text-brand: #1e293b;
+  --bp3d-ob-text-quiet: #4a5568;
+
+  /* ---- accents ---- */
+  --bp3d-ob-primary: #3b52f6;          /* primary button fill (screens 2 & 3) */
+  --bp3d-ob-primary-alt: #1b5cf0;      /* screen 1 exported this instead */
+  --bp3d-ob-step-active: #2563eb;      /* stepper active circle + label */
+  --bp3d-ob-step-idle-bg: #f0f4fa;
+  --bp3d-ob-step-idle-num: #475569;
+  --bp3d-ob-step-idle-label: #828282;
+  --bp3d-ob-step-line: #f4f6f9;
+
+  /* ---- component fills ---- */
+  --bp3d-ob-feature-card-border: #efefef;
+  --bp3d-ob-row-border: #e9eef4;
+  --bp3d-ob-row-bg-neutral: #f8fafc;
+  --bp3d-ob-row-bg-pink: #fff5ff;
+  --bp3d-ob-row-bg-green: #f7fff2;
+  --bp3d-ob-divider: #ecf0f5;
+
+  --bp3d-ob-badge-included-bg: #eff6ff;
+  --bp3d-ob-badge-included-fg: #155dfc;
+  --bp3d-ob-badge-pro-bg: #fef9c2;
+  --bp3d-ob-badge-pro-fg: #9f2d00;
+  --bp3d-ob-checkbox-fill: #3b82f6;
+
+  --bp3d-ob-tile-green-bg: #eafbd8;
+  --bp3d-ob-tile-green-fg: #5db400;
+  --bp3d-ob-tile-blue-bg: #eff6ff;
+  --bp3d-ob-tile-blue-fg: #2563eb;
+  --bp3d-ob-tile-purple-bg: #efdffa;
+  --bp3d-ob-tile-purple-fg: #b953ff;
+
+  --bp3d-ob-gutenberg-fg: #2563eb;
+  --bp3d-ob-elementor-fg: #ec4899;
+  --bp3d-ob-shortcode-fg: #22a04a;
+
+  /* Selected method row: deeper tint of each brand's resting fill. */
+  --bp3d-ob-row-bg-neutral-on: #eff6ff;
+  --bp3d-ob-row-bg-pink-on: #fdecf7;
+  --bp3d-ob-row-bg-green-on: #edfae4;
+  --bp3d-ob-icon-dark: #0c1a30;
+
+  /* ---- type scale (Inter) ---- */
+  --bp3d-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --bp3d-ob-h2-size: 30px;
+  --bp3d-ob-h2-weight: 700;
+  --bp3d-ob-h2-lh: 1.2;
+  --bp3d-ob-h2-tracking: -0.005em;
+
+  --bp3d-ob-eyebrow-size: 16px;
+  --bp3d-ob-eyebrow-size-sm: 12px;
+  --bp3d-ob-eyebrow-weight: 500;
+  --bp3d-ob-eyebrow-lh: 1.4;
+
+  /* paragraph — Inter 500 / 14px / 140% / 0 tracking */
+  --bp3d-ob-body-size: 14px;
+  --bp3d-ob-body-weight: 500;
+  --bp3d-ob-body-lh: 1.4;
+
+  /* card-header (h4) — Inter 600 / 14px / 130% / 0 tracking */
+  --bp3d-ob-card-header-size: 14px;
+  --bp3d-ob-card-header-weight: 600;
+  --bp3d-ob-card-header-lh: 1.3;
+
+  --bp3d-ob-label-size: 14px;
+  --bp3d-ob-label-weight: 600;
+
+  --bp3d-ob-step-label-size: 13px;
+  --bp3d-ob-btn-size: 14px;
+}

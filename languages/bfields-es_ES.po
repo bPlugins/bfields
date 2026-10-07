@@ -1,0 +1,780 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: bfields 1.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bfields\n"
+"POT-Creation-Date: 2026-10-05T09:10:34+00:00\n"
+"PO-Revision-Date: 2026-10-03 09:45+0600\n"
+"Last-Translator: bPlugins\n"
+"Language-Team: Spanish (Spain)\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: bfields\n"
+
+#: php/compat/Codestar.php:78
+msgid "bfields does not implement Customizer options. Keep this screen on Codestar."
+msgstr "bfields no implementa las opciones del Personalizador. Deja esta pantalla en Codestar."
+
+#: php/compat/Codestar.php:90
+msgid "bfields does not implement the shortcode generator. Keep this screen on Codestar."
+msgstr "bfields no implementa el generador de shortcodes. Deja esta pantalla en Codestar."
+
+#: php/compat/Codestar.php:102
+msgid "bfields does not implement widgets. Keep this screen on Codestar."
+msgstr "bfields no implementa widgets. Deja esta pantalla en Codestar."
+
+#: php/includes/Choices.php:110 php/includes/Choices.php:130
+#: php/includes/Choices.php:159
+msgid "Unknown field."
+msgstr "Campo desconocido."
+
+#: php/includes/Choices.php:121
+msgid "You do not have permission to do that."
+msgstr "No tienes permiso para hacer eso."
+
+#: php/includes/Metabox.php:340
+msgid "Copy and paste this shortcode into your posts, pages and widget"
+msgstr "Copia y pega este shortcode en tus entradas, páginas y widgets"
+
+#: php/includes/Metabox.php:349
+msgid "Move to Trash"
+msgstr "Mover a la papelera"
+
+#: php/includes/Metabox.php:349
+msgid "Delete permanently"
+msgstr "Borrar permanentemente"
+
+#: php/includes/Metabox.php:378 build/index.js:20
+msgid "Post updated."
+msgstr "Entrada actualizada."
+
+#: php/includes/Metabox.php:420 build/index.js:20
+msgid "These settings were not saved: your account is not allowed to change them."
+msgstr "Estos ajustes no se han guardado: tu cuenta no tiene permiso para cambiarlos."
+
+#: php/includes/Metabox.php:431
+msgid "These settings were not saved because the page was open too long. Make your changes again and click Update."
+msgstr "Estos ajustes no se guardaron porque la página estuvo abierta demasiado tiempo. Vuelve a hacer tus cambios y haz clic en Actualizar."
+
+#: php/includes/Mount.php:88
+msgid "Loading these settings…"
+msgstr "Cargando estos ajustes…"
+
+#: php/includes/Mount.php:88
+msgid "Loading the settings…"
+msgstr "Cargando los ajustes…"
+
+#: php/includes/Mount.php:96
+msgid "These settings are taking longer than usual to load, or they could not load on this site. Nothing has changed: saving the post will not change them."
+msgstr "Estos ajustes están tardando más de lo habitual en cargarse, o no se han podido cargar en este sitio. No ha cambiado nada: guardar la entrada no los modificará."
+
+#: php/includes/Mount.php:97
+msgid "This screen is taking longer than usual to load, or it could not load on this site. Your saved settings are safe and unchanged."
+msgstr "Esta pantalla está tardando más de lo habitual en cargarse, o no se ha podido cargar en este sitio. Tus ajustes guardados están a salvo y sin cambios."
+
+#: php/includes/Mount.php:101 build/index.js:20
+msgid "Switch to the classic interface"
+msgstr "Cambiar a la interfaz clásica"
+
+#: php/includes/OptionsPage.php:134
+msgid "You do not have permission to edit these settings."
+msgstr "No tienes permiso para editar estos ajustes."
+
+#: php/includes/OptionsPage.php:194 php/includes/OptionsPage.php:226
+msgid "Unknown settings screen."
+msgstr "Pantalla de ajustes desconocida."
+
+#: php/includes/OptionsPage.php:204
+msgid "You do not have permission to save these settings."
+msgstr "No tienes permiso para guardar estos ajustes."
+
+#: php/includes/OptionsPage.php:232
+msgid "Malformed request."
+msgstr "Solicitud mal formada."
+
+#: php/includes/OptionsPage.php:242 build/index.js:18
+msgid "This page is out of date. Reload and try again."
+msgstr "Esta página no está actualizada. Recárgala e inténtalo de nuevo."
+
+#: php/includes/OptionsPage.php:253 php/includes/OptionsPage.php:260
+msgid "Reset is not available on this screen."
+msgstr "El restablecimiento no está disponible en esta pantalla."
+
+#: php/includes/OptionsPage.php:271
+msgid "Nothing to save."
+msgstr "No hay nada que guardar."
+
+#. translators: %s: Codestar `database` value.
+#: php/includes/Registry.php:121
+#, php-format
+msgid "bfields does not implement the \"%s\" database option. Keep this screen on Codestar."
+msgstr "bfields no implementa la opción de base de datos «%s». Deja esta pantalla en Codestar."
+
+#. translators: %s: Codestar `data_type` value.
+#: php/includes/Registry.php:126
+#, php-format
+msgid "bfields does not implement data_type \"%s\" for meta boxes. Keep this screen on Codestar."
+msgstr "bfields no implementa data_type «%s» para las cajas meta. Deja esta pantalla en Codestar."
+
+#: php/includes/Sanitizer.php:206
+msgid "This value is not valid."
+msgstr "Este valor no es válido."
+
+#: php/includes/Schema.php:349
+msgid "A \"field_group\" holds no value: its \"default\" and \"responsive\" keys are ignored. Set them on its fields."
+msgstr "Un «field_group» no guarda ningún valor: sus claves «default» y «responsive» se ignoran. Defínelas en sus campos."
+
+#: php/includes/Schema.php:358
+msgid "A \"field_group\" inside another \"field_group\" is not drawn as its own card; its fields join the outer group."
+msgstr "Un «field_group» dentro de otro «field_group» no se muestra como una tarjeta propia; sus campos se unen al grupo exterior."
+
+#: php/includes/Schema.php:364
+msgid "A \"field_group\" inside a repeater row or a fieldset is not drawn as a card; its fields are shown flat."
+msgstr "Un «field_group» dentro de una fila de repetidor o de un fieldset no se muestra como una tarjeta; sus campos se muestran sin agrupar."
+
+#. translators: %s: field_group id.
+#: php/includes/Schema.php:452
+#, php-format
+msgid "The field_group id \"%s\" is also used by a field or another group on this screen. Group ids are never stored, but they must be unique."
+msgstr "El id de field_group «%s» también lo usa un campo u otro grupo de esta pantalla. Los id de grupo nunca se guardan, pero deben ser únicos."
+
+#: php/includes/Schema.php:532
+msgid "A \"field_group\" dependency and a field dependency inside it disagree on the global (4th) flag; Codestar applies one flag to both."
+msgstr "La dependencia de un «field_group» y la de un campo dentro de él no coinciden en el indicador global (4.º elemento); Codestar aplica un solo indicador a ambas."
+
+#. translators: %s: field type.
+#: php/includes/Schema.php:613
+#, php-format
+msgid "bfields has no renderer for the field type \"%s\". Its stored value is preserved but it cannot be edited. Map it with the bfields_type_map filter."
+msgstr "bfields no tiene un renderizador para el tipo de campo «%s». Su valor guardado se conserva, pero no se puede editar. Asígnalo con el filtro bfields_type_map."
+
+#. translators: %s: field type.
+#: php/includes/Schema.php:1087
+#, php-format
+msgid "A \"%s\" field cannot be responsive. Make its sub-fields responsive instead."
+msgstr "Un campo «%s» no puede ser adaptable. Haz adaptables sus subcampos en su lugar."
+
+#: php/includes/Storage/PostMeta.php:157
+msgid "bfields only stores meta boxes with data_type \"serialize\". Nothing was saved."
+msgstr "bfields solo guarda cajas meta con data_type «serialize». No se ha guardado nada."
+
+#: build/index.js:1
+msgid "value"
+msgstr "valor"
+
+#: build/index.js:2
+msgid "Increase %s"
+msgstr "Aumentar %s"
+
+#: build/index.js:3
+msgid "Decrease %s"
+msgstr "Reducir %s"
+
+#: build/index.js:3
+msgid "Search"
+msgstr "Buscar"
+
+#. translators: %d: how many characters to type before a search runs.
+#: build/index.js:4
+msgid "Type at least %d character to search."
+msgid_plural "Type at least %d characters to search."
+msgstr[0] "Escribe al menos %d carácter para buscar."
+msgstr[1] "Escribe al menos %d caracteres para buscar."
+
+#: build/index.js:4
+msgid "Searching…"
+msgstr "Buscando…"
+
+#: build/index.js:4
+msgid "Could not load the results. Try again."
+msgstr "No se pudieron cargar los resultados. Inténtalo de nuevo."
+
+#: build/index.js:4
+msgid "No matches."
+msgstr "No hay coincidencias."
+
+#. translators: %d: number of search results.
+#: build/index.js:5
+msgid "%d result available."
+msgid_plural "%d results available."
+msgstr[0] "%d resultado disponible."
+msgstr[1] "%d resultados disponibles."
+
+#: build/index.js:5
+msgid "Type to search…"
+msgstr "Escribe para buscar…"
+
+#. translators: %s: the chosen item, e.g. a product name.
+#. translators: %s: row title.
+#: build/index.js:6 build/index.js:7 build/index.js:10 build/index.js:34
+msgid "Remove %s"
+msgstr "Quitar %s"
+
+#: build/index.js:6 build/index.js:7 build/index.js:10 build/index.js:23
+#: build/index.js:34
+msgid "Remove"
+msgstr "Quitar"
+
+#: build/index.js:7
+msgid "(not set)"
+msgstr "(sin definir)"
+
+#. translators: %s: a stored value that is no longer one of the options.
+#: build/index.js:8
+msgid "%s (not available)"
+msgstr "%s (no disponible)"
+
+#: build/index.js:8 build/index.js:22
+msgid "Colour"
+msgstr "Color"
+
+#: build/index.js:8
+msgid "Pick a colour"
+msgstr "Elige un color"
+
+#: build/index.js:8 build/index.js:9 build/index.js:22
+msgid "Default"
+msgstr "Predeterminado"
+
+#: build/index.js:8
+msgid "Colour value"
+msgstr "Valor del color"
+
+#: build/index.js:8
+msgid "Opacity"
+msgstr "Opacidad"
+
+#: build/index.js:8
+msgid "Not available"
+msgstr "No disponible"
+
+#: build/index.js:8
+msgid "Transparent"
+msgstr "Transparente"
+
+#. translators: %s: the field's default colour, e.g. "#ffffff".
+#: build/index.js:9
+msgid "Back to %s"
+msgstr "Volver a %s"
+
+#: build/index.js:9
+msgid "Clear"
+msgstr "Borrar"
+
+#: build/index.js:9
+msgid "file"
+msgstr "archivo"
+
+#: build/index.js:10
+msgid "Not selected"
+msgstr "Sin seleccionar"
+
+#: build/index.js:10 build/index.js:12 build/index.js:22 build/index.js:23
+msgid "Upload"
+msgstr "Subir"
+
+#: build/index.js:10 build/index.js:22
+msgid "No file selected"
+msgstr "Ningún archivo seleccionado"
+
+#. translators: 1: width in pixels, 2: height in pixels.
+#: build/index.js:11 build/index.js:23
+msgid "%1$s × %2$spx"
+msgstr "%1$s × %2$spx"
+
+#: build/index.js:12
+msgid "Replace %s"
+msgstr "Reemplazar %s"
+
+#: build/index.js:12
+msgid "Replace"
+msgstr "Reemplazar"
+
+#: build/index.js:12 build/index.js:20
+msgid "Desktop"
+msgstr "Escritorio"
+
+#: build/index.js:12 build/index.js:20
+msgid "Tablet"
+msgstr "Tableta"
+
+#: build/index.js:12 build/index.js:20
+msgid "Mobile"
+msgstr "Móvil"
+
+#: build/index.js:12
+msgid "Device"
+msgstr "Dispositivo"
+
+#. translators: %s: device name, e.g. "Tablet".
+#: build/index.js:13
+msgid "%s (has its own value)"
+msgstr "%s (tiene su propio valor)"
+
+#. translators: %s: device name, e.g. "Tablet".
+#: build/index.js:14
+msgid "Clear the %s value"
+msgstr "Borrar el valor de %s"
+
+#. translators: %s: device name, e.g. "Tablet".
+#: build/index.js:15
+msgid "Clear the %s value and inherit it"
+msgstr "Borrar el valor de %s y heredarlo"
+
+#. translators: %s: field type, e.g. "repeater".
+#: build/index.js:16
+msgid "“%s” cannot be edited in this interface yet. Its saved value is preserved."
+msgstr "«%s» todavía no se puede editar en esta interfaz. Su valor guardado se conserva."
+
+#: build/index.js:16
+msgid "Pro"
+msgstr "Pro"
+
+#. translators: %d: the row's position in the list.
+#: build/index.js:18
+msgid "Item %d"
+msgstr "Elemento %d"
+
+#: build/index.js:18
+msgid "Top"
+msgstr "Arriba"
+
+#: build/index.js:18
+msgid "Right"
+msgstr "Derecha"
+
+#: build/index.js:18
+msgid "Bottom"
+msgstr "Abajo"
+
+#: build/index.js:18
+msgid "Left"
+msgstr "Izquierda"
+
+#: build/index.js:18
+msgid "(has errors)"
+msgstr "(tiene errores)"
+
+#: build/index.js:18
+msgid "Drag to resize · double-click to reset"
+msgstr "Arrastra para cambiar el tamaño · doble clic para restablecer"
+
+#: build/index.js:18
+msgid "Page width"
+msgstr "Ancho de la página"
+
+#: build/index.js:18
+msgid "Tabs on top"
+msgstr "Pestañas arriba"
+
+#: build/index.js:18
+msgid "Tabs in a sidebar"
+msgstr "Pestañas en una barra lateral"
+
+#: build/index.js:18
+msgid "Tab layout"
+msgstr "Disposición de las pestañas"
+
+#: build/index.js:18
+msgid "Your session expired. Reload the page and save again — your changes are still here."
+msgstr "Tu sesión ha caducado. Recarga la página y vuelve a guardar: tus cambios siguen aquí."
+
+#: build/index.js:18
+msgid "Could not save. Your changes have not been lost."
+msgstr "No se ha podido guardar. Tus cambios no se han perdido."
+
+#. translators: %s: list of "Field: message" pairs.
+#: build/index.js:19
+msgid "Saved, except: %s"
+msgstr "Guardado, excepto: %s"
+
+#: build/index.js:19
+msgid "Settings saved."
+msgstr "Ajustes guardados."
+
+#: build/index.js:19
+msgid "Settings restored to their defaults."
+msgstr "Ajustes restablecidos a sus valores predeterminados."
+
+#: build/index.js:19
+msgid "Could not save."
+msgstr "No se ha podido guardar."
+
+#: build/index.js:19
+msgid "Unsaved changes on this page will be lost."
+msgstr "Se perderán los cambios sin guardar de esta página."
+
+#: build/index.js:19
+msgid "Search settings..."
+msgstr "Buscar ajustes..."
+
+#: build/index.js:19
+msgid "Search settings"
+msgstr "Buscar ajustes"
+
+#: build/index.js:19 build/index.js:20
+msgid "Tab column width"
+msgstr "Ancho de la columna de pestañas"
+
+#. translators: %s: the user's search term.
+#: build/index.js:20
+msgid "No settings match “%s”."
+msgstr "Ningún ajuste coincide con «%s»."
+
+#: build/index.js:20
+msgid "Unsaved changes"
+msgstr "Cambios sin guardar"
+
+#: build/index.js:20
+msgid "Saving..."
+msgstr "Guardando..."
+
+#: build/index.js:20
+msgid "Save Changes"
+msgstr "Guardar cambios"
+
+#: build/index.js:20
+msgid "Restore this section to its default settings?"
+msgstr "¿Restablecer esta sección a sus ajustes predeterminados?"
+
+#: build/index.js:20
+msgid "Reset Section"
+msgstr "Restablecer sección"
+
+#: build/index.js:20
+msgid "Restore every setting on this page to its default? This cannot be undone."
+msgstr "¿Restablecer todos los ajustes de esta página a sus valores predeterminados? Esta acción no se puede deshacer."
+
+#: build/index.js:20
+msgid "Reset All"
+msgstr "Restablecer todo"
+
+#: build/index.js:20
+msgid "Could not confirm the save. Click Update again to save normally."
+msgstr "No se pudo confirmar el guardado. Haz clic de nuevo en Actualizar para guardar de la forma habitual."
+
+#: build/index.js:20
+msgid "Could not confirm the save. Check your connection and click Update again."
+msgstr "No se pudo confirmar el guardado. Comprueba tu conexión y haz clic de nuevo en Actualizar."
+
+#: build/index.js:20
+msgid "You were logged out. Log in, then click Update again."
+msgstr "Se cerró tu sesión. Inicia sesión y haz clic de nuevo en Actualizar."
+
+#: build/index.js:20
+msgid "Your session was refreshed. Click Update again."
+msgstr "Tu sesión se renovó. Haz clic de nuevo en Actualizar."
+
+#: build/index.js:20
+msgid "These settings were not saved because the page was open too long. Click Update again."
+msgstr "Estos ajustes no se guardaron porque la página estuvo abierta demasiado tiempo. Haz clic de nuevo en Actualizar."
+
+#: build/index.js:20
+msgid "The post was saved, but other settings on this page were not. Click Update again to see why."
+msgstr "La entrada se guardó, pero otros ajustes de esta página no. Haz clic de nuevo en Actualizar para ver por qué."
+
+#: build/index.js:20
+msgid "Some settings were not saved:"
+msgstr "Algunos ajustes no se guardaron:"
+
+#: build/index.js:20
+msgid "Saved. Update again to save your newer changes."
+msgstr "Guardado. Vuelve a actualizar para guardar tus cambios más recientes."
+
+#: build/index.js:20
+msgid "The post was saved, but these settings were not. Click Update again to save them."
+msgstr "La entrada se guardó, pero estos ajustes no. Haz clic de nuevo en Actualizar para guardarlos."
+
+#: build/index.js:20
+msgid "Update"
+msgstr "Actualizar"
+
+#: build/index.js:20
+msgid "Schedule"
+msgstr "Programar"
+
+#: build/index.js:20
+msgid "Publish"
+msgstr "Publicar"
+
+#: build/index.js:20
+msgid "Submit for Review"
+msgstr "Enviar para revisión"
+
+#: build/index.js:20
+msgid "Save as Pending"
+msgstr "Guardar como pendiente"
+
+#: build/index.js:20
+msgid "Save Draft"
+msgstr "Guardar borrador"
+
+#: build/index.js:20
+msgid "Reset every setting on this tab to its default?"
+msgstr "¿Restablecer todos los ajustes de esta pestaña a sus valores predeterminados?"
+
+#: build/index.js:20
+msgid "Reset to Default"
+msgstr "Restablecer valores predeterminados"
+
+#: build/index.js:20
+msgid "Save Change"
+msgstr "Guardar cambios"
+
+#: build/index.js:20
+msgid "Copy shortcode"
+msgstr "Copiar shortcode"
+
+#: build/index.js:20
+msgid "Copied"
+msgstr "Copiado"
+
+#: build/index.js:20
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: build/index.js:20
+msgid "Updating…"
+msgstr "Actualizando…"
+
+#: build/index.js:20
+msgid "Saved"
+msgstr "Guardado"
+
+#: build/index.js:20
+msgid "Partly saved — show message"
+msgstr "Guardado en parte — ver el mensaje"
+
+#: build/index.js:20
+msgid "Not saved — show message"
+msgstr "No guardado — ver el mensaje"
+
+#: build/index.js:20
+msgid "Add title"
+msgstr "Añadir título"
+
+#: build/index.js:20
+msgid "Sidebar width"
+msgstr "Ancho de la barra lateral"
+
+#: build/index.js:20
+msgid "The settings interface failed to load"
+msgstr "No se ha podido cargar la interfaz de ajustes"
+
+#: build/index.js:20
+msgid "Your saved settings are safe and unchanged. You can keep working in the classic interface while this is fixed."
+msgstr "Tus ajustes guardados están a salvo y sin cambios. Puedes seguir trabajando en la interfaz clásica mientras se soluciona."
+
+#: build/index.js:20
+msgid "Your saved settings are safe and unchanged. Reload the page, and if this keeps happening, ask a site administrator for help."
+msgstr "Tus ajustes guardados están a salvo y sin cambios. Recarga la página y, si vuelve a ocurrir, pide ayuda a un administrador del sitio."
+
+#: build/index.js:20
+msgid "Technical details"
+msgstr "Detalles técnicos"
+
+#: build/index.js:20
+msgid "Show more"
+msgstr "Mostrar más"
+
+#: build/index.js:20
+msgid "Show less"
+msgstr "Mostrar menos"
+
+#: build/index.js:20
+msgid "Enabled"
+msgstr "Activado"
+
+#: build/index.js:20
+msgid "No"
+msgstr "No"
+
+#: build/index.js:20
+msgid "Disabled"
+msgstr "Desactivado"
+
+#: build/index.js:20
+msgid "Selector"
+msgstr "Selector"
+
+#: build/index.js:20
+msgid "Copy selector"
+msgstr "Copiar selector"
+
+#: build/index.js:20
+msgid "Copy"
+msgstr "Copiar"
+
+#. translators: %s: options source, e.g. "posts".
+#: build/index.js:21
+msgid "Options from “%s” cannot be chosen in this interface yet."
+msgstr "Las opciones de «%s» todavía no se pueden elegir en esta interfaz."
+
+#. translators: 1: the stored value, 2: options source, e.g. "posts".
+#: build/index.js:22
+msgid "Saved value: %1$s. Options from “%2$s” cannot be chosen in this interface yet; it is kept as it is."
+msgstr "Valor guardado: %1$s. Las opciones de «%2$s» todavía no se pueden elegir en esta interfaz; se mantiene tal cual."
+
+#: build/index.js:22
+msgid "Select All"
+msgstr "Seleccionar todo"
+
+#: build/index.js:22
+msgid "Deselect All"
+msgstr "Deseleccionar todo"
+
+#: build/index.js:22
+msgid "Select Color"
+msgstr "Seleccionar color"
+
+#: build/index.js:22
+msgid "Width"
+msgstr "Ancho"
+
+#: build/index.js:22
+msgid "Height"
+msgstr "Alto"
+
+#: build/index.js:22
+msgid "Keep width and height in proportion"
+msgstr "Mantener la proporción entre ancho y alto"
+
+#: build/index.js:22
+msgid "Select file"
+msgstr "Seleccionar archivo"
+
+#: build/index.js:22
+msgid "No image selected"
+msgstr "No hay ninguna imagen seleccionada"
+
+#: build/index.js:23
+msgid "JPG, PNG, WebP or SVG"
+msgstr "JPG, PNG, WebP o SVG"
+
+#: build/index.js:23
+msgid "General"
+msgstr "General"
+
+#: build/index.js:23
+msgid "Add New"
+msgstr "Añadir nuevo"
+
+#. translators: 1: row title, 2: new position, 3: number of rows.
+#: build/index.js:24
+msgid "%1$s moved to position %2$d of %3$d."
+msgstr "%1$s movido a la posición %2$d de %3$d."
+
+#: build/index.js:24
+msgid "Reorder cancelled."
+msgstr "Reordenación cancelada."
+
+#. translators: 1: row title, 2: its position, 3: number of rows.
+#: build/index.js:25
+msgid "%1$s added, item %2$d of %3$d."
+msgstr "%1$s añadido, elemento %2$d de %3$d."
+
+#. translators: %d: the fewest rows the list may hold.
+#: build/index.js:26
+msgid "Add at least %d item."
+msgid_plural "Add at least %d items."
+msgstr[0] "Añade al menos %d elemento."
+msgstr[1] "Añade al menos %d elementos."
+
+#. translators: %d: the most rows the list may hold.
+#: build/index.js:27
+msgid "You cannot add more than %d item."
+msgid_plural "You cannot add more than %d items."
+msgstr[0] "No puedes añadir más de %d elemento."
+msgstr[1] "No puedes añadir más de %d elementos."
+
+#: build/index.js:27
+msgid "Drag, or press the up and down arrow keys, to reorder."
+msgstr "Arrastra, o pulsa las flechas arriba y abajo, para reordenar."
+
+#. translators: %s: the add button's label, e.g. "Add New Model".
+#: build/index.js:28
+msgid "Nothing here yet. Use “%s” to add the first one."
+msgstr "Todavía no hay nada aquí. Usa «%s» para añadir el primero."
+
+#. translators: %s: row title.
+#: build/index.js:29
+msgid "Reorder %s"
+msgstr "Reordenar %s"
+
+#: build/index.js:29
+msgid "Drag to reorder"
+msgstr "Arrastra para reordenar"
+
+#. translators: %s: row title.
+#: build/index.js:30
+msgid "Move %s up"
+msgstr "Subir %s"
+
+#: build/index.js:30
+msgid "Move up"
+msgstr "Subir"
+
+#. translators: %s: row title.
+#: build/index.js:31
+msgid "Move %s down"
+msgstr "Bajar %s"
+
+#: build/index.js:31
+msgid "Move down"
+msgstr "Bajar"
+
+#. translators: %s: row title.
+#: build/index.js:32
+msgid "Duplicate %s"
+msgstr "Duplicar %s"
+
+#: build/index.js:32
+msgid "Duplicate"
+msgstr "Duplicar"
+
+#. translators: 1: row title, 2: position of the copy.
+#: build/index.js:33
+msgid "%1$s duplicated as item %2$d."
+msgstr "%1$s duplicado como elemento %2$d."
+
+#: build/index.js:34
+msgid "Are you sure to delete this item?"
+msgstr "¿Seguro que quieres eliminar este elemento?"
+
+#. translators: 1: row title, 2: number of rows left.
+#: build/index.js:35
+msgid "%1$s removed, %2$d item left."
+msgid_plural "%1$s removed, %2$d items left."
+msgstr[0] "%1$s eliminado, queda %2$d elemento."
+msgstr[1] "%1$s eliminado, quedan %2$d elementos."
+
+#: build/index.js:35
+msgid "In the editor, Tab indents. Press Escape, then Tab, to move on."
+msgstr "En el editor, Tab sangra el texto. Pulsa Escape y luego Tab para salir."
+
+#: build/index.js:35
+msgid "unit"
+msgstr "unidad"
+
+#: build/index.js:35
+msgid "Unlink sides"
+msgstr "Desvincular lados"
+
+#: build/index.js:35
+msgid "Link sides"
+msgstr "Vincular lados"
+
+#: build/index.js:35
+msgid "URL"
+msgstr "URL"
+
+#: build/index.js:35
+msgid "Link text"
+msgstr "Texto del enlace"
+
+#: build/index.js:35
+msgid "New tab"
+msgstr "Pestaña nueva"

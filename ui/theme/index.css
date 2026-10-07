@@ -1,0 +1,20 @@
+/*
+ * bfields — stylesheet entry point.
+ *
+ * Import order is load-bearing: base.css declares the element resets at one
+ * class of specificity, so it must come FIRST and the component sheets must
+ * come after, or wp-admin's bare-element rules win (base.css rule 2).
+ */
+
+@import "./base.css";
+@import "./admin.css";
+
+/* Stand-ins for controls the design never drew, and the composed row
+   layouts — see ui/fields/claude/. */
+@import "../fields/claude/claude.css";
+
+/* The page frame: wp-admin page rules, keyed on body.bfields-page-editor. */
+@import "./page.css";
+
+/* Admin notices as one-line bars (also the standalone `notices` bundle). */
+@import "./notices.css";

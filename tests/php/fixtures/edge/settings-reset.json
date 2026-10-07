@@ -1,0 +1,97 @@
+{
+    "unique": "_bp3d_settings_",
+    "note": "Codestar Reset: PHP true/false switchers, a single button_set holding an array, never-toggled switchers.",
+    "value": {
+        "allowed_mime_types": "",
+        "delete_data_on_uninstall": false,
+        "bp3d_loader_type": [
+            "default"
+        ],
+        "bp3d_loader_image": {
+            "url": "",
+            "id": "",
+            "width": "",
+            "height": "",
+            "thumbnail": "",
+            "alt": "",
+            "title": "",
+            "description": ""
+        },
+        "bp3d_loader_size": "100",
+        "bp3d_loader_background": "#ffffff",
+        "bp3d_control_placement": [
+            "zones"
+        ],
+        "bp3d_control_labels": [
+            "off"
+        ],
+        "bp3d_control_corner_zoom": "bottom-right",
+        "bp3d_control_corner_fullscreen": "bottom-right",
+        "bp3d_control_corner_camera": "bottom-left",
+        "bp3d_control_corner_download": "bottom-left",
+        "bp3d_control_corner_reset": "bottom-left",
+        "bp3d_control_corner_dimensions": "bottom-left",
+        "bp3d_control_corner_ar": "bottom-left",
+        "bp3d_control_text_zoomIn": "",
+        "bp3d_control_text_zoomOut": "",
+        "bp3d_control_text_fullscreen": "",
+        "bp3d_control_text_camera": "",
+        "bp3d_control_text_download": "",
+        "bp3d_control_text_reset": "",
+        "bp3d_control_text_dimensions": "",
+        "bp3d_control_text_ar": "",
+        "bp3d_control_size": "35",
+        "bp3d_control_gap": "10",
+        "bp3d_control_offset": "10",
+        "analytics_enabled": false,
+        "analytics_exclude_editors": "",
+        "analytics_respect_gpc": true,
+        "analytics_retention": "90",
+        "analytics_ga4": true,
+        "bpp_3d_width": {
+            "width": "100",
+            "unit": "%"
+        },
+        "bpp_3d_height": {
+            "height": "320",
+            "unit": "px"
+        },
+        "bpp_model_bg": "transparent",
+        "bpp_3d_autoplay": "",
+        "3dp_shadow_intensity": "1",
+        "bpp_3d_preloader": false,
+        "bpp_camera_control": false,
+        "bpp_3d_zooming": "",
+        "bpp_3d_progressbar": true,
+        "bpp_3d_loading": "auto",
+        "bpp_3d_rotate": true,
+        "3dp_rotate_speed": "30",
+        "3dp_rotate_delay": "3000",
+        "bpp_3d_fullscreen": "",
+        "3d_woo_switcher": true,
+        "is_not_compatible": true,
+        "3d_shadow_intensity": "1",
+        "bp_camera_control": "",
+        "bp_3d_zooming": true,
+        "bp_3d_progressbar": false,
+        "bp_3d_loading": "auto",
+        "bp_3d_mobile_image_mode": [
+            "off"
+        ],
+        "bp_3d_mobile_tap_label": "",
+        "bp_3d_mobile_breakpoint": "768",
+        "bp_3d_mobile_reduce_motion": "",
+        "bp_3d_rotate": true,
+        "3d_rotate_speed": "30",
+        "3d_rotate_delay": "3000",
+        "bp_3d_autoplay": true,
+        "bp_3d_fullscreen": "",
+        "gutenberg_enabled": false,
+        "gallery": ".woocommerce-product-gallery",
+        "gallery_item": "",
+        "gallery_item_active": "",
+        "gallery_thumbnail_item": "",
+        "gallery_trigger": "",
+        "custom_css": ""
+    }
+}

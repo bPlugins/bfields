@@ -1,0 +1,149 @@
+{
+    "unique": "_bp3dimages_",
+    "note": "Cycle models with hotspots nested in model rows; row switchers as \"\", PHP true, \"0\" and \"1\".",
+    "value": {
+        "currentViewer": "modelViewer",
+        "bp_3d_model_type": "mcycle",
+        "bp_3d_src_type": "upload",
+        "bp_3d_src": {
+            "url": "http://dev.local/wp-content/uploads/2026/02/RobotExpressive.glb",
+            "id": "31",
+            "width": "",
+            "height": "",
+            "thumbnail": "http://dev.local/wp-includes/images/media/default.svg",
+            "alt": "",
+            "title": "RobotExpressive",
+            "description": ""
+        },
+        "bp_3d_src_link": "",
+        "bp_3d_models": [
+            {
+                "model_link": "http://dev.local/wp-content/uploads/2025/05/37002400_3D_2_with_Product.glb",
+                "poster_src": "",
+                "environment_image_src": "",
+                "skybox_image_src": "",
+                "exposure": "1",
+                "enable_ar": "",
+                "model_iso_src": "",
+                "ar_placement": "floor",
+                "ar_mode": "webxr",
+                "initial_view": "[]",
+                "hotspots": [
+                    {
+                        "title": "Lid",
+                        "desc": "Opens at 90°",
+                        "linkUrl": "https://example.com/?a=1&amp;b=2",
+                        "linkText": "Read more",
+                        "openInNewTab": "",
+                        "imageAlt": "",
+                        "animationName": "",
+                        "videoUrl": "",
+                        "position": "0.1m 0.2m 0.3m",
+                        "normal": "0m 1m 0m",
+                        "orbit": "",
+                        "target": "",
+                        "fov": ""
+                    },
+                    {
+                        "title": "Base",
+                        "desc": "Rubber \"feet\"",
+                        "linkUrl": "https://example.com/?a=1&amp;b=2",
+                        "linkText": "Read more",
+                        "openInNewTab": true,
+                        "imageAlt": "",
+                        "animationName": "",
+                        "videoUrl": "",
+                        "position": "0.1m 0.2m 0.3m",
+                        "normal": "0m 1m 0m",
+                        "orbit": "",
+                        "target": "",
+                        "fov": ""
+                    }
+                ]
+            },
+            {
+                "model_link": "http://dev.local/wp-content/uploads/2025/05/37002400_3D_2_with_Product.glb",
+                "poster_src": "",
+                "environment_image_src": "",
+                "skybox_image_src": "",
+                "exposure": "1",
+                "enable_ar": "0",
+                "model_iso_src": "",
+                "ar_placement": "floor",
+                "ar_mode": "webxr",
+                "initial_view": "[]",
+                "hotspots": [
+                    {
+                        "title": "Handle's grip",
+                        "desc": "Line one<br />Line two",
+                        "linkUrl": "https://example.com/?a=1&amp;b=2",
+                        "linkText": "Read more",
+                        "openInNewTab": "1",
+                        "imageAlt": "",
+                        "animationName": "",
+                        "videoUrl": "",
+                        "position": "0.1m 0.2m 0.3m",
+                        "normal": "0m 1m 0m",
+                        "orbit": "",
+                        "target": "",
+                        "fov": ""
+                    }
+                ]
+            }
+        ],
+        "bp_3d_poster": {
+            "url": "http://dev.local/wp-content/uploads/2025/05/View_From_A_Blue_Moon_Trailer-HD.jpg",
+            "id": "1039",
+            "width": "1280",
+            "height": "720",
+            "thumbnail": "http://dev.local/wp-content/uploads/2025/05/View_From_A_Blue_Moon_Trailer-HD-150x150.jpg",
+            "alt": "",
+            "title": "View_From_A_Blue_Moon_Trailer-HD",
+            "description": ""
+        },
+        "initial_view": "[]",
+        "bp_3d_posters": "",
+        "bp_3d_environment_image": "",
+        "bp_3d_skybox_image": "",
+        "bp_3d_autoplay": "",
+        "bp_camera_control": "1",
+        "bp_3d_zooming": "1",
+        "lockXAxisRotation": "",
+        "lockYAxisRotation": "",
+        "bp_3d_loading": "auto",
+        "bp_3d_rotate": "",
+        "3d_rotate_speed": "30",
+        "3d_rotate_delay": "3000",
+        "3d_zoom_level": "1",
+        "invalid": "",
+        "hotspots": "",
+        "hotspot_style": "style-1",
+        "3d_shadow_intensity": "1",
+        "3d_exposure": "0.9",
+        "show_thumbs": "1",
+        "show_arrows": "1",
+        "bp_3d_enable_ar": "0",
+        "model_iso_src": "",
+        "ar_placement": "floor",
+        "ar_mode": "webxr",
+        "bp_3d_fullscreen": "0",
+        "bp_3d_zoom_in_out_btn": "0",
+        "bp_3d_camera_btn": "0",
+        "bp_3d_progressbar": "0",
+        "bp_model_progress_percent": "1",
+        "bp_3d_width": {
+            "width": "96",
+            "unit": "%"
+        },
+        "bp_3d_height": {
+            "height": "400",
+            "unit": "px"
+        },
+        "bp_3d_align": "center",
+        "bp_model_bg": "#8224e3",
+        "bp_model_progressbar_color": "rgba(0, 0, 0, 0.4)",
+        "css": "",
+        "additional_id": "",
+        "additional_class": ""
+    }
+}

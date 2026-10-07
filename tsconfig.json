@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    // Types come from React; the RUNTIME does not. @wordpress/scripts
+    // externalises react/react-dom to wp.element, so the bundle never carries a
+    // React of its own (4.6) — the hosts pin React 19 while "Requires at least:
+    // 6.5" ships 18.2, and two Reacts on one admin page is the failure to avoid.
+    "jsxImportSource": "react",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "allowJs": false
+  },
+  // demo/ is a development-only harness (see bfields-3dv-demo.php). It is
+  // type-checked with everything else so it cannot rot against ui/, and it is
+  // excluded from dist/ by bin/dist.sh.
+  "include": ["ui/**/*.ts", "ui/**/*.tsx", "demo/ui/**/*.ts", "demo/ui/**/*.tsx", "tests/ts/**/*.ts"],
+  "exclude": ["node_modules", "build"]
+}

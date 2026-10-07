@@ -1,0 +1,401 @@
+{
+	"about": "Stale single-select controllers (Schema::tag_select_rules). Replayed by tests/ts/dependency.test.ts and tests/php/schema.php; both engines must give `expected`.",
+	"cases": [
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": ""
+			},
+			"row": {},
+			"expected": true,
+			"origin": "blank value reads as the first option"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": "99"
+			},
+			"row": {},
+			"expected": true,
+			"origin": "deleted id reads as the first option"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": "12"
+			},
+			"row": {},
+			"expected": false,
+			"origin": "offered value is read as stored"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": "none"
+			},
+			"row": {},
+			"expected": true,
+			"origin": "offered first option"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": 12
+			},
+			"row": {},
+			"expected": false,
+			"origin": "int value matching an option is kept"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {},
+			"row": {},
+			"expected": false,
+			"origin": "absent controller is not remapped"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": null
+			},
+			"row": {},
+			"expected": true,
+			"origin": "stored null reads as the first option"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": [
+					"12"
+				]
+			},
+			"row": {},
+			"expected": false,
+			"origin": "array value is left alone"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": true
+			},
+			"row": {},
+			"expected": false,
+			"origin": "bool value is left alone"
+		},
+		{
+			"rules": [
+				{
+					"controller": "pick",
+					"condition": "!=",
+					"value": "a",
+					"scope": "local",
+					"choices": [
+						"",
+						"a",
+						"b"
+					],
+					"shown": ""
+				}
+			],
+			"values": {
+				"pick": "zzz"
+			},
+			"row": {},
+			"expected": true,
+			"origin": "stale value reads as the placeholder"
+		},
+		{
+			"rules": [
+				{
+					"controller": "pick",
+					"condition": "!=",
+					"value": "a",
+					"scope": "local",
+					"choices": [
+						"",
+						"a",
+						"b"
+					],
+					"shown": ""
+				}
+			],
+			"values": {
+				"pick": "a"
+			},
+			"row": {},
+			"expected": false,
+			"origin": "placeholder select, offered value"
+		},
+		{
+			"rules": [
+				{
+					"controller": "pick",
+					"condition": "!=",
+					"value": "a",
+					"scope": "local",
+					"choices": [
+						"",
+						"a",
+						"b"
+					],
+					"shown": ""
+				}
+			],
+			"values": {
+				"pick": ""
+			},
+			"row": {},
+			"expected": true,
+			"origin": "placeholder select, blank value"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": "12"
+			},
+			"row": {
+				"tpl": "99"
+			},
+			"expected": true,
+			"origin": "row-local stale value"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": "12"
+			},
+			"row": {
+				"tpl": "15"
+			},
+			"expected": false,
+			"origin": "row-local offered value"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "global",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": "99"
+			},
+			"row": {
+				"tpl": "12"
+			},
+			"expected": true,
+			"origin": "global rule reads the root, remapped"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "!=",
+					"value": "none",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": ""
+			},
+			"row": {},
+			"expected": false,
+			"origin": "!= on a blank value"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "any",
+					"value": "none,12",
+					"scope": "local",
+					"choices": [
+						"none",
+						"12",
+						"15"
+					],
+					"shown": "none"
+				}
+			],
+			"values": {
+				"tpl": "gone"
+			},
+			"row": {},
+			"expected": true,
+			"origin": "any on a deleted id"
+		},
+		{
+			"rules": [
+				{
+					"controller": "tpl",
+					"condition": "==",
+					"value": "none",
+					"scope": "local"
+				}
+			],
+			"values": {
+				"tpl": ""
+			},
+			"row": {},
+			"expected": false,
+			"origin": "untagged rule is unchanged"
+		}
+	]
+}

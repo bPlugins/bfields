@@ -1,0 +1,233 @@
+/*
+ * bfields — app root and element normalisation.
+ *
+ * Ported from bPlugins/3d-viewer-new-ui (src/styles/base.css). Its three rules
+ * are what make the UI safe to drop into wp-admin, and they carry over
+ * unchanged — only the prefix differs (4.6):
+ *
+ *   1. No selector here or in any other bfields sheet may reach outside
+ *      .bfields-app. No html, no body, no bare element selectors — wp-admin
+ *      owns those, and so does every other plugin's settings screen.
+ *   2. The element resets are written `.bfields-app :where(el)`, which is
+ *      exactly one class of specificity: enough to beat wp-admin's bare `p`,
+ *      `h2`, `ul` rules (0,0,1), and equal to a component's own `.bfields-*`
+ *      rule so the component wins on source order. Hence base.css must be
+ *      imported FIRST. Plain `:where(...)` would not work: at zero specificity
+ *      wp-admin's `p { margin: 1em 0 }` would win.
+ *   3. The defensive block at the bottom goes the other way: at (0,1,1) it
+ *      outranks the component classes too, so it may only name properties no
+ *      component sets.
+ *
+ * Other plugins' markup moved inside the root (the page frame's side boxes,
+ * `.bfields-foreign`) keeps wp-admin's styles: every reset skips it, at zero
+ * specificity (`:where(:not(.bfields-foreign *))`).
+ */
+
+@import "./tokens.css";
+
+/*
+ * Inter, bundled (plan 11.8). Every size, weight and line pitch in the design
+ * was measured in Inter; without these the stack falls through to the system
+ * font and every row, label and button is a pixel or two off — the design's
+ * own preview loads it from Google Fonts, which wp-admin must not do.
+ *
+ * `@font-face` is global by nature. It only DECLARES a family; nothing outside
+ * .bfields-app asks for it, so it changes no other screen.
+ */
+@font-face {
+	font-family: "Inter";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("./fonts/inter-latin.woff2") format("woff2");
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "Inter";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("./fonts/inter-latin-ext.woff2") format("woff2");
+	unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/*
+ * The mount node carries BOTH classes: `bfields-root` is what the bundle looks
+ * for, `bfields-app` is the scope every selector is written under. It also
+ * carries the host's brand tokens inline, set by PHP from the `brand` argument.
+ */
+.bfields-app {
+	/* Full-height screens measure against this rather than 100vh, so the
+	   wp-admin toolbar does not add 32px of scroll to every page. */
+	--bfields-viewport: 100vh;
+
+	font-family: var(--bfields-font);
+	/* Pinned to the browser defaults the design was measured against —
+	   wp-admin puts 13px/1.4 on <body> and every unsized component would
+	   inherit it. */
+	font-size: 16px;
+	line-height: normal;
+	/* The design's body text colour (.bp3d-admin in the design repo). Every
+	   unstyled label inherits it; without it they take wp-admin's #3c434a. */
+	color: var(--bfields-row-title);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/*
+ * The page around a bfields screen — the ONE exception to rule 1.
+ *
+ * The app paints #f8f9fa, but wp-admin paints the page behind it #f0f0f1, so
+ * a strip of the wrong grey showed above the screen, under the footer and
+ * below a short page. Only the page itself can fix that. It is opt-in: the
+ * class is added by bfields' own screen (OptionsPage::body_class()) and by
+ * nothing else, so no other admin page is touched. The colour is
+ * --bfields-bg's value; tokens live on .bfields-app and cannot reach <body>.
+ */
+/* wp-admin's body typography, for that foreign markup. */
+.bfields-app .bfields-foreign {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+	line-height: 1.4em;
+	color: #3c434a;
+	-webkit-font-smoothing: auto;
+	-moz-osx-font-smoothing: auto;
+}
+
+html:has(> body.bfields-screen),
+body.bfields-screen {
+	background: #f8f9fa;
+}
+
+body.wp-admin .bfields-app {
+	--bfields-viewport: calc(100vh - 32px);
+
+	/* Bleed out of #wpcontent's gutter so the screen sits flush. */
+	margin: 0 0 -45px -20px;
+}
+
+@media screen and (max-width: 782px) {
+	body.wp-admin .bfields-app {
+		--bfields-viewport: calc(100vh - 46px);
+		margin-inline-start: -10px;
+	}
+}
+
+/* A meta box sits inside its postbox: nothing to bleed out of. */
+body.wp-admin .bfields-app[data-kind="metabox"] {
+	margin: 0;
+}
+
+.bfields-app,
+.bfields-app *,
+.bfields-app *::before,
+.bfields-app *::after {
+	box-sizing: border-box;
+}
+
+/* ---- element normalisation (see the specificity note above) ----
+   Transcribed from the design repo's base.css rule for rule. Values are the
+   browser defaults the design was measured against, restated so wp-admin's
+   own `p`, `h2`, `ul`, `button` and form rules cannot supply different ones.
+   An earlier port "simplified" this block — `font: inherit` on buttons, a
+   1.25 heading line-height, no button padding reset — and every toggle,
+   radio and section title came out a pixel or two off the Figma. */
+
+.bfields-app :where(h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, ul, ol, li):where(:not(.bfields-foreign *)) {
+	margin: 0;
+	padding: 0;
+}
+
+.bfields-app :where(h1, h2, h3, h4, h5, h6):where(:not(.bfields-foreign *)) {
+	font-weight: bold;
+	line-height: normal;
+	color: inherit;
+}
+
+/* wp-admin's h1–h6 sizes happen to match the UA defaults today; pinning them
+   means it stays true if that changes. */
+.bfields-app :where(h1):where(:not(.bfields-foreign *)) { font-size: 2em; }
+.bfields-app :where(h2):where(:not(.bfields-foreign *)) { font-size: 1.5em; }
+.bfields-app :where(h3):where(:not(.bfields-foreign *)) { font-size: 1.17em; }
+.bfields-app :where(h4):where(:not(.bfields-foreign *)) { font-size: 1em; }
+.bfields-app :where(h5):where(:not(.bfields-foreign *)) { font-size: 0.83em; }
+.bfields-app :where(h6):where(:not(.bfields-foreign *)) { font-size: 0.67em; }
+
+/* <p> carries no UA typography at all, so everything is inherited. wp-admin
+   sets font-size/line-height on it directly — this puts it back. */
+.bfields-app :where(p):where(:not(.bfields-foreign *)) {
+	font-size: inherit;
+	font-weight: inherit;
+	line-height: inherit;
+	color: inherit;
+}
+
+.bfields-app :where(ul, ol):where(:not(.bfields-foreign *)) {
+	list-style: none;
+}
+
+.bfields-app :where(a):where(:not(.bfields-foreign *)) {
+	color: inherit;
+}
+
+.bfields-app :where(img):where(:not(.bfields-foreign *)) {
+	display: block;
+	max-width: 100%;
+	border: 0;
+}
+
+.bfields-app :where(button):where(:not(.bfields-foreign *)) {
+	font-family: inherit;
+	cursor: pointer;
+	border: 0;
+	background: none;
+	padding: 0;
+}
+
+/* wp-admin puts `line-height: 2` / `vertical-align: middle` on bare form
+   controls, which shifts them inside their line box. Back to the UA defaults
+   the layout was measured against. */
+.bfields-app :where(input, select, textarea):where(:not(.bfields-foreign *)) {
+	font-family: inherit;
+	line-height: normal;
+	vertical-align: baseline;
+}
+
+/* ---- defensive block (0,1,1): only properties no component sets ----
+   wp-admin/css/forms.css styles `select`, `textarea` and `input[type=…]`
+   directly. The component classes already win on the properties they set;
+   these are the leftovers they don't, so listing them here cannot shadow a
+   component rule. */
+
+.bfields-app input:where(:not(.bfields-foreign *)),
+.bfields-app select:where(:not(.bfields-foreign *)),
+.bfields-app textarea:where(:not(.bfields-foreign *)) {
+	min-height: 0;
+	max-width: none;
+	box-shadow: none;
+	/* forms.css: `input, select { margin: 0 1px }` and `.wp-core-ui select
+	   { line-height: 2 }` — the design repo never met either, and both nudge
+	   a control off its measured position. The UA margin for text controls
+	   is 0; the one control that has another (range, 2px) restates it. */
+	margin: 0;
+	line-height: normal;
+}
+
+.bfields-app input:where(:not(.bfields-foreign *)):focus,
+.bfields-app select:where(:not(.bfields-foreign *)):focus,
+.bfields-app textarea:where(:not(.bfields-foreign *)):focus {
+	box-shadow: none;
+}
+
+.bfields-app :is(input, select, textarea, button):where(:not(.bfields-foreign *)):focus-visible {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.bfields-app :is(*, *::before, *::after) {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+}

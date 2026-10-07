@@ -1,0 +1,23 @@
+{
+  "name": "bplugins/bfields",
+  "description": "bPlugins settings and meta-box framework: a JavaScript body on a PHP spine, with a Codestar compatibility layer.",
+  "type": "wordpress-library",
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://github.com/bPlugins/bfields",
+  "support": {
+    "issues": "https://github.com/bPlugins/bfields/issues",
+    "source": "https://github.com/bPlugins/bfields"
+  },
+  "require": {
+    "php": ">=7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "BFields\\": "php/includes/",
+      "BFields\\Compat\\": "php/compat/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true
+  }
+}

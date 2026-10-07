@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+.vscode
+
+# Golden fixtures are captured from a real site and may carry URLs and post
+# ids from it. They are committed on purpose (they are the contract the round-
+# trip suite tests against) — see tests/php/fixtures/golden/README.md.

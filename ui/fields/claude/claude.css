@@ -1,0 +1,309 @@
+/*
+ * bfields — stand-in field styles.
+ *
+ * The rules for the stand-ins left in ui/fields/claude/ (Link, ImageTiles),
+ * and the composed row layouts and states the design never drew (wide, fill
+ * and wrapping rows, the selector chip's width, the meta box's title column,
+ * the `below` slot, titled display rows, a multiple select, the pressed
+ * dimensions link). Nothing below was measured: it is composed from the
+ * design's tokens and its existing classes. Delete a block when the real
+ * design for it lands (see ./README.md).
+ *
+ * Same scoping rule as admin.css: every selector is `.bfields-app .x`, which
+ * outranks wp-admin's attribute-selector control styles at (0,1,1).
+ */
+
+.bfields-app .bfields-input--mono {
+	font-family: var(--bfields-font-mono);
+	font-size: 13px;
+}
+
+.bfields-app .bfields-select[multiple] {
+	height: auto;
+	min-height: 96px;
+	padding: 8px 14px;
+	background-image: none;
+}
+
+.bfields-app .bfields-mime__image {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+/* ============================================================
+   Row layouts, spacing, link
+
+   The wide/fill row rules and the two stand-ins below have no entry in the
+   design repo, so they are composed rather than measured. They are built
+   strictly from the tokens the rest of the sheet uses, so a host that
+   overrides --bfields-primary restyles them too.
+   ============================================================ */
+
+/* `.bfields-row__control` is `flex: none` — right for a toggle, wrong for a
+   list or a sub-form. FieldRenderer adds `--wide` for the cores whose control
+   IS a block, so a field file never has to ask for it and can never forget. */
+.bfields-app .bfields-row--wide {
+	flex-wrap: wrap;
+	align-items: flex-start;
+}
+
+/* The CHILD combinator is load-bearing. As a descendant selector this also hit
+   every row nested inside the repeater, which collapsed their title column to
+   zero and stacked the label on top of its own control. */
+.bfields-app .bfields-row--wide > .bfields-row__control {
+	flex: 1 0 100%;
+	margin-top: 12px;
+}
+
+/* The editor's 10px lead-in (admin.css) spaces a control from the label
+   BESIDE it. On a line of its own it would only indent it. */
+.bfields-app .bfields-editor .bfields-row--wide > .bfields-row__control {
+	margin-inline-start: 0;
+}
+
+/* ---- fill rows: text fields and the code editor ----
+
+   Not in the design, which only draws toggles, radios and sliders in a row.
+   The title keeps a fixed 240px column — room for "Gallery Thumbnail Item
+   Selector" — and the control takes the rest, top-aligned so a tall editor
+   starts level with its label. FieldRenderer adds the class by core. */
+
+.bfields-app .bfields-row--fill {
+	align-items: flex-start;
+}
+
+.bfields-app .bfields-row--fill > .bfields-row__main {
+	flex: 0 0 240px;
+	/* Centre a one-line title on the 40px field beside it (and on the icon
+	   tile), instead of pinning it to the field's top edge. */
+	padding-top: 11px;
+}
+
+.bfields-app .bfields-row--fill > .bfields-row__control {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.bfields-app .bfields-row--fill > .bfields-row__control > .bfields-input {
+	width: 100%;
+}
+
+@media (max-width: 782px) {
+	.bfields-app .bfields-row--fill > .bfields-row__main {
+		flex-basis: calc(100% - 58px);
+	}
+}
+
+/* ---- a control too wide for its row ----
+
+   Not in the design, whose controls all fit beside their title. A segmented
+   control with long options, a six-option radio set or an upload field used
+   to squeeze the title into one word per line ("Default Hotspot Style"). The
+   title now keeps at least 180px, and a control that does not fit beside it
+   takes a line of its own, still at the right edge. A row that fits is
+   unchanged: nothing wraps. Wide and fill rows lay out their own lines, and
+   so do a fieldset's cells (admin.css, "Fieldset"). */
+
+.bfields-app :not(.bfields-fieldset) > .bfields-row:not(.bfields-row--fill):not(.bfields-row--wide):not(.bfields-row--display):not(.bfields-row--selector) {
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	row-gap: 10px;
+}
+
+.bfields-app :not(.bfields-fieldset) > .bfields-row:not(.bfields-row--fill):not(.bfields-row--wide):not(.bfields-row--display):not(.bfields-row--selector) > .bfields-row__main {
+	min-width: 180px;
+}
+
+/* A control wider than the whole row (six long radio labels) wraps inside
+   the line instead of spilling past its start edge. */
+.bfields-app :not(.bfields-fieldset) > .bfields-row:not(.bfields-row--fill):not(.bfields-row--wide):not(.bfields-row--display):not(.bfields-row--selector) > .bfields-row__control {
+	max-width: 100%;
+	min-width: 0;
+}
+
+.bfields-app .bfields-row__control > .bfields-radios {
+	flex-wrap: wrap;
+	row-gap: 10px;
+}
+
+/* Every selector chip has one width, up to 560px, so a stack of them lines
+   up at any page width; a longer value clips with an ellipsis (Text.tsx adds
+   the title). It stays beside its title rather than wrapping. */
+.bfields-app .bfields-row--selector > .bfields-row__main {
+	min-width: 240px;
+}
+
+.bfields-app .bfields-row--selector > .bfields-row__control {
+	flex: 0 1 560px;
+	min-width: min(320px, 100%);
+}
+
+.bfields-app .bfields-row--selector .bfields-selector-field {
+	box-sizing: border-box;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.bfields-app .bfields-row--selector .bfields-selector-field input {
+	flex: 1 1 auto;
+	width: auto;
+	text-overflow: ellipsis;
+}
+
+/* ---- meta box: text, upload and code rows keep the common title column ----
+
+   The fixed 240px fill column suits the Settings page; in a meta box it
+   squeezed long titles to four lines beside short controls. Here the title
+   grows like any row's, text and upload controls take up to 320px, and the
+   code editor takes a line of its own. */
+
+.bfields-app .bfields-admin--metabox .bfields-row--fill:not(.bfields-row--titled):not(.bfields-row--code) > .bfields-row__main,
+.bfields-app .bfields-admin--metabox .bfields-row--media > .bfields-row__main {
+	flex: 1 1 0;
+	min-width: 180px;
+}
+
+.bfields-app .bfields-admin--metabox .bfields-row--fill:not(.bfields-row--titled):not(.bfields-row--code) > .bfields-row__control,
+.bfields-app .bfields-admin--metabox .bfields-row--media > .bfields-row__control {
+	flex: 0 1 320px;
+	min-width: 0;
+}
+
+.bfields-app .bfields-admin--metabox .bfields-row--media > .bfields-row__control > .bfields-media {
+	flex: 1 1 auto;
+}
+
+.bfields-app .bfields-admin--metabox .bfields-row--media > .bfields-row__control > .bfields-media .bfields-media__input {
+	flex: 1 1 auto;
+	inline-size: auto;
+}
+
+.bfields-app .bfields-admin--metabox .bfields-row--code {
+	flex-wrap: wrap;
+}
+
+.bfields-app .bfields-admin--metabox .bfields-row--code > .bfields-row__main {
+	flex: 1 1 0;
+	padding-top: 0;
+}
+
+.bfields-app .bfields-admin--metabox .bfields-row--code > .bfields-row__control {
+	flex: 1 0 100%;
+	margin-top: 12px;
+}
+
+@media (max-width: 782px) {
+	.bfields-app .bfields-row--selector {
+		flex-wrap: wrap;
+	}
+
+	.bfields-app .bfields-row--selector > .bfields-row__control,
+	.bfields-app .bfields-admin--metabox .bfields-row--fill:not(.bfields-row--titled):not(.bfields-row--code) > .bfields-row__control,
+	.bfields-app .bfields-admin--metabox .bfields-row--media > .bfields-row__control {
+		flex-basis: 100%;
+	}
+}
+
+/* ---- the `below` adornment slot: full width under the control ---- */
+
+.bfields-app .bfields-row--below {
+	flex-wrap: wrap;
+	row-gap: 10px;
+}
+
+/* The basis subtracts the icon indent so the block ends at the row's edge. */
+.bfields-app .bfields-row__below {
+	--bfields-below-indent: 0px;
+	flex: 1 0 calc(100% - var(--bfields-below-indent));
+	margin-inline-start: var(--bfields-below-indent);
+	min-width: 0;
+	max-width: calc(100% - var(--bfields-below-indent));
+}
+
+.bfields-app .bfields-row__icon ~ .bfields-row__below {
+	--bfields-below-indent: 58px;
+}
+
+.bfields-app .bfields-editor .bfields-row__icon ~ .bfields-row__below {
+	--bfields-below-indent: 53px;
+}
+
+/* A fieldset cell is a column: a percentage basis would resolve against its height and wrap. */
+.bfields-app .bfields-fieldset > .bfields-row > .bfields-row__below {
+	flex: none;
+}
+
+.bfields-app .bfields-danger-card:has(> .bfields-row__below) {
+	flex-wrap: wrap;
+	row-gap: 10px;
+}
+
+.bfields-app .bfields-danger-card__icon ~ .bfields-row__below {
+	--bfields-below-indent: 40px;
+}
+
+.bfields-app .bfields-card__below {
+	margin-top: 12px;
+}
+
+.bfields-app .bfields-row__below:empty,
+.bfields-app .bfields-card__below:empty {
+	display: none;
+}
+
+/* ---- titled display rows ----
+
+   A `content`, `callback` or `notice` with a title: the title in its column,
+   as Codestar draws it, and the HTML (with its hint) as one block beside it,
+   starting level with the title rather than centred on a 40px field. */
+
+.bfields-app .bfields-row--titled > .bfields-row__main {
+	padding-top: 0;
+}
+
+.bfields-app .bfields-row--titled > .bfields-row__control {
+	display: block;
+}
+
+.bfields-app .bfields-row--titled .bfields-hint {
+	margin-top: 8px;
+}
+
+/* ---- link ---- */
+
+.bfields-app .bfields-link {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	justify-content: flex-end;
+}
+
+.bfields-app .bfields-link .bfields-input {
+	width: 210px;
+}
+
+.bfields-app .bfields-link__target {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 12px;
+	color: var(--bfields-row-desc);
+	white-space: nowrap;
+}
+
+.bfields-app .bfields-link__target input {
+	margin: 0;
+}
+
+/* ============================================================
+   Pressed link — a state of the designed dimensions control
+   ============================================================ */
+
+/* The design draws the link button at rest only. Pressed, it locks a
+   two-axis field's aspect ratio (Dimension.tsx), and needs to say so. */
+.bfields-app .bfields-dim__link[aria-pressed="true"] {
+	border-color: var(--bfields-primary);
+	background: var(--bfields-strip);
+}

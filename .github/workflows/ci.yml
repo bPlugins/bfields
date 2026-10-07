@@ -1,0 +1,139 @@
+# bfields — CI.
+#
+# Runs on every push, per Phase 0 of the migration plan. The TypeScript suites
+# run everywhere. The PHP data suites (round-trip, seeding, save parity) run in
+# the `wordpress` job against a disposable WordPress with real Codestar: the
+# field sets come from tests/php/fixtures/schema-inventory.json, the records
+# from the golden and edge fixtures, so 3D Viewer itself is not needed. This
+# job is gate item 2 of the Codestar removal (plan 4.10) — not a manual run.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  js:
+    name: TypeScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Types
+        run: npx tsc -p tsconfig.json --noEmit
+
+      - name: Unit — dependency-engine parity with PHP
+        run: npx jest --config jest.config.cjs
+
+      - name: Build
+        run: npm run build
+
+      - name: Build the demo host
+        run: npm run build:demo
+
+      - name: Bundle dependencies exist on the WordPress floor
+        # A missing dependency means the script is never printed — a blank
+        # screen with no error (review 3.4: react-jsx-runtime is 6.6+).
+        run: php tests/php/asset-deps.php
+
+      - name: PHP engine replays the dependency fixtures
+        run: php tests/php/dependency-replay.php
+
+      - name: The theme must be scoped for wp-admin
+        # Every selector in admin.css is written `.bfields-app .bfields-x`.
+        # An unscoped one loses to wp-admin's forms.css attribute selectors,
+        # which is how the inputs silently got 2px corners instead of 8px.
+        # Comments are stripped first: admin.css diagrams class names in them.
+        run: |
+          for sheet in ui/theme/admin.css ui/fields/claude/claude.css; do
+            if php -r 'echo preg_replace("#/\*.*?\*/#s", "", file_get_contents($argv[1]));' "$sheet" | grep -nP '^\s*\.bfields-(?!app)'; then
+              echo "Unscoped selector(s) in $sheet — see the SCOPING note at the top of ui/theme/admin.css."
+              exit 1
+            fi
+          done
+
+      - name: The built bundle must not contain React
+        # React comes from wp.element, never from the bundle (plan 4.6): two
+        # Reacts on one admin page is the failure this guards against.
+        run: |
+          if grep -qE 'react-dom/client|createRoot=function' build/index.js; then
+            echo 'React appears to be bundled — check the webpack externals.'
+            exit 1
+          fi
+          grep -q 'window.wp.element' build/index.js
+
+  php:
+    name: PHP lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.4', '8.2', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+
+      - name: Syntax
+        # demo/ is a development harness and never ships, but a demo that does
+        # not parse is a demo nobody can open — and it is the only screen where
+        # the meta-box path and the group/fieldset components are exercised.
+        run: find php tests/php demo bfields-3dv-demo.php -name '*.php' -print0 | xargs -0 -n1 php -l
+
+  wordpress:
+    name: PHP data suites (WordPress ${{ matrix.wp }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 6.5 is the plugins' "Requires at least".
+        wp: ['6.5', 'latest']
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: bfields
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli
+          tools: wp-cli
+
+      - name: WordPress ${{ matrix.wp }}
+        run: |
+          mkdir wp && cd wp
+          wp core download --version=${{ matrix.wp }}
+          wp config create --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1:3306
+          wp core install --url=http://localhost --title=bfields-ci --admin_user=admin --admin_password=admin --admin_email=ci@example.invalid --skip-email
+
+      - name: Codestar Framework 2.3.1, the version 3D Viewer vendors
+        # The public build is Codestar free: CSF_Options, no CSF_Metabox. The
+        # meta-box half of save-parity.php is reported as skipped here and is
+        # required in local runs, where 3D Viewer supplies Codestar Pro.
+        run: |
+          git clone --depth 1 --branch 2.3.1 https://github.com/Codestar/codestar-framework.git wp/wp-content/plugins/codestar-framework
+          cd wp && wp plugin activate codestar-framework
+
+      - name: Round-trip, seeding and save parity
+        env:
+          BFIELDS_SCHEMA_SOURCE: inventory
+          WP_PATH: ${{ github.workspace }}/wp
+        run: ./bfields/bin/test.sh --php-only

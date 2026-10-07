@@ -1,0 +1,4449 @@
+/*
+ * bfields — the options screen.
+ *
+ * Ported from bPlugins/3d-viewer-new-ui (src/styles/admin.css). Values were
+ * measured off assets/images/figma/settings/; the odd-looking ones (15.9px row
+ * padding, 41px toggle track, 178px MIME columns) are the measurements, not
+ * typos. Changes here must be checked against those exports.
+ *
+ * Dropped from the port, per plan 4.6: the mock wp-admin chrome — the Screen
+ * Options bar, the fake admin notice and the "Thank you for creating with
+ * WordPress" footer. Those exist in the design repo so the standalone preview
+ * looks like wp-admin; inside wp-admin, WordPress draws them itself.
+ *
+ * SCOPING: every selector here is written `.bfields-app .bfields-x`, never bare
+ * `.bfields-x`. That is load-bearing, not tidiness. wp-admin's forms.css styles
+ * controls with attribute selectors —
+ *
+ *   input[type="text"], ... select, textarea { border-radius: 2px; ... }
+ *
+ * — which is (0,1,1) specificity and beats a plain `.bfields-input` at (0,1,0),
+ * so the inputs came out with wp-admin's 2px corners instead of the design's
+ * 8px. The app scope takes every rule to (0,2,0)+, which wins outright rather
+ * than depending on stylesheet order. It is applied to ALL selectors, not just
+ * the controls: scoping only some of them would leave a modifier
+ * (`.bfields-tab--active`) ranking BELOW its own scoped base rule.
+ *
+ * base.css's `:where()` element ladder cannot help here — it is deliberately
+ * only (0,1,0), enough for wp-admin's bare `p`/`h2` rules and no more.
+ *
+ * The design repo never hit this: it runs standalone, with no forms.css.
+ */
+
+/* ============================================================
+   Page chrome
+   ============================================================ */
+
+.bfields-app .bfields-admin {
+	min-height: var(--bfields-viewport);
+	padding: 0 var(--bfields-gutter) 40px;
+	background: var(--bfields-bg);
+	font-family: var(--bfields-font);
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-admin__inner {
+	max-width: var(--bfields-container);
+	margin: 0 auto;
+}
+
+.bfields-app .bfields-admin--align-start .bfields-admin__inner {
+	margin-left: 0;
+}
+
+.bfields-app .bfields-settings-head {
+	display: flex;
+	align-items: center;
+	gap: 48px;
+	margin: 20px 0;
+}
+
+.bfields-app .bfields-settings-head__title {
+	margin: 0;
+	font-size: 22px;
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	color: #000;
+	white-space: nowrap;
+}
+
+.bfields-app .bfields-settings-head__logo {
+	width: 28px;
+	height: 28px;
+	object-fit: contain;
+	flex: none;
+	/* The head's 48px gap is the design's title-to-search space; the logo (not
+	   in the design) sits 12px from its title. */
+	margin-inline-end: -36px;
+}
+
+/* ---- search ---- */
+
+.bfields-app .bfields-search {
+	position: relative;
+	flex: 1;
+}
+
+.bfields-app .bfields-search svg {
+	position: absolute;
+	inset-inline-start: 18px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: var(--bfields-primary);
+}
+
+.bfields-app .bfields-search input {
+	width: 100%;
+	height: 44px;
+	padding: 0 18px 0 52px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: #fff;
+	font-family: inherit;
+	font-size: 15px;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-search input::placeholder {
+	color: #3170ec;
+}
+
+/*
+ * `tabs_switcher`: not in the design. Two icon buttons, drawn like the search
+ * box they sit beside (44px, white, bordered). It goes to the right end of the
+ * head, 16px after the search when there is one.
+ */
+.bfields-app .bfields-tabs-switch {
+	display: inline-flex;
+	flex: none;
+	gap: 2px;
+	height: 44px;
+	margin-inline-start: auto;
+	padding: 4px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: #fff;
+}
+
+.bfields-app .bfields-search + .bfields-tabs-switch {
+	margin-inline-start: -32px;
+}
+
+.bfields-app .bfields-tabs-switch button {
+	display: grid;
+	place-items: center;
+	width: 34px;
+	height: 34px;
+	min-height: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 6px;
+	background: transparent;
+	color: var(--bfields-row-desc);
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.bfields-app .bfields-tabs-switch button:hover {
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-tabs-switch button[aria-pressed="true"] {
+	background: var(--bfields-strip);
+	color: var(--bfields-primary);
+}
+
+.bfields-app .bfields-tabs-switch button:focus-visible {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: -2px;
+}
+
+/* The editor's "Add New" heading, with the switch at its right. The heading
+   keeps the design's own 20px top margin, so the row bottom-aligns. */
+.bfields-app .bfields-title-row {
+	display: flex;
+	align-items: flex-end;
+	gap: 16px;
+}
+
+/* The 44px switch must not make the row taller than the 36px heading, or
+   everything below moves off the design's measurements. */
+.bfields-app .bfields-title-row .bfields-tabs-switch {
+	margin-block: -4px;
+}
+
+/* ============================================================
+   Panel + tab strip
+   ============================================================ */
+
+.bfields-app .bfields-panel {
+	border: 1px solid var(--bfields-border);
+	border-radius: var(--bfields-radius);
+	background: var(--bfields-card);
+	padding: 19px;
+}
+
+.bfields-app .bfields-tabs {
+	display: flex;
+	gap: 24px;
+	padding: 10px 16px;
+	border-radius: 8px;
+	background: var(--bfields-strip);
+}
+
+/*
+ * `sticky_tabs`: the strip stays under the admin bar while its panel scrolls,
+ * and lets go when the panel's bottom goes past. The ring is the panel's own
+ * white, so at rest it is invisible inside the panel's 19px padding; once
+ * stuck, it is the band that keeps content from showing round the strip's
+ * rounded corners, and the 8px offset puts its top edge on the admin bar.
+ */
+.bfields-app .bfields-tabs--sticky {
+	position: sticky;
+	z-index: 20;
+	top: calc(var(--wp-admin--admin-bar--height, 32px) + 8px);
+	box-shadow: 0 0 0 8px var(--bfields-card);
+}
+
+/* Below 600px wp-admin stops fixing the admin bar; it scrolls away. */
+@media (max-width: 600px) {
+	.bfields-app .bfields-tabs--sticky {
+		top: 8px;
+	}
+}
+
+/* On a settings page the head (title, search, layout switch) pins too, 12px
+   under the admin bar on a band of the page colour, and the tabs pin under
+   it. --bfields-head-h is the head's measured height (AdminShell). Below
+   782px only the tabs pin: two pinned bars would fill a phone screen. */
+@media (min-width: 783px) {
+	.bfields-app .bfields-admin--sticky-head .bfields-settings-head {
+		position: sticky;
+		z-index: 21;
+		top: calc(var(--wp-admin--admin-bar--height, 32px) + 12px);
+		background: var(--bfields-bg);
+		box-shadow: 0 0 0 12px var(--bfields-bg);
+	}
+
+	.bfields-app .bfields-admin--sticky-head .bfields-tabs--sticky {
+		top: calc(var(--wp-admin--admin-bar--height, 32px) + var(--bfields-head-h, 44px) + 32px);
+	}
+
+	/* The panel's top edge, kept under the head while the real one is
+	   scrolled away: 8px deep, which is the pinned tabs' white ring. */
+	/* Behind the rounded edge, the page colour hides the scrolled panel's
+	   square corners. */
+	.bfields-app .bfields-admin--sticky-head .bfields-settings-head.is-stuck::before,
+	.bfields-app .bfields-admin--sticky-head .bfields-settings-head.is-stuck::after {
+		content: "";
+		position: absolute;
+		top: calc(100% + 12px);
+		right: 0;
+		left: 0;
+		height: 8px;
+	}
+
+	.bfields-app .bfields-admin--sticky-head .bfields-settings-head.is-stuck::before {
+		background: var(--bfields-bg);
+	}
+
+	.bfields-app .bfields-admin--sticky-head .bfields-settings-head.is-stuck::after {
+		border: 1px solid var(--bfields-border);
+		border-bottom: 0;
+		border-radius: var(--bfields-radius) var(--bfields-radius) 0 0;
+		background: var(--bfields-card);
+	}
+}
+
+.bfields-app .bfields-tab {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	height: 44px;
+	padding: 0 16px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: #fff;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--bfields-row-title);
+	white-space: nowrap;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.bfields-app .bfields-tab:hover {
+	border-color: #cbd5e1;
+}
+
+.bfields-app .bfields-tab--active {
+	border-color: var(--bfields-primary);
+	background: var(--bfields-primary);
+	color: #fff;
+}
+
+/* A section holding a field its `validate` rejected (Codestar's "!" on the tab). */
+.bfields-app .bfields-tab__error {
+	display: inline-grid;
+	place-items: center;
+	flex: none;
+	inline-size: 18px;
+	block-size: 18px;
+	margin-inline-start: auto;
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--bfields-danger-fg), var(--bfields-heading) 20%);
+	box-shadow: 0 0 0 1px #fff;
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 1;
+}
+
+/* The design has four tabs and room to spare. A real host can register more
+   (3D Viewer registers seven), so the strip wraps instead of overflowing. */
+.bfields-app .bfields-tabs {
+	flex-wrap: wrap;
+	row-gap: 12px;
+}
+
+.bfields-app .bfields-settings-body {
+	padding: 20px 0 0;
+	/* All four Settings frames hold the panel at the same height whatever the
+	   tab shows (design repo README, "Design inconsistencies" 8). */
+	min-height: 859px;
+}
+
+/* Tabs with no inner card still sit on the card's own 32px inset; the top matches the carded tabs. */
+.bfields-app .bfields-settings-body--flush {
+	padding: 20px 32px 0;
+}
+
+/*
+ * `tabs_position: 'left'`: not in the design, which only draws the strip on
+ * top. The same strip and pills, stacked in a column beside the body. The
+ * body's top inset exists to clear the strip, so it drops here; its side
+ * inset stays. `sticky_tabs` keeps working: the column pins instead.
+ */
+.bfields-app .bfields-panel--sidebar {
+	display: grid;
+	/* --bfields-tabs-width: the tab column's handle, with `resizable` on. */
+	grid-template-columns: var(--bfields-tabs-width, 240px) minmax(0, 1fr);
+	align-items: start;
+	gap: 24px;
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-tabs {
+	flex-direction: column;
+	flex-wrap: nowrap;
+	gap: 8px;
+	padding: 10px;
+}
+
+/* The strip's colour fills the whole column, as tall as the body beside it;
+   the tabs share its cell so they can still pin. */
+.bfields-app .bfields-panel--sidebar::before {
+	content: "";
+	grid-row: 1;
+	grid-column: 1;
+	align-self: stretch;
+	border-radius: 8px;
+	background: var(--bfields-strip);
+}
+
+.bfields-app .bfields-panel--sidebar > .bfields-tabs {
+	grid-row: 1;
+	grid-column: 1;
+}
+
+.bfields-app .bfields-panel--sidebar > .bfields-tabs + * {
+	grid-row: 1;
+	grid-column: 2;
+}
+
+/* Pinned over the column's own colour, the white ring would frame it. */
+.bfields-app .bfields-panel--sidebar > .bfields-tabs--sticky {
+	box-shadow: none;
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-tab {
+	justify-content: flex-start;
+	height: auto;
+	min-height: 44px;
+	padding: 10px 16px;
+	text-align: start;
+	white-space: normal;
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-tab > svg {
+	flex: none;
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-settings-body {
+	padding-top: 0;
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-settings-body--flush {
+	padding: 10px 13px 0 0;
+}
+
+/* The design's five fixed 178px tile columns need the full-width body. */
+.bfields-app .bfields-panel--sidebar .bfields-mime-grid {
+	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+
+/* Long inline radio sets would otherwise crush the row's title column. */
+.bfields-app .bfields-panel--sidebar .bfields-row__main {
+	min-width: 180px;
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-row__control {
+	flex: 0 1 auto;
+	min-width: 0;
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-radios {
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	row-gap: 12px;
+}
+
+/* Too narrow for a column beside the body: back to the strip on top. */
+@media (max-width: 782px) {
+	.bfields-app .bfields-panel--sidebar {
+		display: block;
+	}
+
+	.bfields-app .bfields-panel--sidebar::before {
+		content: none;
+	}
+
+	.bfields-app .bfields-panel--sidebar > .bfields-tabs--sticky {
+		box-shadow: 0 0 0 8px var(--bfields-card);
+	}
+
+	.bfields-app .bfields-panel--sidebar .bfields-tabs {
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 12px;
+		padding: 10px 16px;
+	}
+
+	.bfields-app .bfields-panel--sidebar .bfields-settings-body {
+		padding-top: 20px;
+	}
+
+	.bfields-app .bfields-panel--sidebar .bfields-settings-body--flush {
+		padding: 20px 32px 0;
+	}
+}
+
+.bfields-app .bfields-section-title {
+	margin: 0 0 26px;
+	font-size: 18px;
+	font-weight: 700;
+	color: var(--bfields-heading);
+}
+
+/* ============================================================
+   Setting rows
+   ============================================================ */
+
+.bfields-app .bfields-row {
+	display: flex;
+	align-items: center;
+	gap: 18px;
+	padding: 15.9px 0;
+	border-bottom: 1px solid #f1f3f5;
+}
+
+/* Rows that sit in their own block in the design (e.g. Loading Type). */
+.bfields-app .bfields-row--spaced {
+	padding: 27px 0;
+}
+
+.bfields-app .bfields-row--spaced + .bfields-row {
+	padding-top: 38px;
+}
+
+.bfields-app .bfields-settings-body .bfields-row--spaced {
+	padding: 39px 0 17px;
+}
+
+.bfields-app .bfields-row:last-child {
+	border-bottom: 0;
+}
+
+.bfields-app .bfields-row__icon {
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	border-radius: 8px;
+	background: #f8fafc;
+	color: var(--bfields-row-title);
+	flex: none;
+}
+
+.bfields-app .bfields-row__main {
+	flex: 1;
+	min-width: 0;
+}
+
+.bfields-app .bfields-row__title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.3;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-row__desc {
+	margin: 3px 0 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 20px;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-row__control {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex: none;
+}
+
+/* A field the current build cannot render, or one locked behind Pro. */
+.bfields-app .bfields-row--locked .bfields-row__control {
+	opacity: 0.65;
+}
+
+.bfields-app .bfields-badge--pro {
+	padding: 1px 7px;
+	border-radius: 999px;
+	background: var(--bfields-warn-bg);
+	color: var(--bfields-warn-fg);
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+/* Display-only fields (content / notice / heading) span the full row. */
+.bfields-app .bfields-row--display {
+	display: block;
+	padding: 15.9px 0;
+}
+
+/* ============================================================
+   Controls
+   ============================================================ */
+
+/* ---- toggle ---- */
+
+.bfields-app .bfields-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.bfields-app .bfields-toggle__track {
+	position: relative;
+	width: 41px;
+	height: 24px;
+	border-radius: 999px;
+	background: var(--bfields-off-soft);
+	transition: background-color 0.18s ease;
+	flex: none;
+}
+
+.bfields-app .bfields-toggle__track::after {
+	content: "";
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: #fff;
+	transition: transform 0.18s ease;
+}
+
+.bfields-app .bfields-toggle--on .bfields-toggle__track {
+	background: var(--bfields-on);
+}
+
+.bfields-app .bfields-toggle--on .bfields-toggle__track::after {
+	transform: translateX(17px);
+}
+
+.bfields-app .bfields-toggle--danger .bfields-toggle__track {
+	background: var(--bfields-off);
+}
+
+.bfields-app .bfields-toggle__label {
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--bfields-off-fg);
+}
+
+.bfields-app .bfields-toggle--on .bfields-toggle__label {
+	color: var(--bfields-on-fg);
+}
+
+.bfields-app .bfields-toggle--danger .bfields-toggle__label {
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-toggle:disabled {
+	cursor: not-allowed;
+}
+
+/* ---- radios ---- */
+
+.bfields-app .bfields-radios {
+	display: inline-flex;
+	align-items: center;
+	gap: 26px;
+}
+
+.bfields-app .bfields-radio {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	font-size: 14px;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-radio__dot {
+	display: grid;
+	place-items: center;
+	width: 18px;
+	height: 18px;
+	border: 1.5px solid var(--bfields-control-border);
+	border-radius: 50%;
+	flex: none;
+}
+
+.bfields-app .bfields-radio--on .bfields-radio__dot {
+	border-color: var(--bfields-primary);
+}
+
+.bfields-app .bfields-radio--on .bfields-radio__dot::after {
+	content: "";
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background: var(--bfields-primary);
+}
+
+/* ---- MIME / tile grid ---- */
+
+/* The design's 178px tiles, five across at the 1185px column; a wider page
+   adds columns instead of leaving the card's right half empty. */
+.bfields-app .bfields-mime-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 178px);
+	gap: 14px;
+	margin-top: 20px;
+}
+
+.bfields-app .bfields-mime {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	height: 50px;
+	padding: 0 16px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: #fff;
+	font-size: 14px;
+	color: var(--bfields-row-title);
+	text-align: start;
+}
+
+.bfields-app .bfields-mime--on {
+	background: #f4f6f8;
+}
+
+.bfields-app .bfields-mime__box {
+	display: grid;
+	place-items: center;
+	width: 20px;
+	height: 20px;
+	border: 1.5px solid var(--bfields-control-border);
+	border-radius: 5px;
+	color: #fff;
+	flex: none;
+}
+
+.bfields-app .bfields-mime--on .bfields-mime__box {
+	border-color: var(--bfields-check);
+	background: var(--bfields-check);
+}
+
+.bfields-app .bfields-mime__ext {
+	color: var(--bfields-row-desc);
+}
+
+/* ---- segmented ---- */
+
+.bfields-app .bfields-segmented {
+	display: inline-flex;
+	padding: 4px;
+	border-radius: 8px;
+	background: var(--bfields-field);
+}
+
+.bfields-app .bfields-segmented button {
+	height: 32px;
+	padding: 0 18px;
+	border-radius: 6px;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-segmented button[aria-pressed="true"] {
+	background: var(--bfields-save);
+	color: #fff;
+	font-weight: 600;
+}
+
+/*
+ * Neutralise wp-admin's control min-height.
+ *
+ * forms.css sets `select { min-height: 40px }` and `.wp-core-ui select
+ * { min-height: 40px }`. A min-height CLAMPS the used height no matter how
+ * specific the height rule is, so the dimension field's 36px unit select came
+ * out 40px even though `.bfields-app .bfields-dim select { height: 36px }` was
+ * the winning rule. Specificity could not fix this; only resetting the
+ * min-height can.
+ *
+ * Placed BEFORE the component rules on purpose: the few controls that want a
+ * real min-height (the code editor, a multiple select, a textarea) set it
+ * below and win on source order or on their extra element specificity.
+ */
+.bfields-app :is(.bfields-input, .bfields-select, .bfields-btn, .bfields-tab, .bfields-mime, .bfields-linkbtn, .bfields-number__step, .bfields-segmented button, .bfields-toggle) {
+	min-height: 0;
+}
+
+/* ---- text fields ---- */
+
+.bfields-app .bfields-input {
+	height: 40px;
+	padding: 0 14px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: #fff;
+	font-family: inherit;
+	font-size: 14px;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-input::placeholder {
+	color: var(--bfields-placeholder);
+}
+
+.bfields-app .bfields-input:focus-visible {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: -1px;
+}
+
+.bfields-app .bfields-select {
+	height: 44px;
+	padding: 0 38px 0 14px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: #f8fafc
+		url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+		no-repeat right 14px center;
+	appearance: none;
+	font-family: inherit;
+	font-size: 14px;
+	color: var(--bfields-row-title);
+	min-width: 180px;
+	/* wp-admin's forms.css caps every select at `max-width: 25rem`, which
+	   stopped the Decoder card's full-width select at 400px. */
+	max-width: none;
+}
+
+/* ---- selector chip (copyable) ---- */
+
+.bfields-app .bfields-selector-field {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	height: 40px;
+	padding: 0 12px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: var(--bfields-bg);
+	font-family: var(--bfields-font-mono);
+	font-size: 13px;
+	color: var(--bfields-row-title);
+	min-width: 320px;
+	justify-content: space-between;
+}
+
+.bfields-app .bfields-selector-field input {
+	flex: 1;
+	min-width: 0;
+	height: auto;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
+	font: inherit;
+	color: inherit;
+}
+
+/* wp-admin's input:focus border + box-shadow drew a second box inside the chip. */
+.bfields-app .bfields-selector-field input:focus,
+.bfields-app .bfields-selector-field input:focus-visible {
+	border: 0;
+	box-shadow: none;
+	outline: none;
+}
+
+/* The chip is the field: focus rings it, as .bfields-input is ringed, rather
+   than drawing base.css's ring round the bare input inside it. */
+.bfields-app .bfields-selector-field:has(input:focus-visible) {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: -1px;
+}
+
+.bfields-app .bfields-selector-field button {
+	color: var(--bfields-row-desc);
+	flex: none;
+}
+
+.bfields-app .bfields-selector-field button:hover {
+	color: var(--bfields-primary);
+}
+
+/* ---- sliders ---- */
+
+.bfields-app .bfields-slider {
+	display: flex;
+	align-items: center;
+	gap: 18px;
+}
+
+/*
+ * The track fills blue up to the thumb — a hard-stop gradient at
+ * --bfields-range-pct, in the same blue as the thumb, not a plain grey bar.
+ * (A flat single-colour track was a bug in an earlier revision of the design
+ * repo.) Track/thumb colour is --bfields-slider, NOT --bfields-primary.
+ */
+.bfields-app .bfields-slider input[type="range"] {
+	--bfields-range-pct: 0%;
+	/* Chrome's UA margin for a range input, which the design was measured
+	   with; base.css zeroes every control's margin to undo wp-admin's. */
+	margin: 2px;
+	width: 350px;
+	height: 5px;
+	border-radius: 999px;
+	appearance: none;
+	background: linear-gradient(
+		to right,
+		var(--bfields-slider) var(--bfields-range-pct),
+		#e2e8f0 var(--bfields-range-pct)
+	);
+}
+
+.bfields-app .bfields-slider input[type="range"]::-webkit-slider-thumb {
+	appearance: none;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: var(--bfields-slider);
+	cursor: pointer;
+}
+
+.bfields-app .bfields-slider input[type="range"]::-moz-range-track {
+	height: 5px;
+	border-radius: 999px;
+	background: #e2e8f0;
+}
+
+.bfields-app .bfields-slider input[type="range"]::-moz-range-progress {
+	height: 5px;
+	border-radius: 999px;
+	background: var(--bfields-slider);
+}
+
+.bfields-app .bfields-slider input[type="range"]::-moz-range-thumb {
+	width: 18px;
+	height: 18px;
+	border: 0;
+	border-radius: 50%;
+	background: var(--bfields-slider);
+	cursor: pointer;
+}
+
+.bfields-app .bfields-slider__value {
+	display: grid;
+	place-items: center;
+	min-width: 36px;
+	height: 34px;
+	padding: 0 8px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 6px;
+	font-size: 14px;
+	color: var(--bfields-row-title);
+}
+
+/* ---- dimensions ---- */
+
+.bfields-app .bfields-dim {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.bfields-app .bfields-dim .bfields-input {
+	width: 72px;
+	height: 36px;
+	text-align: start;
+}
+
+.bfields-app .bfields-dim select {
+	width: 62px;
+	height: 36px;
+	padding: 0 24px 0 10px;
+	font-size: 13px;
+	background-position: right 8px center;
+	min-width: 0;
+}
+
+.bfields-app .bfields-dim__link {
+	display: grid;
+	place-items: center;
+	width: 34px;
+	height: 34px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 6px;
+	color: var(--bfields-primary);
+}
+
+/* ---- colour ---- */
+
+.bfields-app .bfields-colorpick {
+	/* The native colour input is laid over the whole button (below), so the
+	   button is its positioning context and every pixel of it opens the picker. */
+	position: relative;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	/* The settings rows' text and number inputs. */
+	height: 40px;
+	padding: 0 14px 0 8px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: #fff;
+	font-size: 14px;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-colorpick__swatch {
+	width: 26px;
+	height: 18px;
+	border-radius: 4px;
+	background: var(--bfields-primary);
+	flex: none;
+}
+
+.bfields-app .bfields-colorpick__picker {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	border: 0;
+	opacity: 0;
+	cursor: pointer;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+
+.bfields-app .bfields-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 9px;
+	height: 40px;
+	padding: 0 18px;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 600;
+	white-space: nowrap;
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.bfields-app .bfields-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.bfields-app .bfields-btn--primary {
+	background: var(--bfields-primary);
+	color: #fff;
+}
+
+.bfields-app .bfields-btn--primary:hover:not(:disabled) {
+	background: var(--bfields-primary-hover);
+}
+
+.bfields-app .bfields-btn--save {
+	background: var(--bfields-save);
+	color: #fff;
+}
+
+.bfields-app .bfields-btn--save:hover:not(:disabled) {
+	background: #2f45e0;
+}
+
+.bfields-app .bfields-btn--ghost {
+	height: 45px;
+	padding: 0 14px;
+	border: 1px solid var(--bfields-border);
+	background: #fff;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-btn--ghost:hover:not(:disabled) {
+	background: var(--bfields-bg);
+}
+
+.bfields-app .bfields-btn--reset {
+	background: var(--bfields-reset-bg);
+	color: var(--bfields-reset-fg);
+}
+
+.bfields-app .bfields-btn--danger {
+	background: var(--bfields-danger-bg);
+	color: var(--bfields-danger-fg);
+}
+
+.bfields-app .bfields-btn--link {
+	color: var(--bfields-muted);
+	font-weight: 500;
+	height: auto;
+	padding: 0;
+}
+
+.bfields-app .bfields-actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	margin-top: 26px;
+}
+
+/* ---- Sticky action bar ----
+   Not in the design. Once a value is unsaved (.is-dirty), Save stays in reach
+   on a long tab: the bar pins 20px above the window's bottom edge and settles
+   back into place at the end of the panel; saving lets it go again. While pinned (stickyBar.ts adds .is-stuck) it floats on a
+   white card, so the rows don't show through. At rest it is the
+   measured bar, unchanged. Settings only: the post editor's Update is
+   already pinned in its sidebar. */
+.bfields-app .bfields-actions.is-dirty {
+	position: sticky;
+	/* stickyBar.ts OFFSET. */
+	bottom: 20px;
+	z-index: 15;
+}
+
+.bfields-app .bfields-actions.is-stuck::before {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	inset: -12px -16px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 12px;
+	background: var(--bfields-card);
+	box-shadow:
+		0 12px 32px -8px rgba(15, 23, 42, 0.18),
+		0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+/* Slides up from the window's edge when the first change pins it, and back
+   down when saving (or undoing) lets it go (stickyBar.ts, useBarPhase). */
+.bfields-app .bfields-actions.is-stuck.is-entering {
+	animation: bfields-bar-in 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.bfields-app .bfields-actions.is-stuck.is-leaving {
+	animation: bfields-bar-out 220ms ease-in forwards;
+}
+
+@keyframes bfields-bar-in {
+	from {
+		opacity: 0;
+		transform: translateY(calc(100% + 40px));
+	}
+}
+
+@keyframes bfields-bar-out {
+	to {
+		opacity: 0;
+		transform: translateY(calc(100% + 40px));
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.bfields-app .bfields-actions.is-stuck:is(.is-entering, .is-leaving) {
+		animation: none;
+	}
+}
+
+.bfields-app .bfields-actions__end {
+	display: block;
+	height: 0;
+}
+
+.bfields-app .bfields-actions .bfields-btn {
+	height: 40px;
+	padding: 0 15px;
+}
+
+.bfields-app .bfields-actions__status {
+	margin-inline-end: auto;
+	font-size: 13px;
+	font-weight: 500;
+}
+
+.bfields-app .bfields-actions__status--dirty {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--bfields-warn-fg);
+}
+
+.bfields-app .bfields-actions__status--dirty::before {
+	content: "";
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: currentColor;
+	box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 20%, transparent);
+}
+
+.bfields-app .bfields-actions__status--success {
+	color: var(--bfields-reset-fg);
+}
+
+.bfields-app .bfields-actions__status--error {
+	color: var(--bfields-danger-fg);
+}
+
+.bfields-app .bfields-linkbtns {
+	display: flex;
+	gap: 10px;
+	flex: none;
+}
+
+.bfields-app .bfields-linkbtn {
+	height: 34px;
+	padding: 0 14px;
+	border-radius: 6px;
+	font-size: 14px;
+	font-weight: 600;
+	background: var(--bfields-info-bg);
+	color: var(--bfields-primary);
+}
+
+.bfields-app .bfields-linkbtn--muted {
+	background: var(--bfields-field);
+	color: var(--bfields-row-desc);
+}
+
+/* ============================================================
+   Cards, info bars, danger card
+   ============================================================ */
+
+.bfields-app .bfields-subcard {
+	border: 1px solid var(--bfields-border);
+	border-radius: var(--bfields-radius);
+	background: #fff;
+	padding: 32px;
+}
+
+.bfields-app .bfields-subcard + .bfields-subcard {
+	margin-top: 18px;
+}
+
+.bfields-app .bfields-subcard__head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 24px;
+}
+
+.bfields-app .bfields-subcard__title {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 700;
+	color: var(--bfields-heading);
+}
+
+.bfields-app .bfields-subcard__desc {
+	margin: 6px 0 0;
+	font-size: 14px;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-infobar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: 26px;
+	padding: 16px 20px;
+	border-radius: 8px;
+	background: #f4f8ff;
+	font-size: 14px;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-infobar svg {
+	color: var(--bfields-primary);
+	flex: none;
+}
+
+.bfields-app .bfields-infobar--warning {
+	background: var(--bfields-warn-bg);
+}
+
+.bfields-app .bfields-infobar--warning svg {
+	color: var(--bfields-warn-fg);
+}
+
+.bfields-app .bfields-infobar--danger {
+	background: var(--bfields-danger-bg);
+}
+
+.bfields-app .bfields-infobar--danger svg {
+	color: var(--bfields-danger-fg);
+}
+
+.bfields-app .bfields-infobar--success {
+	background: var(--bfields-reset-bg);
+}
+
+.bfields-app .bfields-infobar--success svg {
+	color: var(--bfields-reset-fg);
+}
+
+/* The uninstall row: its own bordered card, outside the row list. */
+.bfields-app .bfields-danger-card {
+	display: flex;
+	align-items: center;
+	gap: 18px;
+	margin-top: 26px;
+	padding: 21px 24px;
+	border: 1px solid var(--bfields-border);
+	border-radius: var(--bfields-radius);
+	background: #fff;
+}
+
+.bfields-app .bfields-danger-card__icon {
+	color: var(--bfields-off);
+	flex: none;
+}
+
+.bfields-app .bfields-danger-card .bfields-row__main {
+	flex: 1;
+}
+
+.bfields-app .bfields-content {
+	font-size: 14px;
+	line-height: 1.5;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-empty {
+	padding: 32px 0;
+	font-size: 14px;
+	color: var(--bfields-row-desc);
+}
+
+/* ============================================================
+   Error boundary
+   ============================================================ */
+
+.bfields-app .bfields-boundary {
+	margin: 20px 0;
+	padding: 16px 20px;
+}
+
+.bfields-app .bfields-boundary pre {
+	overflow: auto;
+	padding: 8px;
+	background: var(--bfields-field);
+	font-size: 12px;
+}
+
+/* ============================================================
+   Narrow screens
+   ============================================================ */
+
+@media (max-width: 1100px) {
+	.bfields-app .bfields-mime-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.bfields-app .bfields-tabs {
+		flex-wrap: wrap;
+		gap: 12px;
+	}
+
+	.bfields-app .bfields-settings-head {
+		flex-wrap: wrap;
+		gap: 16px;
+	}
+
+	.bfields-app .bfields-search + .bfields-tabs-switch {
+		margin-inline-start: 0;
+	}
+}
+
+@media (max-width: 782px) {
+	.bfields-app .bfields-admin {
+		padding: 0 12px 40px;
+	}
+
+	.bfields-app .bfields-row {
+		flex-wrap: wrap;
+	}
+
+	.bfields-app .bfields-row__control {
+		flex-basis: 100%;
+		padding-inline-start: 58px;
+	}
+
+	.bfields-app .bfields-slider input[type="range"] {
+		width: 100%;
+	}
+}
+
+/* A field that renders its own card (the MIME tile grid) sits between the
+   rows without the row's hairline rule or flex layout. */
+.bfields-app .bfields-row--card {
+	padding: 20px 0;
+}
+
+.bfields-app .bfields-row--card:first-child {
+	padding-top: 0;
+}
+
+/* ============================================================
+   Card sections — 3d-viewer-new-ui `AddNew.jsx` + admin.css
+
+   The design has TWO row idioms and the schema already names both on a
+   section (`layout: 'rows' | 'cards'`). Rows are the Settings screen: icon
+   and title left, a compact control pushed right. Cards are the Add New
+   Model tab: the icon, title and description stacked at the top of a
+   bordered card, the control full width beneath it, and the long helper
+   sentence under that.
+
+   Which one a field gets is the SECTION's decision, not the field's, for the
+   same reason the icon tile is (see FieldRenderer's `showIcons`): a tab that
+   mixes the two reads as broken.
+   ============================================================ */
+
+.bfields-app .bfields-card {
+	padding: 21px 19px;
+	border: 1px solid var(--bfields-border);
+	border-radius: var(--bfields-radius);
+	background: #fff;
+}
+
+.bfields-app .bfields-card + .bfields-card {
+	margin-top: 18px;
+}
+
+.bfields-app .bfields-card__head {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+}
+
+.bfields-app .bfields-card__head-icon {
+	flex: none;
+	margin-top: 1px;
+	color: var(--bfields-primary);
+}
+
+.bfields-app .bfields-card__title {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.3;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-card__desc {
+	margin: 4px 0 0;
+	font-size: 14px;
+	line-height: 1.45;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-card__control {
+	margin-top: 20px;
+}
+
+/* A compact control (segmented) beside the head instead of under it. */
+.bfields-app .bfields-card--inline {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px 24px;
+}
+
+.bfields-app .bfields-card--inline .bfields-card__head {
+	flex: 1 1 240px;
+}
+
+.bfields-app .bfields-card--inline .bfields-card__control,
+.bfields-app .bfields-editor .bfields-card--inline .bfields-card__control {
+	flex: none;
+	margin-top: 0;
+}
+
+/* The hint and the below slot keep a line of their own under the head, also
+   on a page wide enough to fit them beside the control. */
+.bfields-app .bfields-card--inline > :is(.bfields-hint, .bfields-card__below) {
+	flex: 1 0 100%;
+	margin-top: 0;
+}
+
+/* The long helper sentence under a card's control. A row puts the same text
+   beside the title; a card puts it here, which is why `subtitle` is the head
+   copy and `desc` is this one. */
+.bfields-app .bfields-hint {
+	margin: 14px 0 0;
+	font-size: 14px;
+	color: var(--bfields-row-desc);
+}
+
+/* An input with a button beside it — the "3D Source" control. */
+.bfields-app .bfields-field-row {
+	display: flex;
+	gap: 14px;
+}
+
+.bfields-app .bfields-field-row .bfields-input {
+	flex: 1;
+	height: 44px;
+}
+
+.bfields-app .bfields-btn--soft {
+	height: 44px;
+	background: var(--bfields-info-bg);
+	color: var(--bfields-primary);
+}
+
+.bfields-app .bfields-btn--soft:hover:not(:disabled) {
+	background: #e0ecfe;
+}
+
+/* A select fills its card, unlike the auto-width one in a row. */
+.bfields-app .bfields-card__control > .bfields-select {
+	width: 100%;
+}
+
+/* So does a text field — at the design's 44px, the height of the "3D Source"
+   input beside its Upload button, so switching Model Source Type between
+   Upload and Link does not resize the field. */
+.bfields-app .bfields-card__control > .bfields-input {
+	width: 100%;
+}
+
+.bfields-app .bfields-card__control > input.bfields-input {
+	height: 44px;
+}
+
+/* ---- mode grid: the `cards` presentation of a choice ---- */
+
+.bfields-app .bfields-mode-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 20px;
+}
+
+/* In a row's flex control the grid shrank to its tiles' text (700px on a wide
+   product box); it fills the line, as it does in a card. */
+.bfields-app .bfields-row__control > .bfields-mode-grid {
+	flex: 1 1 auto;
+}
+
+.bfields-app .bfields-mode {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 16px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: #fff;
+	text-align: start;
+}
+
+.bfields-app .bfields-mode--on {
+	border-color: var(--bfields-primary);
+	background: var(--bfields-strip);
+}
+
+/* The inactive tile is near-white with a dark glyph in the reference — it does
+   NOT carry the light-indigo tint used elsewhere. Only the selected card fills
+   the tile solid blue with a white glyph. */
+.bfields-app .bfields-mode__icon {
+	display: grid;
+	place-items: center;
+	flex: none;
+	width: 36px;
+	height: 36px;
+	border-radius: 8px;
+	background: #f9fafb;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-mode--on .bfields-mode__icon {
+	background: var(--bfields-primary);
+	color: #fff;
+}
+
+.bfields-app .bfields-mode__body {
+	flex: 1;
+	min-width: 0;
+}
+
+.bfields-app .bfields-mode__name {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-mode__tag {
+	font-size: 12px;
+	font-weight: 500;
+	color: var(--bfields-primary);
+}
+
+.bfields-app .bfields-mode__perks {
+	display: flex;
+	gap: 14px;
+	margin-top: 5px;
+	font-size: 12px;
+	white-space: nowrap;
+	color: var(--bfields-reset-fg);
+}
+
+.bfields-app .bfields-mode--plain .bfields-mode__perks {
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-mode__radio {
+	display: grid;
+	place-items: center;
+	flex: none;
+	width: 20px;
+	height: 20px;
+	border: 1.5px solid var(--bfields-control-border);
+	border-radius: 50%;
+}
+
+.bfields-app .bfields-mode--on .bfields-mode__radio {
+	border-color: var(--bfields-primary);
+}
+
+.bfields-app .bfields-mode--on .bfields-mode__radio::after {
+	content: "";
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: var(--bfields-primary);
+}
+
+/* ---- poster: the `attachment` presentation of a media field ---- */
+
+.bfields-app .bfields-poster {
+	display: flex;
+	align-items: center;
+	gap: 18px;
+}
+
+.bfields-app .bfields-poster__thumb {
+	display: grid;
+	place-items: center;
+	flex: none;
+	width: 62px;
+	height: 62px;
+	overflow: hidden;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: var(--bfields-bg);
+	color: var(--bfields-muted);
+}
+
+.bfields-app .bfields-poster__thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.bfields-app .bfields-poster__main {
+	flex: 1;
+	min-width: 0;
+}
+
+.bfields-app .bfields-poster__name {
+	margin: 0;
+	overflow: hidden;
+	font-size: 14px;
+	font-weight: 600;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-poster__meta {
+	margin: 4px 0 0;
+	font-size: 13px;
+	color: var(--bfields-muted);
+}
+
+.bfields-app .bfields-poster .bfields-btn {
+	height: 44px;
+}
+
+@media (max-width: 782px) {
+	.bfields-app .bfields-mode-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.bfields-app .bfields-field-row,
+	.bfields-app .bfields-poster {
+		flex-wrap: wrap;
+	}
+}
+
+/* ============================================================
+   Add New — the post editor
+
+   3d-viewer-new-ui `AddNew.jsx` + admin.css, "Add New — editor layout",
+   measured off assets/images/figma/add-new/Model (1)–(4).png. The page is one
+   column of furniture above a panel:
+
+     .bfields-title          "Add New", 30px
+     .bfields-title-input    the post title, 52px
+     .bfields-shortcode      the grey copy-me bar with the blue chip
+     .bfields-panel
+       .bfields-tabs--fixed  equal 112px tabs
+       .bfields-editor       1fr | 369px grid
+         main                cards (Model) or one rows card (Settings, Style)
+         .bfields-side       Live Preview card, heading, Publish box
+
+   The framework renders options screens only (AdminShell); this vocabulary is
+   what a meta-box shell renders with. The demo's EditorShell uses it today.
+   ============================================================ */
+
+.bfields-app .bfields-title {
+	/* wp-admin's `.wrap h1` adds `padding: 9px 0 4px` at (0,1,1). */
+	margin: 20px 0 0;
+	padding: 0;
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+	color: var(--bfields-title);
+}
+
+.bfields-app .bfields-title-input {
+	width: 100%;
+	height: 52px;
+	min-height: 0;
+	margin: 23px 0 0;
+	padding: 0 20px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: none;
+	font-family: inherit;
+	font-size: 20px;
+	line-height: normal;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-title-input::placeholder {
+	color: var(--bfields-placeholder);
+}
+
+.bfields-app .bfields-title-input:focus {
+	border-color: var(--bfields-border);
+	box-shadow: none;
+}
+
+.bfields-app .bfields-title-input:focus-visible {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: -1px;
+}
+
+/* ---- shortcode bar ---- */
+
+.bfields-app .bfields-shortcode {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	height: 61px;
+	margin-top: 21px;
+	padding: 0 18px;
+	border-radius: 8px;
+	background: var(--bfields-field);
+}
+
+.bfields-app .bfields-shortcode__hint {
+	font-size: 12px;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-shortcode__chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	height: 38px;
+	min-height: 0;
+	padding: 0 14px;
+	border-radius: 8px;
+	background: var(--bfields-primary);
+	color: #fff;
+	font-size: 14px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+/* The list inherits the strip's flow, so every strip rule still lays the tabs out. */
+.bfields-app .bfields-tabs__list {
+	display: flex;
+	flex: 0 1 auto;
+	flex-direction: inherit;
+	flex-wrap: inherit;
+	gap: inherit;
+	min-width: 0;
+}
+
+/* ---- panel ---- */
+
+/* Add New uses equal-width tabs (all 112px in the design). A label longer
+   than the design's ("Lighting & Environment") grows its tab instead of
+   spilling out of it; the design's four keep their 112px. The inset that
+   keeps a grown label off the border is the label's, so the tab itself
+   keeps the design's zero padding. */
+.bfields-app .bfields-tabs--fixed .bfields-tab {
+	min-width: 112px;
+	padding: 0;
+}
+
+.bfields-app .bfields-tab__label {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 0 12px;
+}
+
+.bfields-app .bfields-editor {
+	display: grid;
+	/* --bfields-side-width: the sidebar handle, with `resizable` on. */
+	grid-template-columns: minmax(0, 1fr) var(--bfields-side-width, 369px);
+	gap: 40px;
+	padding: 20px 20px 11px;
+	/* Keeps the panel from collapsing when a short tab is selected, so
+	   switching tabs does not resize the card (Figma holds the frame height
+	   the same way). */
+	min-height: 860px;
+}
+
+/* The Add New panel exports one notch tighter than the Settings page. */
+.bfields-app .bfields-editor .bfields-row {
+	padding: 14.9px 0;
+}
+
+.bfields-app .bfields-editor .bfields-row--spaced {
+	padding: 37px 0 26px;
+}
+
+.bfields-app .bfields-editor .bfields-row--spaced + .bfields-row {
+	padding-top: 27px;
+}
+
+/* The Settings / Style cards indent their rows further than the Model cards. */
+.bfields-app .bfields-card--rows {
+	padding-inline-start: 29px;
+	padding-inline-end: 13px;
+}
+
+.bfields-app .bfields-card--rows > .bfields-section-title {
+	margin: 8px 0 23px;
+}
+
+.bfields-app .bfields-editor__actions {
+	display: flex;
+	gap: 14px;
+	margin-top: 28px;
+}
+
+/* Settings: 24px under the card; Style: 34px. Figma's two frames disagree,
+   and the rows card is the one both have, so it takes the Settings value. */
+.bfields-app .bfields-card--rows + .bfields-editor__actions {
+	margin-top: 24px;
+}
+
+/* ---- the Add New frames' compact controls ----
+
+   The design repo carried the Settings page's control metrics onto Add New,
+   and its own fidelity table hid the difference in a whole-screen average.
+   The Add New frames (Model (2), (3).png) draw a tighter variant: a wider
+   rows card, a 38px icon tile, and 12–13px controls. Every value below is
+   measured off those exports at 1x; the Settings page keeps the repo's.
+
+     rows card      88→801 (714 wide, 20px from the sidebar), 29px inset
+                    both sides — the Model tab's cards stop at 782
+     icon tile      38×38, text 15px after it, control 10px after the text
+     toggle         41×22 track, 12px label
+     radio          13px label, 24px between options
+     slider         20px thumb, 37×31 readout, 12px
+     dimensions     70×30 input, content-width 30px select, 28px link, 12px
+     segmented      27px buttons in a 35px strip, 12px, slate hairline
+     colour         125×28 button, 18×12 swatch, 12px
+
+   The compact controls also use the slate ramp rather than the grey one:
+   borders #d9e3ec, text #1e293b, the strip #f3f6fa / #e9eef5, and the
+   segmented pill in the primary blue rather than the Save blue. */
+
+.bfields-app .bfields-editor .bfields-card--rows {
+	margin-inline-end: -20px;
+	padding-inline-end: 29px;
+}
+
+.bfields-app .bfields-editor .bfields-row {
+	column-gap: 0;
+}
+
+.bfields-app .bfields-editor .bfields-row__icon {
+	width: 38px;
+	height: 38px;
+	margin-inline-end: 15px;
+}
+
+.bfields-app .bfields-editor .bfields-row__control {
+	margin-inline-start: 10px;
+}
+
+.bfields-app .bfields-editor .bfields-toggle__track {
+	height: 22px;
+}
+
+.bfields-app .bfields-editor .bfields-toggle__track::after {
+	top: 2px;
+	left: 2px;
+}
+
+.bfields-app .bfields-editor .bfields-toggle--on .bfields-toggle__track::after {
+	transform: translateX(19px);
+}
+
+.bfields-app .bfields-editor .bfields-toggle__label {
+	font-size: 12px;
+}
+
+.bfields-app .bfields-editor .bfields-radios {
+	gap: 24px;
+}
+
+.bfields-app .bfields-editor .bfields-radio {
+	font-size: 13px;
+}
+
+.bfields-app .bfields-editor .bfields-slider input[type="range"]::-webkit-slider-thumb {
+	width: 20px;
+	height: 20px;
+}
+
+.bfields-app .bfields-editor .bfields-slider input[type="range"]::-moz-range-thumb {
+	width: 20px;
+	height: 20px;
+}
+
+.bfields-app .bfields-editor .bfields-slider__value {
+	min-width: 37px;
+	height: 31px;
+	background: #f8fafc;
+	font-size: 12px;
+}
+
+.bfields-app .bfields-editor .bfields-dim .bfields-input {
+	width: 70px;
+	height: 30px;
+	padding: 0 10px;
+	border-color: #d9e3ec;
+	font-size: 12px;
+	color: #1e293b;
+}
+
+.bfields-app .bfields-editor .bfields-dim select {
+	/* The frame sizes the select to its value ('%' 48px, 'px' 52px).
+	   `field-sizing: content` does exactly that where supported; elsewhere
+	   `auto` sizes it to the widest option, a few px wider. */
+	field-sizing: content;
+	width: auto;
+	height: 30px;
+	padding: 0 26px 0 10px;
+	border-color: #d9e3ec;
+	background-color: #fff;
+	font-size: 12px;
+	color: #1e293b;
+	background-position: right 7px center;
+}
+
+.bfields-app .bfields-editor .bfields-dim__link {
+	width: 28px;
+	height: 28px;
+	border-color: #d9e3ec;
+}
+
+/* A 1px hairline around the strip, inside the same 35px: 3px of padding
+   instead of 4 keeps the 27px buttons where the frame draws them. */
+.bfields-app .bfields-editor .bfields-segmented {
+	padding: 3px;
+	border: 1px solid #e9eef5;
+	background: #f3f6fa;
+}
+
+.bfields-app .bfields-editor .bfields-segmented button {
+	height: 27px;
+	font-size: 12px;
+	color: #627289;
+}
+
+.bfields-app .bfields-editor .bfields-segmented button[aria-pressed="true"] {
+	background: var(--bfields-primary);
+	color: #fff;
+}
+
+/* In a card the segmented control stands with the card's other controls —
+   3D Source's input and button, Decoder's select — which the Model frame draws
+   44px tall with 14px text, not with the 27px row variant above. 3 + 36 + 3
+   plus the 1px border is 44. */
+/* `:not(--rows)`: the Settings / Style tabs' rows card is a .bfields-card
+   too, and its rows keep the 27px variant the Style frame draws (Align). */
+.bfields-app .bfields-card:not(.bfields-card--rows) .bfields-segmented button,
+.bfields-app .bfields-editor .bfields-card:not(.bfields-card--rows) .bfields-segmented button {
+	height: 36px;
+	padding: 0 20px;
+	font-size: 14px;
+}
+
+.bfields-app .bfields-editor .bfields-colorpick {
+	gap: 10px;
+	/* The editor rows' segmented buttons beside it. */
+	height: 35px;
+	padding: 0 14px 0 10px;
+	border-color: #dee7ef;
+	font-size: 12px;
+	color: #1e293b;
+}
+
+.bfields-app .bfields-editor .bfields-colorpick__swatch {
+	width: 22px;
+	height: 15px;
+	border-radius: 3px;
+}
+
+/* ---- the Add New Model tab's cards (Model (1).png) ----
+
+   Same story as the rows above: the frame draws the cards tighter at the
+   head and the mode cards taller than the design repo's CSS, and the
+   "Recommended" tag as a white pill. Measured at 1x:
+
+     card            title ink 24px under the top edge, description 20px
+                     under the title, the control 25px under that
+     head            20px icon, text 10px after it
+     mode grid       two 321px cards 12px apart, 81px tall
+     mode card       18px / 12px padding, 28px icon tile, body 12px after
+     tag             12px text in a 21px white pill, 7px inset
+     perks           7px under the name */
+
+.bfields-app .bfields-editor .bfields-card {
+	padding-top: 19px;
+}
+
+.bfields-app .bfields-editor .bfields-card__head {
+	gap: 10px;
+}
+
+.bfields-app .bfields-editor .bfields-card__desc {
+	margin-top: 1px;
+}
+
+.bfields-app .bfields-editor .bfields-card__control {
+	margin-top: 18px;
+}
+
+.bfields-app .bfields-editor .bfields-mode-grid {
+	gap: 12px;
+}
+
+.bfields-app .bfields-editor .bfields-mode {
+	gap: 12px;
+	padding: 18px 12px;
+}
+
+.bfields-app .bfields-editor .bfields-mode__icon {
+	width: 28px;
+	height: 28px;
+	border-radius: 6px;
+}
+
+.bfields-app .bfields-editor .bfields-mode__name {
+	gap: 8px;
+}
+
+.bfields-app .bfields-editor .bfields-mode__tag {
+	height: 21px;
+	padding: 0 7px;
+	border-radius: 4px;
+	background: #fff;
+	line-height: 21px;
+}
+
+.bfields-app .bfields-editor .bfields-mode__perks {
+	margin-top: 7px;
+}
+
+/* ---- sidebar ---- */
+
+.bfields-app .bfields-side {
+	display: flex;
+	flex-direction: column;
+	gap: 13px;
+	min-width: 0;
+}
+
+/*
+ * With `sticky_tabs` the sidebar rides along too, under the stuck strip at the
+ * same 20px it sits below it at rest: admin bar + 8px ring offset + the 64px
+ * strip + 20px. `start` stops the grid stretching it to the row, without which
+ * there is nothing to stick.
+ */
+.bfields-app .bfields-editor--sticky > .bfields-side {
+	position: sticky;
+	top: calc(var(--wp-admin--admin-bar--height, 32px) + 92px);
+	align-self: start;
+}
+
+/* The sidebar is ~520px, so below ~720px of window Publish would sit under the
+   fold for as long as it is stuck: there it scrolls inside itself. Only there,
+   because an overflow box also clips its buttons' focus rings. */
+@media (max-height: 720px) {
+	.bfields-app .bfields-editor--sticky > .bfields-side {
+		max-height: calc(100vh - var(--wp-admin--admin-bar--height, 32px) - 108px);
+		overflow-y: auto;
+		scrollbar-width: thin;
+	}
+}
+
+/*
+ * `tabs_position: 'left'` on the editor. The tab column already puts 24px
+ * between itself and the editor, so the editor drops its left inset, and its
+ * top one comes down to the column's 10px so the first card lines up with the
+ * first tab. With no strip above it, the sticky sidebar stops at that same
+ * 10px under the stuck column: admin bar + 8px ring offset + 10px.
+ */
+/* Three columns share the editor's width, so its tab column is narrower. */
+.bfields-app .bfields-panel--sidebar:has(> .bfields-tabs--fixed) {
+	grid-template-columns: var(--bfields-tabs-width, 200px) minmax(0, 1fr);
+}
+
+/* The strip's fixed tabs keep their inset on the label; the column's is the
+   tab's own, as on the options screen. */
+.bfields-app .bfields-panel--sidebar .bfields-tabs--fixed .bfields-tab {
+	min-width: 0;
+	padding: 10px 16px;
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-tab__label {
+	padding: 0;
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-editor {
+	padding: 10px 20px 11px 0;
+}
+
+/* The main column is ~500px here; the design drew it at ~820px. */
+.bfields-app .bfields-panel--sidebar .bfields-mode-grid {
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-slider {
+	min-width: 0;
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-slider input[type="range"] {
+	flex: 0 1 350px;
+	width: auto;
+	min-width: 80px;
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-splitter--side {
+	top: 10px;
+}
+
+.bfields-app .bfields-panel--sidebar .bfields-editor--sticky > .bfields-side {
+	top: calc(var(--wp-admin--admin-bar--height, 32px) + 18px);
+}
+
+@media (max-height: 720px) and (min-width: 1101px) {
+	.bfields-app .bfields-panel--sidebar .bfields-editor--sticky > .bfields-side {
+		max-height: calc(100vh - var(--wp-admin--admin-bar--height, 32px) - 34px);
+	}
+}
+
+.bfields-app .bfields-preview {
+	border: 1px solid var(--bfields-border);
+	border-radius: var(--bfields-radius);
+	background: #fff;
+	overflow: hidden;
+}
+
+.bfields-app .bfields-preview__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 0 15px;
+	padding: 8px 0;
+	border-bottom: 1px solid var(--bfields-border);
+}
+
+.bfields-app .bfields-preview__title {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: normal;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-preview__title svg {
+	color: var(--bfields-primary);
+}
+
+.bfields-app .bfields-preview__stage {
+	position: relative;
+	display: grid;
+	place-items: center;
+	margin: 12px 15px 11px;
+	aspect-ratio: 337 / 193;
+	border-radius: 8px;
+	overflow: hidden;
+	background: #c9ced2;
+	color: rgba(255, 255, 255, 0.85);
+}
+
+.bfields-app .bfields-preview__stage img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.2s ease;
+}
+
+.bfields-app .bfields-preview__controls {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 0 15px;
+	padding: 12px 0 11px;
+	border-top: 1px solid var(--bfields-border);
+}
+
+/* The frame's preview icons are #4b5563 at ~20px, a shade darker and a size
+   larger than the design repo's 17px row-desc grey. */
+.bfields-app .bfields-preview .bfields-icon-btn {
+	color: #4b5563;
+}
+
+.bfields-app .bfields-preview__controls > div {
+	display: flex;
+	gap: 12px;
+}
+
+.bfields-app .bfields-preview__controls .bfields-icon-btn {
+	width: 32px;
+	height: 32px;
+	background: #f9fafb;
+}
+
+.bfields-app .bfields-icon-btn {
+	display: grid;
+	place-items: center;
+	width: 30px;
+	height: 30px;
+	min-height: 0;
+	padding: 0;
+	border-radius: 6px;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-icon-btn:hover:not(:disabled) {
+	background: var(--bfields-bg);
+}
+
+/* Disabled (no model to open yet) keeps the frame's look: the button is
+   inert, not greyed, the same as the design draws it at rest. */
+.bfields-app .bfields-icon-btn:disabled {
+	cursor: default;
+}
+
+.bfields-app .bfields-side__heading {
+	margin: 0 0 4px;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: normal;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-publish {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.bfields-app .bfields-publish .bfields-btn {
+	width: 100%;
+	height: 45px;
+	/* 14px medium in the frame (the label and icon are 73px wide); the
+	   design repo's CSS had 15px semibold. */
+	font-size: 14px;
+	font-weight: 500;
+}
+
+/* Save Draft is NOT the design repo's ghost button: the export draws it at
+   14px regular in slate (#64748b), where the repo's CSS has 15px/600 in the
+   row-title ink. Measured off Model (1).png — the label is 69px wide and its
+   darkest pixel is rgb(101, 117, 139). */
+.bfields-app .bfields-publish .bfields-btn--ghost {
+	font-size: 14px;
+	font-weight: 400;
+	color: #64748b;
+}
+
+/* ---- Preview tab: the stage card ----
+
+   Measured off Model (4).png. The design repo's CSS for this card is a
+   different, larger component (14px head, 32px device buttons, 13px note,
+   a bordered card) and does not match its own frame; the frame is followed.
+
+     card       708×673, no border, a soft shadow; 13px past the column
+     head       51px, 11px ring and 12px semibold title in navy, an 11px
+                green "Ready" pill; a #e5ecf5 hairline under it
+     devices    29px buttons, 10px type and icon, 7px apart
+     stage      674×408, 17px inset, 15px under the hairline
+     tool rail  32px wide at 15px from the stage edge, blue 12px icons
+     variants   43px strip, 15px off the stage bottom
+     note       47px full-bleed bar, 11px slate text, 13px under the stage
+     actions    flush with the card edge, 10px under the note */
+
+.bfields-app .bfields-stagecard {
+	min-height: 673px;
+	margin-inline-end: -13px;
+	border-radius: var(--bfields-radius);
+	background: #fff;
+	box-shadow: 0 1px 6px rgba(15, 23, 42, 0.06);
+	overflow: hidden;
+}
+
+.bfields-app .bfields-stagecard__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 11px 17px 11px 18px;
+	border-bottom: 1px solid #e5ecf5;
+}
+
+.bfields-app .bfields-stagecard__left {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #102a56;
+}
+
+.bfields-app .bfields-stagecard__left .bfields-dot {
+	display: inline-grid;
+	place-items: center;
+	width: 11px;
+	height: 11px;
+	border-radius: 50%;
+	border: 3px solid #102a56;
+}
+
+.bfields-app .bfields-badge-ready {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 22px;
+	margin-inline-start: 24px;
+	padding: 0 9px 0 8px;
+	border-radius: 999px;
+	background: #e8faf4;
+	color: #207f60;
+	font-size: 11px;
+	font-weight: 500;
+}
+
+.bfields-app .bfields-badge-ready::before {
+	content: "";
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: var(--bfields-on);
+}
+
+.bfields-app .bfields-devices {
+	display: flex;
+	gap: 7px;
+}
+
+.bfields-app .bfields-device {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	height: 29px;
+	min-height: 0;
+	padding: 0 14px 0 13px;
+	border: 1px solid #e5ecf5;
+	border-radius: 5px;
+	background: #fff;
+	font-size: 10px;
+	color: #1f3861;
+}
+
+.bfields-app .bfields-device[aria-pressed="true"] {
+	border-color: #5892ff;
+	color: #1b6cff;
+}
+
+.bfields-app .bfields-stagecard__body {
+	padding: 15px 17px 0;
+}
+
+.bfields-app .bfields-stagecard__stage {
+	position: relative;
+	display: grid;
+	place-items: center;
+	margin: 0 auto;
+	aspect-ratio: 674 / 408;
+	border-radius: 8px;
+	overflow: hidden;
+	background: #c9ced2;
+	color: rgba(255, 255, 255, 0.85);
+	transition: max-width 0.2s ease;
+}
+
+.bfields-app .bfields-stagecard__stage img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.2s ease;
+}
+
+.bfields-app .bfields-stagecard__note {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	height: 47px;
+	margin: 13px -17px 0;
+	padding: 0 18px;
+	background: #f9fbfe;
+	font-size: 11px;
+	color: #58739e;
+}
+
+.bfields-app .bfields-stagecard__note::before {
+	content: "";
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: #88a9d2;
+	flex: none;
+}
+
+.bfields-app .bfields-stagecard__actions {
+	display: flex;
+	gap: 15px;
+	padding: 10px 0 0;
+}
+
+.bfields-app .bfields-stage-corner {
+	position: absolute;
+	top: 11px;
+	inset-inline-end: 11px;
+	display: grid;
+	place-items: center;
+	width: 24px;
+	height: 24px;
+	min-height: 0;
+	padding: 0;
+	border-radius: 5px;
+	background: #f2f4f5;
+	color: #808ea5;
+}
+
+.bfields-app .bfields-stage-tools {
+	position: absolute;
+	top: 50%;
+	inset-inline-start: 15px;
+	transform: translateY(-50%);
+	display: flex;
+	flex-direction: column;
+	width: 32px;
+	padding: 1px 0;
+	border-radius: 8px;
+	background: #f4f6f7;
+	overflow: hidden;
+}
+
+.bfields-app .bfields-stage-tools button {
+	display: grid;
+	place-items: center;
+	width: 32px;
+	height: 33px;
+	min-height: 0;
+	padding: 0;
+	color: #327bfe;
+}
+
+.bfields-app .bfields-stage-tools button:hover,
+.bfields-app .bfields-stage-tools button[aria-pressed="true"] {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+.bfields-app .bfields-variants {
+	position: absolute;
+	left: 50%;
+	bottom: 15px;
+	transform: translateX(-50%);
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	height: 43px;
+	padding: 0 7px;
+	border-radius: 8px;
+	background: #f5f7f8;
+}
+
+.bfields-app .bfields-variants__nav {
+	min-height: 0;
+	padding: 0 2px;
+	font-size: 11px;
+	color: var(--bfields-muted);
+}
+
+.bfields-app .bfields-variants__deg {
+	padding: 0 4px;
+	font-size: 10px;
+	font-weight: 600;
+	color: #1165fe;
+}
+
+.bfields-app .bfields-variant {
+	display: grid;
+	place-items: center;
+	width: 36px;
+	height: 33px;
+	min-height: 0;
+	padding: 0;
+	overflow: hidden;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	background: #fff;
+	font-size: 12px;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-variant img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.bfields-app .bfields-variant[aria-pressed="true"] {
+	border-color: #6ea1ff;
+}
+
+@media (max-width: 1100px) {
+	.bfields-app .bfields-editor {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.bfields-app .bfields-editor--sticky > .bfields-side {
+		position: static;
+		max-height: none;
+		overflow: visible;
+	}
+}
+
+@media (max-width: 782px) {
+	.bfields-app .bfields-shortcode {
+		flex-wrap: wrap;
+		height: auto;
+		padding: 12px 18px;
+	}
+
+	.bfields-app .bfields-stagecard__head {
+		flex-wrap: wrap;
+	}
+}
+
+/* ============================================================
+   Resizable layout — `resizable` (ui/layout/Resizable.tsx)
+
+   EXPERIMENTAL, and not in the design: composed from its tokens. At rest a
+   handle is a small grip in the gutter — outside every designed surface, so
+   a screen that has not been dragged is still the measured one. On hover,
+   focus and drag the grip turns primary and a hairline runs the full edge.
+   ============================================================ */
+
+.bfields-app .bfields-admin__inner,
+.bfields-app .bfields-editor-page,
+.bfields-app .bfields-editor {
+	position: relative;
+}
+
+.bfields-app .bfields-splitter {
+	position: absolute;
+	z-index: 2;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	cursor: col-resize;
+	touch-action: none;
+}
+
+/* The hairline: the whole edge that moves. */
+.bfields-app .bfields-splitter::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 50%;
+	width: 3px;
+	margin-left: -1.5px;
+	border-radius: 3px;
+	background: var(--bfields-primary);
+	opacity: 0;
+	transition: opacity 0.15s ease;
+}
+
+/*
+ * The grip: the part that says "this moves". A white pill with three dots.
+ * It starts a little way down the column and then rides at mid-screen while
+ * the column scrolls past (sticky inside the full-height handle), so it is
+ * never off the top of a long tab.
+ */
+.bfields-app .bfields-splitter__grip {
+	position: sticky;
+	z-index: 1;
+	top: calc(50vh - 18px);
+	align-self: flex-start;
+	box-sizing: border-box;
+	width: 8px;
+	height: 36px;
+	margin-top: 140px;
+	/* 36 − 2×8 padding − 2×1 border = 18px of content: three 6px dots. */
+	padding: 8px 0;
+	border: 1px solid var(--bfields-border);
+	border-radius: 999px;
+	background:
+		radial-gradient(circle, var(--bfields-row-desc) 1px, transparent 1.5px) center / 4px 6px repeat-y content-box,
+		#fff padding-box;
+	box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+	transition: border-color 0.15s ease;
+}
+
+.bfields-app .bfields-splitter:hover .bfields-splitter__grip,
+.bfields-app .bfields-splitter--active .bfields-splitter__grip,
+.bfields-app .bfields-splitter:focus-visible .bfields-splitter__grip {
+	border-color: var(--bfields-primary);
+	background:
+		radial-gradient(circle, #fff 1px, transparent 1.5px) center / 4px 6px repeat-y content-box,
+		var(--bfields-primary) padding-box;
+}
+
+.bfields-app .bfields-splitter:hover::after,
+.bfields-app .bfields-splitter--active::after {
+	opacity: 0.45;
+}
+
+.bfields-app .bfields-splitter:focus-visible {
+	outline: none;
+}
+
+.bfields-app .bfields-splitter:focus-visible::after {
+	opacity: 1;
+}
+
+/* The page edges: in the 48px gutter either side of the column. */
+.bfields-app .bfields-splitter--page-start,
+.bfields-app .bfields-splitter--page-end {
+	width: 16px;
+}
+
+.bfields-app .bfields-splitter--page-start {
+	left: -32px;
+}
+
+.bfields-app .bfields-splitter--page-end {
+	right: -32px;
+}
+
+/* The editor's 40px gutter, just left of the sidebar (20px panel padding). */
+.bfields-app .bfields-splitter--side {
+	top: 20px;
+	bottom: 11px;
+	right: calc(20px + var(--bfields-side-width, 369px));
+	width: 40px;
+}
+
+/* The 24px gap between the tab column and the body; 19px panel padding. */
+.bfields-app .bfields-panel--sidebar {
+	position: relative;
+}
+
+.bfields-app .bfields-splitter--tabs {
+	top: 19px;
+	bottom: 19px;
+	left: calc(19px + var(--bfields-tabs-width, 240px));
+	width: 24px;
+}
+
+.bfields-app .bfields-panel--sidebar:has(> .bfields-tabs--fixed) > .bfields-splitter--tabs {
+	left: calc(19px + var(--bfields-tabs-width, 200px));
+}
+
+body.bfields-resizing,
+body.bfields-resizing * {
+	cursor: col-resize !important;
+	user-select: none !important;
+}
+
+/* One column: there is no gutter to drag. */
+@media (max-width: 1100px) {
+	.bfields-app .bfields-splitter--side {
+		display: none;
+	}
+}
+
+@media (max-width: 782px) {
+	.bfields-app .bfields-splitter {
+		display: none;
+	}
+}
+
+/* ============================================================
+   Repeater — `group` / `repeater` (ui/fields/Repeater.tsx)
+
+   Each row is a card in the `cards` idiom: handle, title, chevron and actions
+   in the head, the row's fields under a hairline. Logical properties only, so
+   the source reads the same in RTL; colours are tokens or mixes of tokens.
+   ============================================================ */
+
+.bfields-app .bfields-repeater {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	width: 100%;
+	min-width: 0;
+}
+
+.bfields-app .bfields-repeater__list {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.bfields-app .bfields-repeater__list.is-sorting {
+	user-select: none;
+}
+
+.bfields-app .bfields-repeater__list.is-sorting > .bfields-repeater-row:not(.is-dragging) {
+	transition: transform 0.15s ease;
+}
+
+.bfields-app .bfields-repeater-row {
+	position: relative;
+	margin: 0;
+	border: 1px solid var(--bfields-border);
+	border-radius: var(--bfields-radius);
+	background: var(--bfields-card);
+	transition: border-color 0.15s ease;
+}
+
+.bfields-app .bfields-repeater-row:hover {
+	border-color: color-mix(in srgb, var(--bfields-border), var(--bfields-row-desc) 25%);
+}
+
+.bfields-app .bfields-repeater-row.is-dragging {
+	z-index: 1;
+	border-color: var(--bfields-primary);
+	box-shadow: 0 12px 28px -12px color-mix(in srgb, var(--bfields-heading) 35%, transparent);
+}
+
+.bfields-app .bfields-repeater-row__head {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding-block: 11px;
+	padding-inline: 8px 12px;
+}
+
+.bfields-app .bfields-repeater-row__handle {
+	flex: none;
+	cursor: grab;
+	touch-action: none;
+}
+
+.bfields-app .bfields-repeater-row.is-dragging .bfields-repeater-row__handle {
+	cursor: grabbing;
+}
+
+.bfields-app .bfields-repeater-row__toggle {
+	display: flex;
+	flex: 1 1 auto;
+	align-items: center;
+	gap: 10px;
+	min-width: 0;
+	min-height: 32px;
+	padding-block: 0;
+	padding-inline: 6px;
+	border-radius: 6px;
+	color: var(--bfields-row-title);
+	text-align: start;
+}
+
+.bfields-app .bfields-repeater-row__title {
+	display: flex;
+	flex: 1 1 auto;
+	align-items: baseline;
+	gap: 8px;
+	min-width: 0;
+	font-size: 14px;
+	line-height: 1.3;
+	white-space: nowrap;
+}
+
+.bfields-app .bfields-repeater-row__title--plain {
+	padding-inline: 6px;
+}
+
+.bfields-app .bfields-repeater-row__name,
+.bfields-app .bfields-repeater-row__value {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.bfields-app .bfields-repeater-row__name {
+	flex: 0 1 auto;
+	font-weight: 600;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-repeater-row__value {
+	flex: 0 1 auto;
+	font-weight: 400;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-repeater-row__value:first-child {
+	font-weight: 600;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-repeater-row__chevron {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 20px;
+	height: 20px;
+	color: var(--bfields-row-desc);
+	transition: transform 0.15s ease;
+}
+
+.bfields-app .bfields-repeater-row.is-open > .bfields-repeater-row__head .bfields-repeater-row__chevron {
+	transform: rotate(180deg);
+}
+
+.bfields-app .bfields-repeater-row__actions,
+.bfields-app .bfields-repeater-row__order {
+	display: flex;
+	flex: none;
+	align-items: center;
+	gap: 2px;
+}
+
+.bfields-app .bfields-repeater-row__actions {
+	margin-inline-start: 4px;
+}
+
+.bfields-app .bfields-repeater-row__actions .bfields-icon-btn:hover:not(:disabled) {
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-repeater-row__actions .bfields-repeater-row__remove:hover:not(:disabled) {
+	color: var(--bfields-danger-fg);
+}
+
+/* Move up / down wait for the pointer or the keyboard where a pointer can hover. */
+@media (hover: hover) {
+	.bfields-app .bfields-repeater-row__order {
+		opacity: 0;
+		transition: opacity 0.15s ease;
+	}
+
+	.bfields-app .bfields-repeater-row__head:hover .bfields-repeater-row__order,
+	.bfields-app .bfields-repeater-row__head:focus-within .bfields-repeater-row__order {
+		opacity: 1;
+	}
+}
+
+.bfields-app .bfields-repeater-row__body {
+	padding-block: 0 4px;
+	padding-inline: 19px;
+	border-top: 1px solid var(--bfields-border);
+}
+
+.bfields-app .bfields-repeater-row__fields {
+	min-inline-size: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.bfields-app .bfields-repeater-row__fields > .bfields-row {
+	flex-wrap: wrap;
+	row-gap: 10px;
+	padding-inline: 0;
+}
+
+.bfields-app .bfields-repeater-row__fields > .bfields-row > .bfields-row__main {
+	flex: 1 1 220px;
+}
+
+/* Row tabs: the section strip at a row's scale. */
+.bfields-app .bfields-repeater-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-block: 14px 4px;
+	padding: 4px;
+	border-radius: 8px;
+	background: var(--bfields-strip);
+}
+
+.bfields-app .bfields-repeater-tab {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	height: 32px;
+	padding-block: 0;
+	padding-inline: 12px;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--bfields-row-desc);
+	white-space: nowrap;
+	transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.bfields-app .bfields-repeater-tab:hover {
+	border-color: var(--bfields-border);
+	background: var(--bfields-card);
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-repeater-tab.is-active,
+.bfields-app .bfields-repeater-tab.is-active:hover {
+	border-color: var(--bfields-primary);
+	background: var(--bfields-primary);
+	color: var(--bfields-card);
+}
+
+/* A group inside a row: one step in, same cards. */
+.bfields-app .bfields-repeater--nested {
+	padding-inline-start: 14px;
+	border-inline-start: 2px solid var(--bfields-border);
+}
+
+.bfields-app .bfields-repeater--nested .bfields-repeater-row__head {
+	padding-block: 8px;
+}
+
+.bfields-app .bfields-repeater__empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	padding-block: 24px;
+	padding-inline: 20px;
+	border: 1px dashed color-mix(in srgb, var(--bfields-border), var(--bfields-row-desc) 30%);
+	border-radius: var(--bfields-radius);
+	background: var(--bfields-bg);
+	text-align: center;
+}
+
+.bfields-app .bfields-repeater__hint {
+	font-size: 14px;
+	line-height: 20px;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-repeater__foot {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 14px;
+}
+
+.bfields-app .bfields-repeater__add {
+	gap: 8px;
+}
+
+.bfields-app .bfields-repeater__note,
+.bfields-app .bfields-repeater__error {
+	margin: 0;
+	font-size: 13px;
+	line-height: 18px;
+	color: var(--bfields-row-desc);
+}
+
+/* --bfields-danger-fg is 3.76:1 on white; a fifth of the heading ink takes it past 4.5:1. */
+.bfields-app .bfields-repeater__error {
+	color: color-mix(in srgb, var(--bfields-danger-fg), var(--bfields-heading) 20%);
+}
+
+.bfields-app .bfields-repeater__sr,
+.bfields-app .bfields-sr {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+@media (max-width: 782px) {
+	.bfields-app .bfields-repeater-row__fields > .bfields-row > .bfields-row__control {
+		padding-inline-start: 0;
+	}
+
+	.bfields-app .bfields-repeater-row__body {
+		padding-inline: 14px;
+	}
+}
+
+/* ============================================================
+   Field group — `field_group` (ui/layout/FieldGroup.tsx)
+
+   The Repeater row's card around a run of ordinary fields: a disclosure
+   head, then the fields under a hairline. In a `cards` section the fields
+   are cards themselves; inside the group they drop their own border and
+   sit on hairlines instead, so the screen never shows a card in a card.
+   ============================================================ */
+
+.bfields-app .bfields-field-group {
+	margin: 0;
+	border: 1px solid var(--bfields-border);
+	border-radius: var(--bfields-radius);
+	background: var(--bfields-card);
+	transition: border-color 0.15s ease;
+}
+
+.bfields-app .bfields-field-group:hover {
+	border-color: color-mix(in srgb, var(--bfields-border), var(--bfields-row-desc) 25%);
+}
+
+.bfields-app :is(.bfields-card, .bfields-field-group) + .bfields-field-group,
+.bfields-app .bfields-field-group + .bfields-card {
+	margin-top: 18px;
+}
+
+.bfields-app :is(.bfields-row, .bfields-row--card, .bfields-danger-card) + .bfields-field-group,
+.bfields-app .bfields-field-group + :is(.bfields-row, .bfields-row--card, .bfields-danger-card) {
+	margin-top: 12px;
+}
+
+.bfields-app .bfields-field-group__head {
+	display: flex;
+	align-items: center;
+	margin: 0;
+	padding-block: 11px;
+	padding-inline: 12px;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.bfields-app .bfields-field-group__toggle {
+	display: flex;
+	flex: 1 1 auto;
+	align-items: center;
+	gap: 10px;
+	min-width: 0;
+	min-height: 32px;
+	margin: 0;
+	padding-block: 0;
+	padding-inline: 6px;
+	border: 0;
+	border-radius: 6px;
+	background: none;
+	font: inherit;
+	color: var(--bfields-row-title);
+	text-align: start;
+}
+
+.bfields-app button.bfields-field-group__toggle {
+	cursor: pointer;
+}
+
+.bfields-app .bfields-field-group__icon {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 8px;
+	background: #f8fafc;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-field-group__title {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.bfields-app .bfields-field-group__chevron {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 20px;
+	height: 20px;
+	color: var(--bfields-row-desc);
+	transition: transform 0.15s ease;
+}
+
+.bfields-app .bfields-field-group.is-open > .bfields-field-group__head .bfields-field-group__chevron {
+	transform: rotate(180deg);
+}
+
+.bfields-app .bfields-field-group__desc {
+	margin: -4px 0 0;
+	padding-block: 0 11px;
+	padding-inline: 18px;
+	font-size: 14px;
+	line-height: 20px;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-field-group__body {
+	padding-block: 0 4px;
+	padding-inline: 19px;
+	border-top: 1px solid var(--bfields-border);
+}
+
+/* layout 'row': the card fills the row's control column. */
+.bfields-app .bfields-row--group > .bfields-row__control > .bfields-field-group {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+/* The class's display would beat the UA [hidden] rule. */
+.bfields-app .bfields-field-group__body[hidden] {
+	display: none;
+}
+
+.bfields-app .bfields-field-group__body > .bfields-hint {
+	margin-block: 14px 0;
+}
+
+.bfields-app .bfields-field-group__body > .bfields-card {
+	padding-inline: 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+}
+
+.bfields-app .bfields-field-group__body > .bfields-card + .bfields-card {
+	margin-top: 0;
+	border-top: 1px solid #f1f3f5;
+}
+
+@media (max-width: 782px) {
+	.bfields-app .bfields-field-group__body {
+		padding-inline: 14px;
+	}
+}
+
+/* ============================================================
+   Number, textarea, code, fieldset, row media
+   (ui/fields/NumberInput.tsx, Textarea.tsx, Code.tsx, Fieldset.tsx,
+   MediaInline.tsx)
+
+   Composed on the input's metrics: 40px, 8px corners, 14px type, the
+   input's border and focus ring. Tokens only, logical properties only; the
+   editor's compact variant uses the Add New slate ramp, as .bfields-dim does.
+   ============================================================ */
+
+/* ---- number / spinner: the unit inside the field; the stepper is [ − | value | + ] ---- */
+
+.bfields-app .bfields-number {
+	display: inline-flex;
+	align-items: stretch;
+	box-sizing: border-box;
+	inline-size: 132px;
+	height: 40px;
+	overflow: hidden;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: var(--bfields-card);
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-number--stepper {
+	inline-size: 204px;
+}
+
+.bfields-app .bfields-number:has(.bfields-number__input:focus-visible) {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: -1px;
+}
+
+.bfields-app .bfields-number__input {
+	flex: 1 1 auto;
+	box-sizing: border-box;
+	min-inline-size: 0;
+	height: 100%;
+	padding-block: 0;
+	padding-inline: 14px;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	font-family: inherit;
+	font-size: 14px;
+	font-variant-numeric: tabular-nums;
+	color: inherit;
+	appearance: textfield;
+	-moz-appearance: textfield;
+}
+
+.bfields-app .bfields-number--unit .bfields-number__input {
+	padding-inline-end: 6px;
+}
+
+.bfields-app .bfields-number__input::-webkit-outer-spin-button,
+.bfields-app .bfields-number__input::-webkit-inner-spin-button {
+	margin: 0;
+	appearance: none;
+}
+
+.bfields-app .bfields-number__input::placeholder {
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-number__input:focus-visible {
+	outline: none;
+}
+
+.bfields-app .bfields-number__unit {
+	display: flex;
+	flex: none;
+	align-items: center;
+	padding-inline-end: 12px;
+	font-size: 13px;
+	color: var(--bfields-row-desc);
+	white-space: nowrap;
+	pointer-events: none;
+}
+
+.bfields-app .bfields-number__step {
+	display: grid;
+	flex: none;
+	place-items: center;
+	inline-size: 36px;
+	padding: 0;
+	border: 0;
+	border-inline-start: 1px solid var(--bfields-border);
+	border-radius: 0;
+	background: transparent;
+	color: var(--bfields-row-desc);
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* The minus leads: its rule is on its end side. */
+.bfields-app .bfields-number__step:first-child {
+	border-inline-start: 0;
+	border-inline-end: 1px solid var(--bfields-border);
+}
+
+.bfields-app .bfields-number--stepper .bfields-number__input {
+	padding-inline: 8px;
+	text-align: center;
+}
+
+.bfields-app .bfields-number__step:hover:not(:disabled) {
+	background: var(--bfields-bg);
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-number__step:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.bfields-app .bfields-number__input:disabled {
+	cursor: not-allowed;
+}
+
+/* The Add New rows: the dimension input's 30px, 12px, slate hairline. */
+.bfields-app .bfields-editor .bfields-number {
+	inline-size: 112px;
+	height: 30px;
+	border-color: #d9e3ec;
+	color: #1e293b;
+}
+
+.bfields-app .bfields-editor .bfields-number--stepper {
+	inline-size: 172px;
+}
+
+.bfields-app .bfields-editor .bfields-number__input {
+	padding-inline-start: 10px;
+	font-size: 12px;
+}
+
+.bfields-app .bfields-editor .bfields-number--stepper .bfields-number__input {
+	padding-inline: 6px;
+}
+
+.bfields-app .bfields-editor .bfields-number__unit {
+	padding-inline-end: 10px;
+	font-size: 12px;
+	color: #64748b;
+}
+
+.bfields-app .bfields-editor .bfields-number__step {
+	inline-size: 30px;
+	border-inline-start-color: #d9e3ec;
+	border-inline-end-color: #d9e3ec;
+	color: #64748b;
+}
+
+/* ---- textarea: grows to six lines, then scrolls ---- */
+
+.bfields-app .bfields-textarea {
+	display: block;
+	box-sizing: border-box;
+	inline-size: 100%;
+	min-block-size: calc(var(--bfields-textarea-rows, 3) * 20px + 20px);
+	max-block-size: calc(6 * 20px + 20px);
+	padding-block: 9px;
+	padding-inline: 14px;
+	overflow-y: hidden;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: var(--bfields-card);
+	font-family: inherit;
+	font-size: 14px;
+	line-height: 20px;
+	color: var(--bfields-row-title);
+	resize: none;
+}
+
+.bfields-app .bfields-textarea::placeholder {
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-textarea:focus-visible {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: -1px;
+}
+
+.bfields-app .bfields-textarea:disabled {
+	cursor: not-allowed;
+}
+
+/* ---- code: core CodeMirror, or the textarea it falls back to ---- */
+
+.bfields-app .bfields-code {
+	position: relative;
+	box-sizing: border-box;
+	inline-size: 100%;
+	min-inline-size: 0;
+	overflow: hidden;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: var(--bfields-card);
+}
+
+.bfields-app .bfields-code:focus-within {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: -1px;
+}
+
+.bfields-app .bfields-code__input {
+	display: block;
+	box-sizing: border-box;
+	inline-size: 100%;
+	min-block-size: 220px;
+	padding-block: 12px;
+	padding-inline: 14px;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	font-family: var(--bfields-font-mono);
+	font-size: 13px;
+	line-height: 1.6;
+	color: var(--bfields-row-title);
+	tab-size: 2;
+	resize: vertical;
+}
+
+.bfields-app .bfields-code__input::placeholder {
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-code__input:focus-visible {
+	outline: none;
+}
+
+.bfields-app .bfields-code .CodeMirror {
+	height: auto;
+	background: var(--bfields-card);
+	font-family: var(--bfields-font-mono);
+	font-size: 13px;
+	line-height: 1.6;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-code .CodeMirror-scroll {
+	min-block-size: 220px;
+	max-block-size: 480px;
+}
+
+.bfields-app .bfields-code .CodeMirror-lines {
+	padding-block: 12px;
+}
+
+.bfields-app .bfields-code .CodeMirror-gutters {
+	border-inline-end: 1px solid var(--bfields-border);
+	background: var(--bfields-bg);
+}
+
+.bfields-app .bfields-code .CodeMirror-linenumber {
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-code .CodeMirror-cursor {
+	border-inline-start-color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-code .CodeMirror-selected,
+.bfields-app .bfields-code .CodeMirror-focused .CodeMirror-selected {
+	background: color-mix(in srgb, var(--bfields-primary) 14%, var(--bfields-card));
+}
+
+/* CodeMirror's default tokens below 4.5:1 on white, darkened onto tokens. */
+.bfields-app .bfields-code .cm-bracket {
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-code .cm-string-2,
+.bfields-app .bfields-code .cm-error,
+.bfields-app .bfields-code .CodeMirror-nonmatchingbracket {
+	color: color-mix(in srgb, var(--bfields-danger-fg), var(--bfields-heading) 20%);
+}
+
+.bfields-app .bfields-code .CodeMirror-matchingbracket {
+	color: color-mix(in srgb, var(--bfields-on), var(--bfields-heading) 40%);
+}
+
+.bfields-app .bfields-code.is-locked .CodeMirror {
+	opacity: 0.65;
+}
+
+/* ---- fieldset: the sub-fields as one grid, labels in small caps ---- */
+
+.bfields-app .bfields-fieldset {
+	display: grid;
+	grid-template-columns: repeat(var(--bfields-fieldset-cols, 3), minmax(0, 1fr));
+	gap: 14px 14px;
+	box-sizing: border-box;
+	inline-size: 100%;
+	max-inline-size: calc(var(--bfields-fieldset-cols, 3) * 220px + (var(--bfields-fieldset-cols, 3) - 1) * 14px);
+	min-inline-size: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.bfields-app .bfields-fieldset > .bfields-row {
+	flex-direction: column;
+	flex-wrap: nowrap;
+	align-items: stretch;
+	justify-content: flex-start;
+	gap: 6px;
+	min-inline-size: 0;
+	padding: 0;
+	border: 0;
+}
+
+.bfields-app .bfields-fieldset > .bfields-row > .bfields-row__main {
+	flex: none;
+	min-inline-size: 0;
+	padding-top: 0;
+}
+
+.bfields-app .bfields-fieldset > .bfields-row .bfields-row__title {
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 16px;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-fieldset > .bfields-row .bfields-row__desc {
+	margin-top: 2px;
+	font-size: 13px;
+	line-height: 18px;
+}
+
+.bfields-app .bfields-fieldset > .bfields-row > .bfields-row__control {
+	flex: none;
+	margin: 0;
+	min-inline-size: 0;
+}
+
+.bfields-app .bfields-fieldset > .bfields-row > .bfields-row__control > :is(.bfields-number, .bfields-input, .bfields-select) {
+	inline-size: 100%;
+	min-inline-size: 0;
+}
+
+/* A list or a media field inside a fieldset takes the whole line. */
+.bfields-app .bfields-fieldset > .bfields-row--wide {
+	grid-column: 1 / -1;
+}
+
+.bfields-app .bfields-fieldset:disabled {
+	opacity: 0.65;
+}
+
+/* ---- media in a row: URL + Upload, or chip + name + Replace / Remove ---- */
+
+.bfields-app .bfields-media {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-inline-size: 0;
+}
+
+.bfields-app .bfields-media__chip {
+	display: grid;
+	flex: none;
+	place-items: center;
+	box-sizing: border-box;
+	inline-size: 40px;
+	block-size: 40px;
+	overflow: hidden;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: var(--bfields-bg);
+	color: var(--bfields-muted);
+}
+
+.bfields-app .bfields-media__chip img {
+	inline-size: 100%;
+	block-size: 100%;
+	object-fit: cover;
+}
+
+.bfields-app .bfields-media__input {
+	inline-size: 280px;
+	min-inline-size: 0;
+}
+
+.bfields-app .bfields-media .bfields-btn--soft {
+	height: 40px;
+	padding-inline: 16px;
+}
+
+.bfields-app .bfields-media__main {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	gap: 2px;
+	min-inline-size: 0;
+	max-inline-size: 240px;
+}
+
+.bfields-app .bfields-media__name {
+	overflow: hidden;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 20px;
+	color: var(--bfields-row-title);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.bfields-app .bfields-media--attachment.is-empty .bfields-media__name {
+	font-weight: 500;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-media__meta {
+	font-size: 13px;
+	line-height: 18px;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-media__remove {
+	flex: none;
+	height: 40px;
+	padding-block: 0;
+	padding-inline: 6px;
+	border: 0;
+	border-radius: 6px;
+	background: transparent;
+	font-family: inherit;
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--bfields-row-desc);
+	cursor: pointer;
+	transition: color 0.15s ease;
+}
+
+.bfields-app .bfields-media__remove:hover:not(:disabled) {
+	color: color-mix(in srgb, var(--bfields-danger-fg), var(--bfields-heading) 20%);
+}
+
+.bfields-app .bfields-media__remove:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+/* On a line of its own (a repeater row, a fieldset) the URL takes what is left. */
+.bfields-app .bfields-row--wide > .bfields-row__control > .bfields-media {
+	flex: 1 1 auto;
+}
+
+.bfields-app .bfields-row--wide > .bfields-row__control > .bfields-media .bfields-media__input {
+	flex: 1 1 auto;
+	inline-size: auto;
+}
+
+.bfields-app .bfields-row--wide > .bfields-row__control > .bfields-media .bfields-media__main {
+	max-inline-size: none;
+}
+
+/* A host's button in an adornment slot stands at the row's 40px, beside Upload. */
+.bfields-app .bfields-row .bfields-row__control > .bfields-btn--soft {
+	height: 40px;
+}
+
+@media (max-width: 782px) {
+	.bfields-app .bfields-media {
+		flex-wrap: wrap;
+	}
+
+	.bfields-app .bfields-media__input {
+		flex: 1 1 100%;
+		inline-size: 100%;
+	}
+
+	.bfields-app .bfields-fieldset {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+/* ============================================================
+   Colour panel, source select, device switch, checklist, spacing, meta box
+   (ColorPanel.tsx, SourceSelect.tsx, DeviceSwitcher.tsx, Checklist.tsx,
+   Spacing.tsx, MetaboxShell.tsx)
+
+   Composed on the sheet's metrics: 40px fields (44px selects), 8px corners,
+   14px type, the slider, the tile's tick box, the primary-on-strip pressed
+   state. Placeholders and secondary text use --bfields-row-desc (4.83:1).
+   ============================================================ */
+
+/* ---- colour: the button and its panel ---- */
+
+.bfields-app .bfields-color {
+	position: relative;
+	display: inline-flex;
+	vertical-align: middle;
+}
+
+/* The button was a <label>; this keeps the rule wp-admin gave it as one. */
+.bfields-app .bfields-colorpick {
+	vertical-align: middle;
+}
+
+.bfields-app .bfields-colorpick:focus-visible {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: 1px;
+}
+
+/* `transparent` and '' (use the default) read as "no colour", not as the
+   brand blue the design's swatch falls back to. */
+.bfields-app .bfields-colorpick__swatch--empty,
+.bfields-app .bfields-colorpanel__preview {
+	background-color: #fff;
+	background-image:
+		linear-gradient(45deg, #e2e8f0 25%, transparent 25%),
+		linear-gradient(-45deg, #e2e8f0 25%, transparent 25%),
+		linear-gradient(45deg, transparent 75%, #e2e8f0 75%),
+		linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+	background-size: 8px 8px;
+	background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+}
+
+/* Every swatch has a hairline, so white (or any colour close to the
+   button's own white) still reads as a colour chip, not as nothing. */
+.bfields-app .bfields-colorpick__swatch {
+	box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.18);
+}
+
+.bfields-app .bfields-colorpick__swatch--empty {
+	box-shadow: inset 0 0 0 1px var(--bfields-border);
+}
+
+.bfields-app .bfields-colorpick:hover:not([aria-disabled="true"]) {
+	border-color: #94a3b8;
+}
+
+.bfields-app .bfields-colorpanel {
+	position: absolute;
+	z-index: 30;
+	inset-block-start: calc(100% + 6px);
+	inset-inline-end: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	inline-size: 272px;
+	padding: 16px;
+	border: 1px solid var(--bfields-border);
+	border-radius: var(--bfields-radius);
+	background: var(--bfields-card);
+	box-shadow: 0 12px 32px color-mix(in srgb, var(--bfields-heading) 12%, transparent);
+	color: var(--bfields-row-title);
+	font-size: 14px;
+	text-align: start;
+	cursor: default;
+}
+
+/* A card's control starts at the card's edge, so its panel does too. */
+.bfields-app .bfields-card__control .bfields-colorpanel {
+	inset-inline-start: 0;
+	inset-inline-end: auto;
+}
+
+.bfields-app .bfields-colorpanel__row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.bfields-app .bfields-colorpanel__preview {
+	position: relative;
+	flex: none;
+	inline-size: 40px;
+	block-size: 40px;
+	overflow: hidden;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+}
+
+.bfields-app .bfields-colorpanel__preview:has(.bfields-colorpanel__native:focus-visible) {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: 1px;
+}
+
+.bfields-app .bfields-colorpanel__fill {
+	position: absolute;
+	inset: 0;
+}
+
+.bfields-app .bfields-colorpanel__native {
+	position: absolute;
+	inset: 0;
+	inline-size: 100%;
+	block-size: 100%;
+	padding: 0;
+	border: 0;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.bfields-app .bfields-colorpanel__native:focus-visible {
+	outline: none;
+}
+
+.bfields-app .bfields-colorpanel__text {
+	flex: 1 1 auto;
+	min-inline-size: 0;
+	font-family: var(--bfields-font-mono);
+	font-size: 13px;
+}
+
+.bfields-app .bfields-colorpanel__text::placeholder {
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-colorpanel__alpha {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 12px;
+}
+
+.bfields-app .bfields-colorpanel__label {
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-colorpanel__alpha input[type="range"] {
+	--bfields-range-pct: 0%;
+	inline-size: 100%;
+	height: 5px;
+	margin: 2px 0;
+	border-radius: 999px;
+	appearance: none;
+	background: linear-gradient(
+		to right,
+		var(--bfields-slider) var(--bfields-range-pct),
+		#e2e8f0 var(--bfields-range-pct)
+	);
+	cursor: pointer;
+}
+
+.bfields-app .bfields-colorpanel__alpha input[type="range"]::-webkit-slider-thumb {
+	appearance: none;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	background: var(--bfields-slider);
+}
+
+.bfields-app .bfields-colorpanel__alpha input[type="range"]::-moz-range-thumb {
+	width: 18px;
+	height: 18px;
+	border: 0;
+	border-radius: 50%;
+	background: var(--bfields-slider);
+}
+
+.bfields-app .bfields-colorpanel__alpha input[type="range"]:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.bfields-app .bfields-colorpanel__output {
+	min-inline-size: 40px;
+	font-size: 13px;
+	font-variant-numeric: tabular-nums;
+	color: var(--bfields-row-title);
+	text-align: end;
+}
+
+.bfields-app .bfields-colorpanel__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin-inline: -8px;
+	padding-block-start: 10px;
+	border-block-start: 1px solid #f1f3f5;
+}
+
+.bfields-app .bfields-colorpanel__action {
+	height: 30px;
+	min-height: 0;
+	padding: 0 8px;
+	border: 0;
+	border-radius: 6px;
+	background: transparent;
+	font-family: inherit;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--bfields-primary);
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+.bfields-app .bfields-colorpanel__action:hover:not(:disabled) {
+	background: var(--bfields-info-bg);
+}
+
+.bfields-app .bfields-colorpanel__action:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+/* ---- source select: the select at rest, search + results open ---- */
+
+.bfields-app .bfields-source {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	inline-size: 280px;
+	max-inline-size: 100%;
+}
+
+.bfields-app .bfields-card__control > .bfields-source {
+	inline-size: 100%;
+}
+
+.bfields-app .bfields-source__box {
+	position: relative;
+	display: flex;
+	align-items: center;
+	block-size: 44px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: #f8fafc;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-source__box:has(:focus-visible),
+.bfields-app .bfields-source--open .bfields-source__box {
+	outline: 2px solid var(--bfields-primary);
+	outline-offset: -1px;
+}
+
+.bfields-app .bfields-source__box > svg:first-child {
+	flex: none;
+	margin-inline-start: 14px;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-source__input {
+	flex: 1 1 auto;
+	min-inline-size: 0;
+	block-size: 100%;
+	min-height: 0;
+	padding: 0 8px;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	box-shadow: none;
+	font-family: inherit;
+	font-size: 14px;
+	color: inherit;
+	appearance: none;
+}
+
+.bfields-app .bfields-source__input:focus,
+.bfields-app .bfields-source__input:focus-visible {
+	outline: none;
+	box-shadow: none;
+}
+
+.bfields-app .bfields-source__input::placeholder {
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-source__input::-webkit-search-cancel-button {
+	appearance: none;
+}
+
+.bfields-app .bfields-source__chevron {
+	flex: none;
+	margin-inline-end: 14px;
+	color: var(--bfields-row-desc);
+	pointer-events: none;
+}
+
+.bfields-app .bfields-source__value {
+	display: flex;
+	flex: 1 1 auto;
+	align-items: center;
+	gap: 8px;
+	min-inline-size: 0;
+	block-size: 100%;
+	min-height: 0;
+	padding: 0 0 0 14px;
+	border: 0;
+	border-radius: 8px;
+	background: transparent;
+	font-family: inherit;
+	font-size: 14px;
+	color: inherit;
+	text-align: start;
+	cursor: pointer;
+}
+
+.bfields-app .bfields-source__value:focus-visible {
+	outline: none;
+}
+
+.bfields-app .bfields-source__value .bfields-source__chip {
+	flex: 1 1 auto;
+	min-inline-size: 0;
+	padding-inline-end: 34px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.bfields-app .bfields-source__remove {
+	display: grid;
+	flex: none;
+	place-items: center;
+	inline-size: 24px;
+	block-size: 24px;
+	min-height: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 6px;
+	background: transparent;
+	color: var(--bfields-row-desc);
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.bfields-app .bfields-source__box--value .bfields-source__remove {
+	position: absolute;
+	inset-block-start: 50%;
+	inset-inline-end: 38px;
+	transform: translateY(-50%);
+}
+
+.bfields-app .bfields-source__remove:hover:not(:disabled) {
+	background: var(--bfields-danger-bg);
+	color: color-mix(in srgb, var(--bfields-danger-fg), var(--bfields-heading) 20%);
+}
+
+.bfields-app .bfields-source__chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.bfields-app .bfields-source__chips .bfields-source__chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	block-size: 32px;
+	padding-block: 0;
+	padding-inline: 12px 4px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: var(--bfields-bg);
+	font-size: 13px;
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-source__popover {
+	position: absolute;
+	z-index: 30;
+	inset-block-start: calc(100% + 4px);
+	inset-inline: 0;
+	max-block-size: 280px;
+	overflow-y: auto;
+	padding: 6px;
+	border: 1px solid var(--bfields-border);
+	border-radius: var(--bfields-radius);
+	background: var(--bfields-card);
+	box-shadow: 0 12px 32px color-mix(in srgb, var(--bfields-heading) 12%, transparent);
+}
+
+.bfields-app .bfields-source__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.bfields-app .bfields-source__option {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-block-size: 36px;
+	margin: 0;
+	padding: 6px 10px;
+	border-radius: 6px;
+	font-size: 14px;
+	color: var(--bfields-row-title);
+	cursor: pointer;
+}
+
+.bfields-app .bfields-source__option:hover,
+.bfields-app .bfields-source__option--active {
+	background: var(--bfields-info-bg);
+	color: var(--bfields-primary);
+}
+
+.bfields-app .bfields-source__thumb {
+	flex: none;
+	inline-size: 32px;
+	block-size: 32px;
+	border-radius: 6px;
+	background: var(--bfields-field);
+	object-fit: cover;
+}
+
+.bfields-app .bfields-source__name {
+	flex: 1 1 auto;
+	min-inline-size: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.bfields-app .bfields-source__price {
+	flex: none;
+	font-size: 13px;
+	color: var(--bfields-row-desc);
+}
+
+/* --bfields-row-desc is 4.37:1 on the info tint; the highlighted row's ink passes. */
+.bfields-app .bfields-source__option:hover .bfields-source__price,
+.bfields-app .bfields-source__option--active .bfields-source__price {
+	color: inherit;
+}
+
+.bfields-app .bfields-source__status {
+	margin: 0;
+	padding: 8px 10px;
+	font-size: 13px;
+	color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-source__status--error {
+	color: color-mix(in srgb, var(--bfields-danger-fg), var(--bfields-heading) 20%);
+}
+
+/* ---- device switch beside a responsive field's title ---- */
+
+/* 26px tall, drawn into the title's 18px line so the row keeps its pitch. */
+.bfields-app .bfields-devswitch {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	margin-block: -4px;
+	margin-inline-start: 8px;
+	vertical-align: middle;
+	font-weight: 400;
+}
+
+.bfields-app .bfields-devswitch__pill {
+	display: inline-flex;
+	gap: 2px;
+	padding: 1px;
+	border: 1px solid var(--bfields-border);
+	border-radius: 999px;
+	background: var(--bfields-card);
+}
+
+.bfields-app .bfields-devswitch__btn,
+.bfields-app .bfields-devswitch__reset {
+	position: relative;
+	display: inline-grid;
+	place-items: center;
+	inline-size: 22px;
+	block-size: 22px;
+	min-height: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 999px;
+	background: transparent;
+	color: var(--bfields-row-desc);
+	line-height: 0;
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.bfields-app .bfields-devswitch__btn:hover {
+	background: var(--bfields-bg);
+	color: var(--bfields-row-title);
+}
+
+.bfields-app .bfields-devswitch__btn[aria-pressed="true"] {
+	background: var(--bfields-strip);
+	color: var(--bfields-primary);
+}
+
+/* A device with its own value; the others inherit. */
+.bfields-app .bfields-devswitch__dot {
+	position: absolute;
+	inset-block-start: 2px;
+	inset-inline-end: 2px;
+	width: 6px;
+	height: 6px;
+	border: 1px solid var(--bfields-card);
+	border-radius: 50%;
+	background: var(--bfields-primary);
+}
+
+.bfields-app .bfields-devswitch__reset:hover:not(:disabled) {
+	background: var(--bfields-danger-bg);
+	color: color-mix(in srgb, var(--bfields-danger-fg), var(--bfields-heading) 20%);
+}
+
+.bfields-app .bfields-devswitch__reset:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+/* ---- checklist: the tile's tick box, without the tile ---- */
+
+.bfields-app .bfields-checklist {
+	display: grid;
+	grid-template-columns: minmax(0, max-content);
+	gap: 12px 28px;
+	justify-items: start;
+}
+
+.bfields-app .bfields-checklist--columns {
+	grid-template-columns: repeat(2, minmax(0, max-content));
+}
+
+.bfields-app .bfields-checklist__item {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	min-height: 0;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	font-family: inherit;
+	font-size: 14px;
+	color: var(--bfields-row-title);
+	text-align: start;
+	cursor: pointer;
+}
+
+.bfields-app .bfields-checklist__item:disabled {
+	cursor: not-allowed;
+}
+
+.bfields-app .bfields-checklist__box {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 20px;
+	height: 20px;
+	border: 1.5px solid var(--bfields-control-border);
+	border-radius: 5px;
+	color: #fff;
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.bfields-app .bfields-checklist__item--on .bfields-checklist__box {
+	border-color: var(--bfields-check);
+	background: var(--bfields-check);
+}
+
+.bfields-app .bfields-checklist__item:hover:not(:disabled) .bfields-checklist__box {
+	border-color: var(--bfields-row-desc);
+}
+
+.bfields-app .bfields-checklist__item--on:hover:not(:disabled) .bfields-checklist__box {
+	border-color: var(--bfields-check);
+}
+
+/* ---- spacing: a number box per side, the unit, the link ---- */
+
+.bfields-app .bfields-spacing {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+.bfields-app .bfields-spacing .bfields-spacing__side {
+	inline-size: auto;
+}
+
+.bfields-app .bfields-spacing .bfields-spacing__input {
+	flex: none;
+	inline-size: 64px;
+}
+
+.bfields-app .bfields-spacing__prefix {
+	display: flex;
+	flex: none;
+	align-items: center;
+	padding-inline-start: 12px;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--bfields-row-desc);
+	pointer-events: none;
+}
+
+.bfields-app .bfields-spacing .bfields-spacing__prefix + .bfields-spacing__input {
+	padding-inline-start: 6px;
+}
+
+.bfields-app .bfields-spacing .bfields-spacing__unit {
+	width: auto;
+	height: 40px;
+	min-width: 0;
+	padding: 0 30px 0 12px;
+	background-position: right 10px center;
+	font-size: 13px;
+}
+
+.bfields-app .bfields-spacing__link {
+	display: grid;
+	place-items: center;
+	inline-size: 40px;
+	block-size: 40px;
+	min-height: 0;
+	padding: 0;
+	border: 1px solid var(--bfields-border);
+	border-radius: 8px;
+	background: var(--bfields-card);
+	color: var(--bfields-row-desc);
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.bfields-app .bfields-spacing__link[aria-pressed="true"] {
+	border-color: var(--bfields-primary);
+	background: var(--bfields-strip);
+	color: var(--bfields-primary);
+}
+
+.bfields-app .bfields-spacing__link:disabled {
+	cursor: not-allowed;
+}
+
+/* The Add New rows: 30px, 12px, the slate hairline, like the dimensions. */
+.bfields-app .bfields-editor .bfields-spacing .bfields-spacing__side {
+	inline-size: auto;
+}
+
+.bfields-app .bfields-editor .bfields-spacing {
+	gap: 6px;
+}
+
+.bfields-app .bfields-editor .bfields-spacing .bfields-spacing__input {
+	inline-size: 44px;
+	padding-inline-end: 8px;
+}
+
+.bfields-app .bfields-editor .bfields-spacing__prefix {
+	padding-inline-start: 10px;
+	color: #64748b;
+}
+
+.bfields-app .bfields-editor .bfields-spacing .bfields-spacing__unit {
+	height: 30px;
+	padding: 0 26px 0 10px;
+	border-color: #d9e3ec;
+	background-color: #fff;
+	background-position: right 7px center;
+	font-size: 12px;
+	color: #1e293b;
+}
+
+.bfields-app .bfields-editor .bfields-spacing__link {
+	inline-size: 30px;
+	block-size: 30px;
+	border-color: #d9e3ec;
+}
+
+/* ---- meta box: the design's strip inside a core postbox ---- */
+
+/* The postbox is the card: no page gutter, grey well or second border. */
+.bfields-app .bfields-admin--metabox {
+	container: bfields-metabox / inline-size;
+	min-height: 0;
+	padding: 0;
+	background: transparent;
+}
+
+.bfields-app .bfields-admin--metabox > .bfields-panel {
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+}
+
+.bfields-app .bfields-admin--metabox .bfields-settings-body--flush {
+	min-height: 0;
+	padding: 4px 8px 0;
+}
+
+.bfields-app .bfields-admin--metabox .bfields-tabs + .bfields-settings-body--flush {
+	padding-top: 12px;
+}
+
+/* The editor's 72px pitch, and its taller radio block. */
+.bfields-app .bfields-admin--metabox .bfields-row {
+	padding: 14.9px 0;
+}
+
+.bfields-app .bfields-admin--metabox .bfields-row--spaced {
+	padding: 37px 0 26px;
+}
+
+.bfields-app .bfields-admin--metabox .bfields-row--spaced + .bfields-row {
+	padding-top: 27px;
+}
+
+.bfields-app .bfields-admin--metabox .bfields-tab:focus-visible {
+	outline-offset: 2px;
+}
+
+/* A narrow box (the side column, a phone): a tighter strip that wraps, and
+   every control on its own line under its title. */
+@container bfields-metabox (max-width: 560px) {
+	.bfields-app .bfields-admin--metabox .bfields-tabs {
+		gap: 6px;
+		row-gap: 6px;
+		padding: 6px;
+	}
+
+	.bfields-app .bfields-admin--metabox .bfields-tab {
+		flex: 1 1 auto;
+		height: 36px;
+		padding: 0 12px;
+		font-size: 13px;
+		white-space: normal;
+	}
+
+	.bfields-app .bfields-admin--metabox .bfields-settings-body--flush {
+		padding-inline: 0;
+	}
+
+	.bfields-app .bfields-admin--metabox .bfields-row {
+		flex-wrap: wrap;
+		justify-content: flex-start;
+	}
+
+	.bfields-app .bfields-admin--metabox .bfields-row > .bfields-row__main {
+		flex: 1 1 100%;
+		min-width: 0;
+	}
+
+	.bfields-app .bfields-admin--metabox .bfields-row > .bfields-row__control {
+		flex: 1 1 100%;
+		max-width: 100%;
+		padding-inline-start: 0;
+	}
+
+	/* A fieldset cell stays the stacked column the rules above would otherwise wrap into columns. */
+	.bfields-app .bfields-admin--metabox .bfields-fieldset > .bfields-row {
+		flex-wrap: nowrap;
+	}
+
+	.bfields-app .bfields-admin--metabox .bfields-fieldset > .bfields-row > :is(.bfields-row__main, .bfields-row__control) {
+		flex: none;
+	}
+
+	/* Where the title wraps under the icon, the below block starts at the row's edge too. */
+	.bfields-app .bfields-admin--metabox .bfields-row:not(.bfields-row--media):not(.bfields-row--code):not(.bfields-row--fill:not(.bfields-row--titled)) > .bfields-row__icon ~ .bfields-row__below {
+		--bfields-below-indent: 0px;
+	}
+}
+
+/* ---- one control height ----
+   Number, unit, select, colour, slider-value and segmented controls in a row are as tall as
+   the row's text field; in a card, as the card's. The switch keeps its track
+   and gets the same box, so rows line up. Last in the file to win over each
+   control's own (smaller, editor-only) height. */
+.bfields-app .bfields-number,
+.bfields-app .bfields-editor .bfields-number,
+.bfields-app .bfields-colorpick,
+.bfields-app .bfields-editor .bfields-colorpick,
+.bfields-app .bfields-dim .bfields-input,
+.bfields-app .bfields-dim select,
+.bfields-app .bfields-editor .bfields-dim .bfields-input,
+.bfields-app .bfields-editor .bfields-dim select,
+.bfields-app .bfields-editor .bfields-dim__link,
+.bfields-app .bfields-row__control .bfields-select,
+.bfields-app .bfields-slider__value,
+.bfields-app .bfields-editor .bfields-slider__value {
+	height: var(--bfields-control-h);
+}
+
+/* 4px of padding (the editor's 3px plus its 1px border) above and below. */
+.bfields-app .bfields-segmented button,
+.bfields-app .bfields-editor .bfields-segmented button {
+	height: calc(var(--bfields-control-h) - 8px);
+}
+
+/* `button`: the min-height reset's :is() carries an element's weight. */
+.bfields-app button.bfields-toggle {
+	min-height: var(--bfields-control-h);
+}
+
+.bfields-app .bfields-card:not(.bfields-card--rows) :is(.bfields-colorpick, .bfields-number, .bfields-slider__value) {
+	height: var(--bfields-card-control-h);
+}
+
+.bfields-app .bfields-card:not(.bfields-card--rows) button.bfields-toggle {
+	min-height: var(--bfields-card-control-h);
+}
+
+/* At the card's height the editor's compact 12px text and small swatch look
+   lost; take the 14px of the card's other controls. */
+.bfields-app .bfields-card:not(.bfields-card--rows) .bfields-colorpick {
+	gap: 12px;
+	padding: 0 16px 0 12px;
+	font-size: 14px;
+}
+
+.bfields-app .bfields-card:not(.bfields-card--rows) .bfields-colorpick__swatch {
+	width: 26px;
+	height: 18px;
+	border-radius: 4px;
+}
+
+.bfields-app .bfields-card:not(.bfields-card--rows) .bfields-slider__value {
+	min-width: 56px;
+	font-size: 14px;
+}

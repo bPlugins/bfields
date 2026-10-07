@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>3D Viewer Demo — bfields static preview</title>
+
+	<!--
+		The framework's REAL compiled stylesheet, and the demo's, exactly as the
+		plugin enqueues them. That is the point of this preview: if a control
+		looks right here it looks right in wp-admin, because it is the same CSS
+		under the same class names.
+	-->
+	<link rel="stylesheet" href="../../build/index.css">
+	<link rel="stylesheet" href="../build/index.css">
+	<link rel="stylesheet" href="assets/wp-admin.css">
+</head>
+
+<!-- `wp-admin` on <body> is load-bearing: ui/theme/base.css keys the screen's
+     gutter bleed off it, so without the class the settings panel sits 20px in. -->
+<body class="wp-admin">
+
+<div class="wp-adminbar">
+	<a href="index.html">⌂ dev.local</a>
+	<span class="wp-adminbar__spacer"></span>
+	<span class="wp-adminbar__note">static preview — no WordPress, no database</span>
+</div>
+
+<nav class="wp-adminmenu">
+	<ul>
+		<li><a href="#"><span class="wp-adminmenu__glyph">▤</span> Dashboard</a></li>
+		<li><a href="#"><span class="wp-adminmenu__glyph">✎</span> Posts</a></li>
+		<li><a href="#"><span class="wp-adminmenu__glyph">▣</span> Media</a></li>
+		<li><a href="#"><span class="wp-adminmenu__glyph">⎘</span> Pages</a></li>
+		<li class="wp-adminmenu__separator"></li>
+		<li class="is-current">
+			<a href="index.html"><span class="wp-adminmenu__glyph">◱</span> 3D Viewer Demo</a>
+			<ul class="wp-submenu">
+				<li class="is-current"><a href="index.html">All 3D Viewers</a></li>
+				<li class="is-nested"><a href="add-new.html">Add New</a></li>
+				<li><a href="settings.html">Settings</a></li>
+			</ul>
+		</li>
+		<li class="wp-adminmenu__separator"></li>
+		<li><a href="#"><span class="wp-adminmenu__glyph">⚙</span> Settings</a></li>
+	</ul>
+</nav>
+
+<div class="wp-content">
+	<div class="wp-wrap">
+		<h1 class="wp-heading-inline">3D Viewers</h1>
+		<a class="page-title-action" href="add-new.html">Add New</a>
+		<hr class="wp-header-end">
+
+		<p class="static-banner">
+			<strong>Static preview.</strong>
+			These pages render the same JSON schema the plugin sends to the browser
+			(<code>demo/static/assets/schema.js</code>, dumped from a live install) against the
+			same compiled stylesheet it ships. Nothing is saved, the media library
+			cannot open, and the surrounding wp-admin chrome is a lookalike — inside a
+			real install WordPress draws all of it itself.
+		</p>
+
+		<div class="static-cards">
+			<div class="static-card">
+				<h2>Settings</h2>
+				<p>
+					Six tabs, 43 fields, rendered by the framework in the plugin.
+					Tabs, search, dependencies, Reset Section and Reset All all work here.
+				</p>
+				<a class="button button-primary" href="settings.html">Open Settings</a>
+			</div>
+
+			<div class="static-card">
+				<h2>Add New viewer</h2>
+				<p>
+					The post editor, drawn by the demo to the design: title, shortcode
+					bar, five tabs, the Publish box and a Live Preview card and Preview
+					stage that follow the same values the fields write.
+				</p>
+				<a class="button button-primary" href="add-new.html">Open the editor</a>
+			</div>
+		</div>
+
+		<table class="wp-list-table">
+			<thead>
+				<tr>
+					<th style="width:1%"><input type="checkbox" aria-label="Select all"></th>
+					<th>Title</th>
+					<th>Shortcode</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><input type="checkbox" aria-label="Select"></td>
+					<td><a class="row-title" href="add-new.html">Walnut armchair</a></td>
+					<td><code class="bfields-demo-shortcode">[bfields_demo_viewer id="12"]</code></td>
+					<td>Published<br>2026/09/18 at 4:12 pm</td>
+				</tr>
+				<tr>
+					<td><input type="checkbox" aria-label="Select"></td>
+					<td><a class="row-title" href="add-new.html">Running shoe — 4 colourways</a></td>
+					<td><code class="bfields-demo-shortcode">[bfields_demo_viewer id="9"]</code></td>
+					<td>Published<br>2026/09/11 at 10:03 am</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script src="assets/icons.js"></script>
+<script src="assets/schema.js"></script>
+<script src="assets/preview.js"></script>
+</body>
+</html>

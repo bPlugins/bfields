@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Add New 3D Viewer — bfields static preview</title>
+
+	<link rel="stylesheet" href="../../build/index.css">
+	<link rel="stylesheet" href="../build/index.css">
+	<link rel="stylesheet" href="assets/wp-admin.css">
+</head>
+
+<body class="wp-admin bfields-demo-editor">
+
+<div class="wp-adminbar">
+	<a href="index.html">⌂ dev.local</a>
+	<span class="wp-adminbar__spacer"></span>
+	<span class="wp-adminbar__note">static preview — Publish and Save do nothing, the media library cannot open</span>
+</div>
+
+<nav class="wp-adminmenu">
+	<ul>
+		<li><a href="#"><span class="wp-adminmenu__glyph">▤</span> Dashboard</a></li>
+		<li><a href="#"><span class="wp-adminmenu__glyph">✎</span> Posts</a></li>
+		<li><a href="#"><span class="wp-adminmenu__glyph">▣</span> Media</a></li>
+		<li><a href="#"><span class="wp-adminmenu__glyph">⎘</span> Pages</a></li>
+		<li class="wp-adminmenu__separator"></li>
+		<li class="is-current">
+			<a href="index.html"><span class="wp-adminmenu__glyph">◱</span> 3D Viewer Demo</a>
+			<ul class="wp-submenu">
+				<li><a href="index.html">All 3D Viewers</a></li>
+				<li class="is-current is-nested"><a href="add-new.html">Add New</a></li>
+				<li><a href="settings.html">Settings</a></li>
+			</ul>
+		</li>
+		<li class="wp-adminmenu__separator"></li>
+		<li><a href="#"><span class="wp-adminmenu__glyph">⚙</span> Settings</a></li>
+	</ul>
+</nav>
+
+<div class="wp-content">
+	<div class="wp-wrap">
+		<!--
+			What post-new.php prints for this post type once the demo has taken
+			the screen: WordPress's own heading and #poststuff are hidden
+			(demo/ui/theme/demo.css, keyed on body.bfields-demo-editor) and the
+			demo bundle draws the whole editor to the design — title, shortcode
+			bar, tabs, sidebar — into ONE root, which Metabox::render() prints
+			inside #post. This is that root, minus the nonce and the hidden
+			mirror field: there is no form to post, and every submit button
+			says so rather than pretending.
+		-->
+		<div id="bfields-static-viewer"
+			class="bfields-demo-root bfields-app"
+			data-unique="_bfields_demo_viewer_"
+			data-kind="metabox"></div>
+	</div>
+</div>
+
+<script src="assets/icons.js"></script>
+<script src="assets/schema.js"></script>
+<script src="assets/preview.js"></script>
+</body>
+</html>

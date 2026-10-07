@@ -1,0 +1,189 @@
+/*
+ * bfields demo — the styles the framework sheet does not carry.
+ *
+ * No field and no design component is styled here: every control, and every
+ * piece of the Add New furniture (title, shortcode bar, panel, sidebar, Live
+ * Preview card, Publish box, stage card), is in the framework's sheet —
+ * ui/theme/admin.css for what the design drew, ui/fields/claude/claude.css for
+ * the stand-ins. What is left is the one thing the demo owns: handing the
+ * post editor SCREEN to that UI.
+ *
+ * These rules are deliberately NOT under `.bfields-app`. They restyle
+ * wp-admin's own page — its background, its gutters, its heading — which is
+ * exactly what the framework's sheet may never do (base.css rule 1). A host
+ * that adopts the editor shell takes this page-level block with it.
+ *
+ * Everything is keyed on `body.bfields-demo-editor` (PostType.php adds it on
+ * this post type's post.php / post-new.php only), and the parts that HIDE
+ * WordPress's editor also need `body.js`: WordPress swaps `no-js` for `js` in
+ * the first script on the page, so with JavaScript off — or if the fallback in
+ * Assets.php strips the class after a failed mount — the stock editor stays.
+ */
+
+/* ---------------------------------------------------------------------------
+ * The page
+ * ------------------------------------------------------------------------- */
+
+/* The design's page colour (--bfields-bg), behind wp-admin's chrome too, so
+   the Screen Options tab and the footer do not sit on a different grey. */
+html:has(> body.bfields-demo-editor),
+body.bfields-demo-editor {
+	background: #f8f9fa;
+}
+
+/*
+ * The design's column: 1185px, 48px gutters inside the 1280px content well
+ * (1440px window − 160px menu), which is the width the Figma frames were
+ * drawn at. wp-admin's own is a 20px gutter and a 2px-offset .wrap.
+ */
+body.bfields-demo-editor #wpcontent {
+	padding-left: 48px;
+	padding-right: 48px;
+}
+
+body.bfields-demo-editor #wpbody-content .wrap {
+	/* --bfields-demo-page: the page-width handles, with `resizable` on
+	   (ui/layout/Resizable.tsx; EditorShell sets it). */
+	max-width: var(--bfields-demo-page, 1185px);
+	margin: 10px auto 0;
+}
+
+body.bfields-demo-editor #wpfooter {
+	padding-left: 48px;
+	padding-right: 48px;
+}
+
+@media screen and (max-width: 782px) {
+	body.bfields-demo-editor #wpcontent {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+
+/*
+ * WordPress's heading, title/editor and Publish box give way to the design's —
+ * once it runs. Only those: other plugins' meta boxes (SEO, custom fields, a
+ * host's side boxes) stay on the page below the editor (review 3.5). The
+ * two-column frame itself is hidden only when nothing else is in it.
+ */
+body.js.bfields-demo-editor .wrap > .wp-heading-inline,
+body.js.bfields-demo-editor .wrap > .page-title-action,
+body.js.bfields-demo-editor #post-body-content,
+body.js.bfields-demo-editor #submitdiv {
+	display: none;
+}
+
+body.js.bfields-demo-editor #poststuff:not(:has(.postbox:not(#submitdiv):not(.hide-if-js))) {
+	display: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * The root
+ * ------------------------------------------------------------------------- */
+
+/*
+ * base.css bleeds the app out of #wpcontent's gutter so a full-screen settings
+ * page sits flush. The editor sits IN the column set above, so that is undone
+ * at (0,3,1), one class above the rule it overrides.
+ */
+body.wp-admin .bfields-app.bfields-demo-root {
+	margin: 0;
+}
+
+.bfields-app .bfields-demo-noscript {
+	margin: 0;
+	color: var(--bfields-row-desc);
+}
+
+/* ---------------------------------------------------------------------------
+ * The list table (stock WordPress, one extra column)
+ * ------------------------------------------------------------------------- */
+
+.column-bfields_demo_shortcode .bfields-demo-shortcode {
+	font-size: 12px;
+}
+
+/* ---------------------------------------------------------------------------
+ * The product box (ProductEditor.php)
+ *
+ * The same shell in two of WooCommerce's meta boxes instead of a page of its
+ * own. Nothing on the product screen is hidden or restyled; these rules only
+ * fit the shell to its two postboxes.
+ * ------------------------------------------------------------------------- */
+
+/* The postbox clips its overflow on this screen, which makes it the
+   scroller that `position: sticky` measures against: the tab strip and the
+   Live Preview column would never stick. Nothing in the box overflows it. */
+#bfields_demo_product.postbox {
+	overflow: visible;
+}
+
+#bfields_demo_product .inside {
+	margin: 0;
+	padding: 12px;
+}
+
+/* The box is the column: no 21px step down from a title that is not here. */
+#bfields_demo_product .bfields-shortcode {
+	margin-top: 0;
+}
+
+/* ~850px of box holds five or six of the design's 112px tabs, not eight: the
+   strip wraps, as it does on every screen below 1100px. */
+#bfields_demo_product .bfields-tabs {
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+/* Add New's Live Preview column, narrowed to fit a meta box: 300px of the
+   ~810px leaves the section ~490px. It rides along while the section
+   scrolls, under the admin bar, as Add New's sticky sidebar does. No held
+   frame height: a meta box grows with its content like its neighbours. */
+.bfields-app .bfields-editor.bfields-editor--framed {
+	--bfields-side-width: 300px;
+	gap: 24px;
+	min-height: 0;
+}
+
+.bfields-app .bfields-editor--framed > .bfields-side {
+	position: sticky;
+	top: calc(var(--bfields-demo-top, var(--wp-admin--admin-bar--height, 32px)) + 12px);
+	align-self: start;
+}
+
+/* The sidebar handle fills the gap it sits in: 24px here, not Add New's 40. */
+.bfields-app .bfields-editor--framed > .bfields-splitter--side {
+	width: 24px;
+}
+
+/* ~490px of section does not hold two mode cards whose perks do not wrap:
+   they go one to a row below 280px each, as on Add New with its tabs in a
+   left column (admin.css, .bfields-panel--sidebar .bfields-mode-grid). */
+.bfields-app .bfields-editor--framed .bfields-mode-grid {
+	grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/*
+ * Sticky tabs and sidebar on the product screen. What they stick under is the
+ * admin bar AND WooCommerce's own fixed header below it, so the offset is
+ * --bfields-demo-top, measured by EditorShell (the bottom of the lowest fixed
+ * bar), not admin.css's admin-bar height.
+ *
+ * The strip keeps the 8px ring offset Add New's has. The column stops under
+ * the stuck strip at the 20px it sits below it at rest: bars + 8px + the strip
+ * (also measured: it wraps in a box this narrow) + 20px.
+ */
+#bfields_demo_product .bfields-tabs--sticky {
+	top: calc(var(--bfields-demo-top, var(--wp-admin--admin-bar--height, 32px)) + 8px);
+}
+
+.bfields-app .bfields-editor--framed.bfields-editor--sticky > .bfields-side {
+	top: calc(var(--bfields-demo-top, var(--wp-admin--admin-bar--height, 32px)) + 28px + var(--bfields-demo-strip, 64px));
+}
+
+/* Below 1100px the editor is one column (admin.css): the card goes under. */
+@media (max-width: 1100px) {
+	.bfields-app .bfields-editor--framed > .bfields-side {
+		position: static;
+	}
+}

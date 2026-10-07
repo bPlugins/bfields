@@ -1,0 +1,78 @@
+{
+    "unique": "_bp3d_product_",
+    "note": "Variant attribute_* keys inside model rows, and popup models.",
+    "value": {
+        "bp3d_product_save_btn": "",
+        "meta_heading": "",
+        "currentViewer": "modelViewer",
+        "bp3d_models": [
+            {
+                "model_src": "http://dev.local/wp-content/uploads/2026/02/MaterialsVariantsShoe.glb",
+                "attribute_color": "all",
+                "poster_src": "",
+                "environment_image_src": "",
+                "skybox_image_src": "",
+                "exposure": "1",
+                "enable_ar": "",
+                "model_iso_src": "",
+                "ar_placement": "floor",
+                "ar_mode": "webxr",
+                "initial_view": "[]"
+            },
+            {
+                "model_src": "http://dev.local/wp-content/uploads/2026/02/MaterialsVariantsShoe.glb",
+                "attribute_color": "all",
+                "poster_src": "",
+                "environment_image_src": "",
+                "skybox_image_src": "",
+                "exposure": "1",
+                "enable_ar": "",
+                "model_iso_src": "",
+                "ar_placement": "floor",
+                "ar_mode": "webxr",
+                "initial_view": "[]",
+                "attribute_pa_color": "red",
+                "attribute_pa_size": "xl"
+            },
+            {
+                "model_src": "http://dev.local/wp-content/uploads/2026/02/MaterialsVariantsShoe.glb",
+                "attribute_color": "all",
+                "poster_src": "",
+                "environment_image_src": "",
+                "skybox_image_src": "",
+                "exposure": "1",
+                "enable_ar": "",
+                "model_iso_src": "",
+                "ar_placement": "floor",
+                "ar_mode": "webxr",
+                "initial_view": "[]",
+                "attribute_pa_color": "blue",
+                "attribute_pa_size": ""
+            }
+        ],
+        "replace_model_with_thumbnail": "",
+        "show_model_instead_thumbnail": "",
+        "viewer_position": "tab",
+        "bp_model_template": "none",
+        "show_thumbs": "",
+        "bp_3d_zooming": "1",
+        "show_arrows": "",
+        "hotspot_style": "style-1",
+        "bp_3d_height": {
+            "height": "320",
+            "unit": "px"
+        },
+        "bp_model_bg": "#0000",
+        "bp3d_popup_models": [
+            {
+                "selector": ".open-3d[data-x=\"1\"]",
+                "target": "#popup"
+            },
+            {
+                "selector": "a[href*='viewer']",
+                "target": ""
+            }
+        ],
+        "shortcode": ""
+    }
+}

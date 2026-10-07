@@ -1,0 +1,389 @@
+/*
+ * bfields demo — a wp-admin lookalike, for the static preview only.
+ *
+ * WordPress's real admin CSS lives in wp-admin/css/, which a file:// page has
+ * no access to. This reproduces just enough of it — the admin bar, the menu,
+ * notices, buttons, the list table, the editor screen's page frame — using WordPress's own
+ * values (#1d2327, #2271b1, #f0f0f1, 32px bar, 160px menu, 13px/1.4 body) so
+ * the screens are judged in the frame they actually live in.
+ *
+ * It is a STAND-IN. Nothing here ships, nothing here is loaded by the plugin,
+ * and inside a real install WordPress draws all of it itself.
+ *
+ * The one rule it shares with the framework's sheet: it must not reach into
+ * `.bfields-app`. wp-admin's habit of styling bare elements is exactly what
+ * ui/theme/base.css spends its specificity budget defending against, and a
+ * lookalike that broke the fields would be worse than no lookalike.
+ */
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	background: #f0f0f1;
+}
+
+body {
+	margin: 0;
+	padding: 32px 0 0;
+	min-height: 100vh;
+	background: #f0f0f1;
+	color: #3c434a;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu,
+		Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+	line-height: 1.4em;
+	-webkit-font-smoothing: antialiased;
+}
+
+a {
+	color: #2271b1;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #135e96;
+}
+
+/* ---- admin bar ---- */
+
+.wp-adminbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 99999;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	height: 32px;
+	padding: 0 12px;
+	background: #1d2327;
+	color: #f0f0f1;
+	font-size: 13px;
+	line-height: 32px;
+}
+
+.wp-adminbar a {
+	color: #f0f0f1;
+}
+
+.wp-adminbar a:hover {
+	color: #72aee6;
+}
+
+.wp-adminbar__spacer {
+	flex: 1;
+}
+
+.wp-adminbar__note {
+	color: #a7aaad;
+	font-size: 12px;
+}
+
+/* ---- admin menu ---- */
+
+.wp-adminmenu {
+	position: fixed;
+	top: 32px;
+	bottom: 0;
+	left: 0;
+	width: 160px;
+	overflow-y: auto;
+	background: #1d2327;
+	color: #f0f0f1;
+	font-size: 14px;
+}
+
+.wp-adminmenu ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wp-adminmenu > ul > li > a {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 10px;
+	color: #f0f0f1;
+	line-height: 18px;
+}
+
+.wp-adminmenu > ul > li > a:hover {
+	background: #2c3338;
+	color: #72aee6;
+}
+
+.wp-adminmenu li.is-current > a {
+	background: #2271b1;
+	color: #fff;
+	font-weight: 600;
+}
+
+.wp-adminmenu .wp-submenu {
+	padding: 6px 0;
+	background: #2c3338;
+	font-size: 13px;
+}
+
+.wp-adminmenu .wp-submenu a {
+	display: block;
+	padding: 6px 10px 6px 30px;
+	color: #c3c4c7;
+}
+
+.wp-adminmenu .wp-submenu a:hover {
+	color: #72aee6;
+}
+
+.wp-adminmenu .wp-submenu .is-current a {
+	color: #fff;
+	font-weight: 600;
+}
+
+/* WordPress marks the nested "Add New" item with an arrow; the demo post type
+   does the same from PHP, so the preview does it here. */
+.wp-adminmenu .wp-submenu .is-nested a::before {
+	content: "\21B3\00A0";
+}
+
+.wp-adminmenu__separator {
+	height: 1px;
+	margin: 8px 0;
+	background: rgba(255, 255, 255, 0.12);
+}
+
+.wp-adminmenu__glyph {
+	flex: none;
+	width: 20px;
+	text-align: center;
+	opacity: 0.7;
+}
+
+/* ---- content ---- */
+
+.wp-content {
+	margin-left: 160px;
+	padding: 0 20px 64px;
+}
+
+.wp-wrap {
+	margin: 10px 20px 0 2px;
+	max-width: 100%;
+}
+
+.wp-heading-inline {
+	display: inline-block;
+	margin: 0;
+	padding: 9px 0 4px;
+	font-size: 23px;
+	font-weight: 400;
+	line-height: 1.3;
+	color: #1d2327;
+}
+
+.page-title-action {
+	margin-left: 4px;
+	padding: 0 10px;
+	font-size: 13px;
+	line-height: 2.15384615;
+	vertical-align: middle;
+	border: 1px solid #2271b1;
+	border-radius: 3px;
+	background: #f6f7f7;
+	color: #2271b1;
+	cursor: pointer;
+}
+
+.page-title-action:hover {
+	background: #f0f0f1;
+	border-color: #0a4b78;
+	color: #0a4b78;
+}
+
+hr.wp-header-end {
+	visibility: hidden;
+	margin: -2px 0 0;
+	border: 0;
+}
+
+.notice {
+	position: relative;
+	margin: 15px 0;
+	padding: 10px 12px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-left-width: 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.notice p {
+	margin: 0.5em 0;
+	font-size: 13px;
+}
+
+.notice-info {
+	border-left-color: #72aee6;
+}
+
+.notice-success {
+	border-left-color: #00a32a;
+}
+
+.notice-warning {
+	border-left-color: #dba617;
+}
+
+/* ---- buttons ---- */
+
+.button,
+.button-primary {
+	display: inline-block;
+	height: 30px;
+	padding: 0 10px;
+	border: 1px solid #2271b1;
+	border-radius: 3px;
+	background: #f6f7f7;
+	color: #2271b1;
+	font-size: 13px;
+	line-height: 2.15384615;
+	text-decoration: none;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.button:hover {
+	background: #f0f0f1;
+	border-color: #0a4b78;
+	color: #0a4b78;
+}
+
+.button-primary {
+	background: #2271b1;
+	border-color: #2271b1;
+	color: #fff;
+}
+
+.button-primary:hover {
+	background: #135e96;
+	border-color: #135e96;
+	color: #fff;
+}
+
+.button-large {
+	height: 32px;
+	line-height: 2.30769231;
+	padding: 0 12px;
+}
+
+/* ---- the post editor, once the demo has taken it ----
+ *
+ * demo/ui/theme/demo.css restyles wp-admin's own page for this screen —
+ * the design's #f8f9fa page colour, 48px gutters, a 1185px column — keyed on
+ * `body.bfields-demo-editor #wpcontent` and `#wpbody-content .wrap`. This
+ * lookalike has no such ids, so the same values are restated against its own
+ * frame. The page colour needs nothing here: demo.css's
+ * `body.bfields-demo-editor` rule reaches this page as it is.
+ */
+
+body.bfields-demo-editor .wp-content {
+	padding-left: 48px;
+	padding-right: 48px;
+}
+
+body.bfields-demo-editor .wp-wrap {
+	max-width: 1185px;
+	margin: 10px auto 0;
+}
+
+@media screen and (max-width: 782px) {
+	body.bfields-demo-editor .wp-content {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+
+/* ---- list table ---- */
+
+.wp-list-table {
+	width: 100%;
+	margin-top: 10px;
+	border: 1px solid #c3c4c7;
+	border-spacing: 0;
+	background: #fff;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.wp-list-table th,
+.wp-list-table td {
+	padding: 8px 10px;
+	text-align: left;
+	vertical-align: top;
+	font-size: 13px;
+}
+
+.wp-list-table thead th {
+	border-bottom: 1px solid #c3c4c7;
+	color: #2c3338;
+	font-weight: 600;
+}
+
+.wp-list-table tbody tr + tr td {
+	border-top: 1px solid #f0f0f1;
+}
+
+.wp-list-table .row-title {
+	font-weight: 600;
+	font-size: 14px;
+}
+
+/* ---- the preview's own banner ---- */
+
+.static-banner {
+	margin: 15px 0 0;
+	padding: 10px 12px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-left: 4px solid #8c8f94;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	font-size: 13px;
+}
+
+.static-banner strong {
+	color: #1d2327;
+}
+
+.static-banner code {
+	padding: 1px 5px;
+	background: #f0f0f1;
+	border-radius: 2px;
+	font-size: 12px;
+}
+
+.static-cards {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	margin-top: 16px;
+}
+
+.static-card {
+	flex: 1 1 280px;
+	padding: 16px;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.static-card h2 {
+	margin: 0 0 6px;
+	font-size: 15px;
+	color: #1d2327;
+}
+
+.static-card p {
+	margin: 0 0 12px;
+	color: #50575e;
+}

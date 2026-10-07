@@ -1,0 +1,652 @@
+{
+  "_comment": "Expected computed styles, transcribed from bPlugins/3d-viewer-new-ui src/styles/admin.css. This file is the pixel contract: design-parity.mjs asserts the rendered admin screen matches it inside real wp-admin, where WordPress's own forms.css competes for the same properties. Selectors are deliberately precise — a bare `.bfields-input` matches whichever control happens to come first on a tab, which is not necessarily the one the measurement describes. The card, mode-grid and poster entries come from the same file's Add New vocabulary (bp3d-card, bp3d-mode*, bp3d-poster*). Update this file only alongside the design repo. `.bfields-selector-field` (the copyable selector chip) was dropped on 2026-09-23: the demo's selector rows are plain text fields by product decision, so nothing renders the chip; the component remains in ui/fields/Text.tsx (layout => 'selector').",
+  "_source": "3d-viewer-new-ui@src/styles/admin.css",
+  "selectors": {
+    ".bfields-tabs": {
+      "paddingTop": "10px",
+      "paddingLeft": "16px",
+      "borderRadius": "8px",
+      "backgroundColor": "rgb(245, 248, 255)"
+    },
+    ".bfields-tab": {
+      "height": "44px",
+      "paddingLeft": "16px",
+      "borderRadius": "8px",
+      "fontSize": "14px",
+      "fontWeight": "600"
+    },
+    ".bfields-tab--active": {
+      "backgroundColor": "rgb(27, 92, 240)",
+      "color": "rgb(255, 255, 255)"
+    },
+    ".bfields-panel": {
+      "padding": "19px",
+      "borderRadius": "10px",
+      "borderTopWidth": "1px",
+      "borderTopColor": "rgb(229, 231, 235)"
+    },
+    ".bfields-settings-head": {
+      "columnGap": "48px"
+    },
+    ".bfields-settings-head__title": {
+      "fontSize": "22px",
+      "fontWeight": "700"
+    },
+    ".bfields-search input": {
+      "height": "44px",
+      "paddingLeft": "52px",
+      "borderRadius": "8px",
+      "fontSize": "15px"
+    },
+    ".bfields-row": {
+      "paddingTop": "15.9px",
+      "columnGap": "18px",
+      "borderBottomWidth": "1px",
+      "borderBottomColor": "rgb(241, 243, 245)"
+    },
+    ".bfields-row__title": {
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "color": "rgb(36, 36, 43)"
+    },
+    ".bfields-row__desc": {
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "20px",
+      "color": "rgb(105, 112, 126)"
+    },
+    ".bfields-row__control": {
+      "columnGap": "12px"
+    },
+    ".bfields-row__icon": {
+      "width": "40px",
+      "height": "40px",
+      "borderRadius": "8px"
+    },
+    ".bfields-toggle": {
+      "columnGap": "12px"
+    },
+    ".bfields-toggle__track": {
+      "width": "41px",
+      "height": "24px"
+    },
+    ".bfields-toggle__label": {
+      "fontSize": "14px",
+      "fontWeight": "500"
+    },
+    ".bfields-radio__dot": {
+      "width": "18px",
+      "height": "18px"
+    },
+    ".bfields-mime-grid": {
+      "gap": "14px",
+      "marginTop": "20px"
+    },
+    ".bfields-mime": {
+      "height": "50px",
+      "paddingLeft": "16px",
+      "borderRadius": "8px",
+      "fontSize": "14px"
+    },
+    ".bfields-mime__box": {
+      "width": "20px",
+      "height": "20px",
+      "borderRadius": "5px"
+    },
+    ".bfields-subcard": {
+      "padding": "32px",
+      "borderRadius": "10px"
+    },
+    ".bfields-subcard__title": {
+      "fontSize": "18px",
+      "fontWeight": "700"
+    },
+    ".bfields-linkbtn": {
+      "height": "34px",
+      "paddingLeft": "14px",
+      "borderRadius": "6px",
+      "fontSize": "14px",
+      "fontWeight": "600"
+    },
+    ".bfields-segmented": {
+      "padding": "4px",
+      "borderRadius": "8px",
+      "backgroundColor": "rgb(243, 244, 246)"
+    },
+    ".bfields-segmented button": {
+      "height": "32px",
+      "paddingLeft": "18px",
+      "borderRadius": "6px",
+      "fontSize": "13px"
+    },
+    ".bfields-btn--save": {
+      "backgroundColor": "rgb(59, 82, 246)",
+      "color": "rgb(255, 255, 255)"
+    },
+    ".bfields-btn--reset": {
+      "backgroundColor": "rgb(229, 255, 241)",
+      "color": "rgb(0, 132, 61)"
+    },
+    ".bfields-btn--danger": {
+      "backgroundColor": "rgb(252, 221, 221)",
+      "color": "rgb(204, 17, 17)"
+    },
+    ".bfields-actions": {
+      "columnGap": "12px",
+      "marginTop": "26px"
+    },
+    ".bfields-colorpick": {
+      "height": "38px",
+      "borderRadius": "8px"
+    },
+    ".bfields-admin": {
+      "paddingLeft": "48px"
+    },
+    ".bfields-row__control > .bfields-select": {
+      "height": "44px",
+      "borderRadius": "8px",
+      "fontSize": "14px"
+    },
+    ".bfields-row__control > .bfields-input": {
+      "height": "40px",
+      "borderRadius": "8px",
+      "fontSize": "14px",
+      "borderTopColor": "rgb(229, 231, 235)"
+    },
+    ".bfields-dim .bfields-input": {
+      "width": "72px",
+      "height": "36px"
+    },
+    ".bfields-dim select": {
+      "width": "62px",
+      "height": "36px",
+      "fontSize": "13px"
+    },
+    ".bfields-danger-card": {
+      "padding": "21px 24px",
+      "borderRadius": "10px",
+      "columnGap": "18px"
+    },
+    ".bfields-infobar": {
+      "padding": "16px 20px",
+      "borderRadius": "8px",
+      "columnGap": "12px",
+      "fontSize": "14px"
+    },
+    ".bfields-code": {
+      "borderRadius": "8px",
+      "borderTopWidth": "1px",
+      "borderTopColor": "rgb(229, 231, 235)",
+      "backgroundColor": "rgb(255, 255, 255)"
+    },
+    ".bfields-slider input[type=\"range\"]": {
+      "width": "350px",
+      "height": "5px"
+    },
+    ".bfields-slider__value": {
+      "minWidth": "36px",
+      "height": "34px",
+      "borderRadius": "6px"
+    },
+    ".bfields-actions .bfields-btn": {
+      "height": "40px",
+      "borderRadius": "8px",
+      "columnGap": "9px",
+      "fontSize": "14px",
+      "fontWeight": "600"
+    },
+    ".bfields-btn--ghost": {
+      "height": "45px",
+      "paddingLeft": "14px",
+      "borderRadius": "8px"
+    },
+    ".bfields-card__title": {
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "color": "rgb(36, 36, 43)"
+    },
+    ".bfields-card__desc": {
+      "marginTop": "4px",
+      "fontSize": "14px",
+      "color": "rgb(105, 112, 126)"
+    },
+    ".bfields-card__control": {
+      "marginTop": "20px"
+    },
+    ".bfields-hint": {
+      "marginTop": "14px",
+      "fontSize": "14px",
+      "color": "rgb(105, 112, 126)"
+    },
+    ".bfields-field-row": {
+      "columnGap": "14px"
+    },
+    ".bfields-field-row .bfields-input": {
+      "height": "44px"
+    },
+    ".bfields-card:not(.bfields-card--rows) .bfields-btn--soft": {
+      "height": "44px",
+      "backgroundColor": "rgb(239, 246, 255)",
+      "color": "rgb(27, 92, 240)"
+    },
+    ".bfields-mode:not(.bfields-mode--on)": {
+      "padding": "16px",
+      "columnGap": "14px",
+      "borderRadius": "8px",
+      "borderTopWidth": "1px",
+      "borderTopColor": "rgb(229, 231, 235)"
+    },
+    ".bfields-mode--on": {
+      "borderTopColor": "rgb(27, 92, 240)",
+      "backgroundColor": "rgb(245, 248, 255)"
+    },
+    ".bfields-mode__icon": {
+      "width": "36px",
+      "height": "36px",
+      "borderRadius": "8px"
+    },
+    ".bfields-mode--on .bfields-mode__icon": {
+      "backgroundColor": "rgb(27, 92, 240)",
+      "color": "rgb(255, 255, 255)"
+    },
+    ".bfields-mode__name": {
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "columnGap": "10px"
+    },
+    ".bfields-mode__tag": {
+      "fontSize": "12px",
+      "fontWeight": "500",
+      "color": "rgb(27, 92, 240)"
+    },
+    ".bfields-mode__perks": {
+      "marginTop": "5px",
+      "fontSize": "12px",
+      "columnGap": "14px",
+      "color": "rgb(0, 132, 61)"
+    },
+    ".bfields-mode__radio": {
+      "width": "20px",
+      "height": "20px",
+      "borderRadius": "50%"
+    },
+    ".bfields-poster": {
+      "columnGap": "18px"
+    },
+    ".bfields-poster__thumb": {
+      "width": "62px",
+      "height": "62px",
+      "borderRadius": "8px",
+      "borderTopWidth": "1px",
+      "backgroundColor": "rgb(248, 249, 250)"
+    },
+    ".bfields-poster__name": {
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "color": "rgb(36, 36, 43)"
+    },
+    ".bfields-poster__meta": {
+      "marginTop": "4px",
+      "fontSize": "13px",
+      "color": "rgb(113, 113, 118)"
+    },
+    ".bfields-poster .bfields-btn": {
+      "height": "44px"
+    },
+    ".bfields-mode-grid": {
+      "display": "grid",
+      "columnGap": "20px",
+      "rowGap": "20px"
+    },
+    ".bfields-settings-body:not(.bfields-settings-body--flush)": {
+      "paddingTop": "20px"
+    },
+    ".bfields-settings-body--flush": {
+      "paddingTop": "20px",
+      "paddingLeft": "32px",
+      "paddingRight": "32px"
+    },
+    ".bfields-code__input": {
+      "minHeight": "220px",
+      "fontSize": "13px",
+      "lineHeight": "20.8px"
+    },
+    ".bfields-number": {
+      "height": "40px",
+      "borderRadius": "8px",
+      "borderTopWidth": "1px",
+      "borderTopColor": "rgb(229, 231, 235)"
+    },
+    ".bfields-number:not(.bfields-number--stepper) .bfields-number__input": {
+      "fontSize": "14px",
+      "paddingLeft": "14px"
+    },
+    ".bfields-number__unit": {
+      "fontSize": "13px",
+      "color": "rgb(105, 112, 126)"
+    },
+    ".bfields-number--stepper .bfields-number__step:last-child": {
+      "width": "36px",
+      "borderLeftWidth": "1px",
+      "borderLeftColor": "rgb(229, 231, 235)"
+    },
+    ".bfields-fieldset": {
+      "display": "grid",
+      "columnGap": "14px",
+      "borderTopWidth": "0px"
+    },
+    ".bfields-fieldset > .bfields-row .bfields-row__title": {
+      "fontSize": "12px",
+      "fontWeight": "600",
+      "textTransform": "uppercase",
+      "color": "rgb(105, 112, 126)"
+    },
+    ".bfields-row .bfields-media--url .bfields-media__upload": {
+      "height": "40px",
+      "borderRadius": "8px",
+      "backgroundColor": "rgb(239, 246, 255)",
+      "color": "rgb(27, 92, 240)"
+    },
+    ".bfields-row .bfields-media__input": {
+      "height": "40px",
+      "borderRadius": "8px",
+      "fontSize": "14px"
+    }
+  },
+  "grids": {
+    ".bfields-mime-grid": "178px 178px 178px 178px 178px"
+  },
+  "screens": {
+    "viewer editor": {
+      "_comment": "Add New overrides, measured at 1x off 3d-viewer-new-ui assets/images/figma/add-new/Model (1)-(4).png. The design repo's CSS applies the Settings page's control metrics to Add New; the Add New frames draw a tighter variant (38px icon tiles, 12-13px controls, a wider rows card) and a different Preview stage card, and this screen follows the frames. Also covers the page furniture — title, shortcode bar, sidebar, Publish box, stage card — which the base contract never measured. See ui/theme/admin.css, 'the Add New frames' compact controls'. The generic `.bfields-card` entry lives here as two precise selectors — the Model tab's card and the rows card — because a bare `.bfields-card` matches whichever kind a tab shows first. The segmented control has two sizes on this screen: the 27px row variant (Style → Align) and a 44px card variant that stands level with the Model cards' 44px inputs and selects (admin.css, 'In a card the segmented control…'); each has its own entry. Two more are scoped the same way, because twelve tabs put rows the frames never drew first on some of them: the row is measured where it is not a card's last (a last row has no rule under it, as in the frames), and the control column where the row is not a full-width list or grid (those drop the column's inset). The soft button is scoped in the base contract, to the Model cards that draw it: a rows-card upload is the rows' 40px, not the cards' 44px, and the Settings page draws none.",
+      "selectors": {
+        ".bfields-tab": {
+          "height": "44px",
+          "width": "112px",
+          "paddingLeft": "0px",
+          "borderRadius": "8px",
+          "fontSize": "14px",
+          "fontWeight": "600"
+        },
+        ".bfields-segmented": {
+          "padding": "3px",
+          "borderRadius": "8px",
+          "backgroundColor": "rgb(243, 246, 250)",
+          "borderTopColor": "rgb(233, 238, 245)"
+        },
+        ".bfields-row .bfields-segmented button": {
+          "height": "27px",
+          "paddingLeft": "18px",
+          "borderRadius": "6px",
+          "fontSize": "12px"
+        },
+        ".bfields-card:not(.bfields-card--rows)": {
+          "paddingTop": "19px",
+          "paddingLeft": "19px",
+          "borderRadius": "10px",
+          "borderTopWidth": "1px",
+          "borderTopColor": "rgb(229, 231, 235)",
+          "backgroundColor": "rgb(255, 255, 255)"
+        },
+        ".bfields-card--rows": {
+          "paddingLeft": "29px",
+          "paddingRight": "29px",
+          "marginRight": "-20px"
+        },
+        ".bfields-card__head": {
+          "columnGap": "10px"
+        },
+        ".bfields-card__desc": {
+          "marginTop": "1px",
+          "fontSize": "14px",
+          "color": "rgb(105, 112, 126)"
+        },
+        ".bfields-card__control": {
+          "marginTop": "18px"
+        },
+        ".bfields-mode:not(.bfields-mode--on)": {
+          "padding": "18px 12px",
+          "columnGap": "12px",
+          "borderRadius": "8px",
+          "borderTopWidth": "1px",
+          "borderTopColor": "rgb(229, 231, 235)"
+        },
+        ".bfields-mode__icon": {
+          "width": "28px",
+          "height": "28px",
+          "borderRadius": "6px"
+        },
+        ".bfields-mode__name": {
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "columnGap": "8px"
+        },
+        ".bfields-mode__tag": {
+          "height": "21px",
+          "fontSize": "12px",
+          "backgroundColor": "rgb(255, 255, 255)"
+        },
+        ".bfields-mode__perks": {
+          "marginTop": "7px",
+          "fontSize": "12px",
+          "columnGap": "14px",
+          "color": "rgb(0, 132, 61)"
+        },
+        ".bfields-mode-grid": {
+          "display": "grid",
+          "columnGap": "12px",
+          "rowGap": "12px"
+        },
+        ".bfields-row:not(:last-child)": {
+          "paddingTop": "14.9px",
+          "columnGap": "0px",
+          "borderBottomWidth": "1px",
+          "borderBottomColor": "rgb(241, 243, 245)"
+        },
+        ".bfields-row__icon": {
+          "width": "38px",
+          "height": "38px",
+          "borderRadius": "8px",
+          "marginRight": "15px"
+        },
+        ".bfields-row:not(.bfields-row--wide) > .bfields-row__control": {
+          "columnGap": "12px",
+          "marginLeft": "10px"
+        },
+        ".bfields-toggle__track": {
+          "width": "41px",
+          "height": "22px"
+        },
+        ".bfields-toggle__label": {
+          "fontSize": "12px",
+          "fontWeight": "500"
+        },
+        ".bfields-radios": {
+          "columnGap": "24px"
+        },
+        ".bfields-radio": {
+          "fontSize": "13px"
+        },
+        ".bfields-slider__value": {
+          "minWidth": "37px",
+          "height": "31px",
+          "borderRadius": "6px",
+          "fontSize": "12px",
+          "backgroundColor": "rgb(248, 250, 252)"
+        },
+        ".bfields-colorpick": {
+          "height": "28px",
+          "borderRadius": "8px",
+          "fontSize": "12px",
+          "paddingLeft": "13px"
+        },
+        ".bfields-colorpick__swatch": {
+          "width": "18px",
+          "height": "12px"
+        },
+        ".bfields-dim .bfields-input": {
+          "width": "70px",
+          "height": "30px",
+          "fontSize": "12px"
+        },
+        ".bfields-dim select": {
+          "height": "30px",
+          "fontSize": "12px"
+        },
+        ".bfields-title": {
+          "fontSize": "30px",
+          "fontWeight": "700",
+          "marginTop": "20px",
+          "paddingTop": "0px",
+          "color": "rgb(17, 24, 39)"
+        },
+        ".bfields-title-input": {
+          "height": "52px",
+          "marginTop": "23px",
+          "borderRadius": "8px",
+          "fontSize": "20px"
+        },
+        ".bfields-shortcode": {
+          "height": "61px",
+          "marginTop": "21px",
+          "borderRadius": "8px",
+          "backgroundColor": "rgb(243, 244, 246)"
+        },
+        ".bfields-shortcode__chip": {
+          "height": "38px",
+          "borderRadius": "8px",
+          "backgroundColor": "rgb(27, 92, 240)",
+          "fontSize": "14px",
+          "fontWeight": "600"
+        },
+        ".bfields-editor": {
+          "columnGap": "40px",
+          "paddingTop": "20px"
+        },
+        ".bfields-side": {
+          "rowGap": "13px"
+        },
+        ".bfields-preview": {
+          "borderRadius": "10px",
+          "borderTopColor": "rgb(229, 231, 235)"
+        },
+        ".bfields-preview__head": {
+          "paddingTop": "8px",
+          "borderBottomColor": "rgb(229, 231, 235)"
+        },
+        ".bfields-preview__title": {
+          "fontSize": "16px",
+          "fontWeight": "600"
+        },
+        ".bfields-preview__controls .bfields-icon-btn": {
+          "width": "32px",
+          "height": "32px",
+          "color": "rgb(75, 85, 99)"
+        },
+        ".bfields-side__heading": {
+          "fontSize": "16px",
+          "fontWeight": "700"
+        },
+        ".bfields-publish .bfields-btn--primary": {
+          "height": "45px",
+          "fontSize": "14px",
+          "fontWeight": "500"
+        },
+        ".bfields-publish .bfields-btn--ghost": {
+          "height": "45px",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "color": "rgb(100, 116, 139)"
+        },
+        ".bfields-stagecard": {
+          "borderTopWidth": "0px",
+          "minHeight": "673px"
+        },
+        ".bfields-stagecard__head": {
+          "paddingTop": "11px",
+          "borderBottomColor": "rgb(229, 236, 245)"
+        },
+        ".bfields-device": {
+          "height": "29px",
+          "fontSize": "10px"
+        },
+        ".bfields-stagecard__note": {
+          "height": "47px",
+          "fontSize": "11px",
+          "backgroundColor": "rgb(249, 251, 254)"
+        },
+        ".bfields-card:not(.bfields-card--rows) .bfields-segmented button": {
+          "height": "36px",
+          "paddingLeft": "20px",
+          "fontSize": "14px"
+        },
+        ".bfields-repeater__empty": {
+          "paddingTop": "24px",
+          "paddingLeft": "20px",
+          "rowGap": "14px",
+          "borderTopStyle": "dashed",
+          "borderTopWidth": "1px",
+          "borderRadius": "10px",
+          "backgroundColor": "rgb(248, 249, 250)"
+        },
+        ".bfields-repeater__hint": {
+          "fontSize": "14px",
+          "lineHeight": "20px",
+          "color": "rgb(105, 112, 126)"
+        },
+        ".bfields-repeater__empty .bfields-repeater__add": {
+          "height": "44px",
+          "columnGap": "8px",
+          "borderRadius": "8px",
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "backgroundColor": "rgb(239, 246, 255)",
+          "color": "rgb(27, 92, 240)"
+        },
+        ".bfields-number": {
+          "height": "30px",
+          "borderRadius": "8px",
+          "borderTopColor": "rgb(217, 227, 236)"
+        },
+        ".bfields-number:not(.bfields-number--stepper) .bfields-number__input": {
+          "fontSize": "12px",
+          "paddingLeft": "10px"
+        },
+        ".bfields-number__unit": {
+          "fontSize": "12px",
+          "color": "rgb(100, 116, 139)"
+        },
+        ".bfields-number--stepper .bfields-number__step:last-child": {
+          "width": "30px",
+          "borderLeftColor": "rgb(217, 227, 236)"
+        },
+        ".bfields-spacing .bfields-spacing__side": {
+          "height": "30px",
+          "borderRadius": "8px"
+        },
+        ".bfields-spacing .bfields-spacing__input": {
+          "width": "44px",
+          "fontSize": "12px"
+        },
+        ".bfields-spacing .bfields-spacing__unit": {
+          "height": "30px",
+          "fontSize": "12px"
+        },
+        ".bfields-spacing__link": {
+          "width": "30px",
+          "height": "30px",
+          "borderRadius": "8px"
+        }
+      },
+      "drop": [
+        ".bfields-segmented button",
+        ".bfields-row",
+        ".bfields-row__control"
+      ],
+      "_comment_a7": "`.bfields-dim__link` (28x28, the Style frame's chain beside Width and Height) was removed on 30 Sep 2026 by product decision F3: a single-axis dimensions field has nothing to link, so the button is no longer drawn, and every dimensions field on this screen is single-axis. The compact size stays in admin.css for a two-axis field in the editor.",
+      "_comment_repeater": "Repeater (ui/fields/Repeater.tsx, B1, 30 Sep 2026): no Figma frame exists, so these are the designed values from DESIGN-PRINCIPLES.md, not measurements. Only the empty state renders on an untouched demo screen (the Hotspots tab's single-model list); the row card is covered by tests/ts/repeater.test.ts and the standalone Playwright check in the stream-A2 report.",
+      "_comment_a8": "Spacing (ui/fields/Spacing.tsx, stream A8, 30 Sep 2026): no Figma frame; the designed Add New compact values (the NumberInput box at 30px, slate hairline) from DESIGN-PRINCIPLES.md, measured on the demo's Padding field (Style tab). The device switch, colour panel, source select and checklist render on no untouched demo tab of both the live and static screens, so they are covered by jest and the A8 Playwright run instead."
+    }
+  },
+  "_comment_slice2": "Number, code, fieldset and row media (ui/fields/NumberInput.tsx, Code.tsx, Fieldset.tsx, MediaInline.tsx; stream A5, 30 Sep 2026): no Figma frame exists, so these are the designed values from DESIGN-PRINCIPLES.md, not measurements. `.bfields-code__input` is the fallback textarea; in wp-admin core CodeMirror hides it, and its computed values are still the contract. The textarea and the attachment (`media`) row control render on no untouched demo tab; tests/ts/fields-slice2.test.ts and the stream-A5 Playwright check cover them."
+}

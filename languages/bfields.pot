@@ -1,0 +1,834 @@
+# Copyright (C) 2026 bPlugins
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: bfields 1.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bfields\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-05T09:10:34+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: bfields\n"
+
+#: php/compat/Codestar.php:78
+msgid "bfields does not implement Customizer options. Keep this screen on Codestar."
+msgstr ""
+
+#: php/compat/Codestar.php:90
+msgid "bfields does not implement the shortcode generator. Keep this screen on Codestar."
+msgstr ""
+
+#: php/compat/Codestar.php:102
+msgid "bfields does not implement widgets. Keep this screen on Codestar."
+msgstr ""
+
+#: php/includes/Choices.php:110
+#: php/includes/Choices.php:130
+#: php/includes/Choices.php:159
+msgid "Unknown field."
+msgstr ""
+
+#: php/includes/Choices.php:121
+msgid "You do not have permission to do that."
+msgstr ""
+
+#: php/includes/Metabox.php:340
+msgid "Copy and paste this shortcode into your posts, pages and widget"
+msgstr ""
+
+#: php/includes/Metabox.php:349
+msgid "Move to Trash"
+msgstr ""
+
+#: php/includes/Metabox.php:349
+msgid "Delete permanently"
+msgstr ""
+
+#: php/includes/Metabox.php:378
+#: build/index.js:20
+msgid "Post updated."
+msgstr ""
+
+#: php/includes/Metabox.php:420
+#: build/index.js:20
+msgid "These settings were not saved: your account is not allowed to change them."
+msgstr ""
+
+#: php/includes/Metabox.php:431
+msgid "These settings were not saved because the page was open too long. Make your changes again and click Update."
+msgstr ""
+
+#: php/includes/Mount.php:88
+msgid "Loading these settings…"
+msgstr ""
+
+#: php/includes/Mount.php:88
+msgid "Loading the settings…"
+msgstr ""
+
+#: php/includes/Mount.php:96
+msgid "These settings are taking longer than usual to load, or they could not load on this site. Nothing has changed: saving the post will not change them."
+msgstr ""
+
+#: php/includes/Mount.php:97
+msgid "This screen is taking longer than usual to load, or it could not load on this site. Your saved settings are safe and unchanged."
+msgstr ""
+
+#: php/includes/Mount.php:101
+#: build/index.js:20
+msgid "Switch to the classic interface"
+msgstr ""
+
+#: php/includes/OptionsPage.php:134
+msgid "You do not have permission to edit these settings."
+msgstr ""
+
+#: php/includes/OptionsPage.php:194
+#: php/includes/OptionsPage.php:226
+msgid "Unknown settings screen."
+msgstr ""
+
+#: php/includes/OptionsPage.php:204
+msgid "You do not have permission to save these settings."
+msgstr ""
+
+#: php/includes/OptionsPage.php:232
+msgid "Malformed request."
+msgstr ""
+
+#: php/includes/OptionsPage.php:242
+#: build/index.js:18
+msgid "This page is out of date. Reload and try again."
+msgstr ""
+
+#: php/includes/OptionsPage.php:253
+#: php/includes/OptionsPage.php:260
+msgid "Reset is not available on this screen."
+msgstr ""
+
+#: php/includes/OptionsPage.php:271
+msgid "Nothing to save."
+msgstr ""
+
+#. translators: %s: Codestar `database` value.
+#: php/includes/Registry.php:121
+#, php-format
+msgid "bfields does not implement the \"%s\" database option. Keep this screen on Codestar."
+msgstr ""
+
+#. translators: %s: Codestar `data_type` value.
+#: php/includes/Registry.php:126
+#, php-format
+msgid "bfields does not implement data_type \"%s\" for meta boxes. Keep this screen on Codestar."
+msgstr ""
+
+#: php/includes/Sanitizer.php:206
+msgid "This value is not valid."
+msgstr ""
+
+#: php/includes/Schema.php:349
+msgid "A \"field_group\" holds no value: its \"default\" and \"responsive\" keys are ignored. Set them on its fields."
+msgstr ""
+
+#: php/includes/Schema.php:358
+msgid "A \"field_group\" inside another \"field_group\" is not drawn as its own card; its fields join the outer group."
+msgstr ""
+
+#: php/includes/Schema.php:364
+msgid "A \"field_group\" inside a repeater row or a fieldset is not drawn as a card; its fields are shown flat."
+msgstr ""
+
+#. translators: %s: field_group id.
+#: php/includes/Schema.php:452
+#, php-format
+msgid "The field_group id \"%s\" is also used by a field or another group on this screen. Group ids are never stored, but they must be unique."
+msgstr ""
+
+#: php/includes/Schema.php:532
+msgid "A \"field_group\" dependency and a field dependency inside it disagree on the global (4th) flag; Codestar applies one flag to both."
+msgstr ""
+
+#. translators: %s: field type.
+#: php/includes/Schema.php:613
+#, php-format
+msgid "bfields has no renderer for the field type \"%s\". Its stored value is preserved but it cannot be edited. Map it with the bfields_type_map filter."
+msgstr ""
+
+#. translators: %s: field type.
+#: php/includes/Schema.php:1087
+#, php-format
+msgid "A \"%s\" field cannot be responsive. Make its sub-fields responsive instead."
+msgstr ""
+
+#: php/includes/Storage/PostMeta.php:157
+msgid "bfields only stores meta boxes with data_type \"serialize\". Nothing was saved."
+msgstr ""
+
+#: build/index.js:1
+msgid "value"
+msgstr ""
+
+#: build/index.js:2
+#, js-format
+msgid "Increase %s"
+msgstr ""
+
+#: build/index.js:3
+#, js-format
+msgid "Decrease %s"
+msgstr ""
+
+#: build/index.js:3
+msgid "Search"
+msgstr ""
+
+#. translators: %d: how many characters to type before a search runs.
+#: build/index.js:4
+#, js-format
+msgid "Type at least %d character to search."
+msgid_plural "Type at least %d characters to search."
+msgstr[0] ""
+msgstr[1] ""
+
+#: build/index.js:4
+msgid "Searching…"
+msgstr ""
+
+#: build/index.js:4
+msgid "Could not load the results. Try again."
+msgstr ""
+
+#: build/index.js:4
+msgid "No matches."
+msgstr ""
+
+#. translators: %d: number of search results.
+#: build/index.js:5
+#, js-format
+msgid "%d result available."
+msgid_plural "%d results available."
+msgstr[0] ""
+msgstr[1] ""
+
+#: build/index.js:5
+msgid "Type to search…"
+msgstr ""
+
+#. translators: %s: the chosen item, e.g. a product name.
+#. translators: %s: row title.
+#: build/index.js:6
+#: build/index.js:7
+#: build/index.js:10
+#: build/index.js:34
+#, js-format
+msgid "Remove %s"
+msgstr ""
+
+#: build/index.js:6
+#: build/index.js:7
+#: build/index.js:10
+#: build/index.js:23
+#: build/index.js:34
+msgid "Remove"
+msgstr ""
+
+#: build/index.js:7
+msgid "(not set)"
+msgstr ""
+
+#. translators: %s: a stored value that is no longer one of the options.
+#: build/index.js:8
+#, js-format
+msgid "%s (not available)"
+msgstr ""
+
+#: build/index.js:8
+#: build/index.js:22
+msgid "Colour"
+msgstr ""
+
+#: build/index.js:8
+msgid "Pick a colour"
+msgstr ""
+
+#: build/index.js:8
+#: build/index.js:9
+#: build/index.js:22
+msgid "Default"
+msgstr ""
+
+#: build/index.js:8
+msgid "Colour value"
+msgstr ""
+
+#: build/index.js:8
+msgid "Opacity"
+msgstr ""
+
+#: build/index.js:8
+msgid "Not available"
+msgstr ""
+
+#: build/index.js:8
+msgid "Transparent"
+msgstr ""
+
+#. translators: %s: the field's default colour, e.g. "#ffffff".
+#: build/index.js:9
+#, js-format
+msgid "Back to %s"
+msgstr ""
+
+#: build/index.js:9
+msgid "Clear"
+msgstr ""
+
+#: build/index.js:9
+msgid "file"
+msgstr ""
+
+#: build/index.js:10
+msgid "Not selected"
+msgstr ""
+
+#: build/index.js:10
+#: build/index.js:12
+#: build/index.js:22
+#: build/index.js:23
+msgid "Upload"
+msgstr ""
+
+#: build/index.js:10
+#: build/index.js:22
+msgid "No file selected"
+msgstr ""
+
+#. translators: 1: width in pixels, 2: height in pixels.
+#: build/index.js:11
+#: build/index.js:23
+#, js-format
+msgid "%1$s × %2$spx"
+msgstr ""
+
+#: build/index.js:12
+#, js-format
+msgid "Replace %s"
+msgstr ""
+
+#: build/index.js:12
+msgid "Replace"
+msgstr ""
+
+#: build/index.js:12
+#: build/index.js:20
+msgid "Desktop"
+msgstr ""
+
+#: build/index.js:12
+#: build/index.js:20
+msgid "Tablet"
+msgstr ""
+
+#: build/index.js:12
+#: build/index.js:20
+msgid "Mobile"
+msgstr ""
+
+#: build/index.js:12
+msgid "Device"
+msgstr ""
+
+#. translators: %s: device name, e.g. "Tablet".
+#: build/index.js:13
+#, js-format
+msgid "%s (has its own value)"
+msgstr ""
+
+#. translators: %s: device name, e.g. "Tablet".
+#: build/index.js:14
+#, js-format
+msgid "Clear the %s value"
+msgstr ""
+
+#. translators: %s: device name, e.g. "Tablet".
+#: build/index.js:15
+#, js-format
+msgid "Clear the %s value and inherit it"
+msgstr ""
+
+#. translators: %s: field type, e.g. "repeater".
+#: build/index.js:16
+#, js-format
+msgid "“%s” cannot be edited in this interface yet. Its saved value is preserved."
+msgstr ""
+
+#: build/index.js:16
+msgid "Pro"
+msgstr ""
+
+#. translators: %d: the row's position in the list.
+#: build/index.js:18
+#, js-format
+msgid "Item %d"
+msgstr ""
+
+#: build/index.js:18
+msgid "Top"
+msgstr ""
+
+#: build/index.js:18
+msgid "Right"
+msgstr ""
+
+#: build/index.js:18
+msgid "Bottom"
+msgstr ""
+
+#: build/index.js:18
+msgid "Left"
+msgstr ""
+
+#: build/index.js:18
+msgid "(has errors)"
+msgstr ""
+
+#: build/index.js:18
+msgid "Drag to resize · double-click to reset"
+msgstr ""
+
+#: build/index.js:18
+msgid "Page width"
+msgstr ""
+
+#: build/index.js:18
+msgid "Tabs on top"
+msgstr ""
+
+#: build/index.js:18
+msgid "Tabs in a sidebar"
+msgstr ""
+
+#: build/index.js:18
+msgid "Tab layout"
+msgstr ""
+
+#: build/index.js:18
+msgid "Your session expired. Reload the page and save again — your changes are still here."
+msgstr ""
+
+#: build/index.js:18
+msgid "Could not save. Your changes have not been lost."
+msgstr ""
+
+#. translators: %s: list of "Field: message" pairs.
+#: build/index.js:19
+#, js-format
+msgid "Saved, except: %s"
+msgstr ""
+
+#: build/index.js:19
+msgid "Settings saved."
+msgstr ""
+
+#: build/index.js:19
+msgid "Settings restored to their defaults."
+msgstr ""
+
+#: build/index.js:19
+msgid "Could not save."
+msgstr ""
+
+#: build/index.js:19
+msgid "Unsaved changes on this page will be lost."
+msgstr ""
+
+#: build/index.js:19
+msgid "Search settings..."
+msgstr ""
+
+#: build/index.js:19
+msgid "Search settings"
+msgstr ""
+
+#: build/index.js:19
+#: build/index.js:20
+msgid "Tab column width"
+msgstr ""
+
+#. translators: %s: the user's search term.
+#: build/index.js:20
+#, js-format
+msgid "No settings match “%s”."
+msgstr ""
+
+#: build/index.js:20
+msgid "Unsaved changes"
+msgstr ""
+
+#: build/index.js:20
+msgid "Saving..."
+msgstr ""
+
+#: build/index.js:20
+msgid "Save Changes"
+msgstr ""
+
+#: build/index.js:20
+msgid "Restore this section to its default settings?"
+msgstr ""
+
+#: build/index.js:20
+msgid "Reset Section"
+msgstr ""
+
+#: build/index.js:20
+msgid "Restore every setting on this page to its default? This cannot be undone."
+msgstr ""
+
+#: build/index.js:20
+msgid "Reset All"
+msgstr ""
+
+#: build/index.js:20
+msgid "Could not confirm the save. Click Update again to save normally."
+msgstr ""
+
+#: build/index.js:20
+msgid "Could not confirm the save. Check your connection and click Update again."
+msgstr ""
+
+#: build/index.js:20
+msgid "You were logged out. Log in, then click Update again."
+msgstr ""
+
+#: build/index.js:20
+msgid "Your session was refreshed. Click Update again."
+msgstr ""
+
+#: build/index.js:20
+msgid "These settings were not saved because the page was open too long. Click Update again."
+msgstr ""
+
+#: build/index.js:20
+msgid "The post was saved, but other settings on this page were not. Click Update again to see why."
+msgstr ""
+
+#: build/index.js:20
+msgid "Some settings were not saved:"
+msgstr ""
+
+#: build/index.js:20
+msgid "Saved. Update again to save your newer changes."
+msgstr ""
+
+#: build/index.js:20
+msgid "The post was saved, but these settings were not. Click Update again to save them."
+msgstr ""
+
+#: build/index.js:20
+msgid "Update"
+msgstr ""
+
+#: build/index.js:20
+msgid "Schedule"
+msgstr ""
+
+#: build/index.js:20
+msgid "Publish"
+msgstr ""
+
+#: build/index.js:20
+msgid "Submit for Review"
+msgstr ""
+
+#: build/index.js:20
+msgid "Save as Pending"
+msgstr ""
+
+#: build/index.js:20
+msgid "Save Draft"
+msgstr ""
+
+#: build/index.js:20
+msgid "Reset every setting on this tab to its default?"
+msgstr ""
+
+#: build/index.js:20
+msgid "Reset to Default"
+msgstr ""
+
+#: build/index.js:20
+msgid "Save Change"
+msgstr ""
+
+#: build/index.js:20
+msgid "Copy shortcode"
+msgstr ""
+
+#: build/index.js:20
+msgid "Copied"
+msgstr ""
+
+#: build/index.js:20
+msgid "Shortcode"
+msgstr ""
+
+#: build/index.js:20
+msgid "Updating…"
+msgstr ""
+
+#: build/index.js:20
+msgid "Saved"
+msgstr ""
+
+#: build/index.js:20
+msgid "Partly saved — show message"
+msgstr ""
+
+#: build/index.js:20
+msgid "Not saved — show message"
+msgstr ""
+
+#: build/index.js:20
+msgid "Add title"
+msgstr ""
+
+#: build/index.js:20
+msgid "Sidebar width"
+msgstr ""
+
+#: build/index.js:20
+msgid "The settings interface failed to load"
+msgstr ""
+
+#: build/index.js:20
+msgid "Your saved settings are safe and unchanged. You can keep working in the classic interface while this is fixed."
+msgstr ""
+
+#: build/index.js:20
+msgid "Your saved settings are safe and unchanged. Reload the page, and if this keeps happening, ask a site administrator for help."
+msgstr ""
+
+#: build/index.js:20
+msgid "Technical details"
+msgstr ""
+
+#: build/index.js:20
+msgid "Show more"
+msgstr ""
+
+#: build/index.js:20
+msgid "Show less"
+msgstr ""
+
+#: build/index.js:20
+msgid "Enabled"
+msgstr ""
+
+#: build/index.js:20
+msgid "No"
+msgstr ""
+
+#: build/index.js:20
+msgid "Disabled"
+msgstr ""
+
+#: build/index.js:20
+msgid "Selector"
+msgstr ""
+
+#: build/index.js:20
+msgid "Copy selector"
+msgstr ""
+
+#: build/index.js:20
+msgid "Copy"
+msgstr ""
+
+#. translators: %s: options source, e.g. "posts".
+#: build/index.js:21
+#, js-format
+msgid "Options from “%s” cannot be chosen in this interface yet."
+msgstr ""
+
+#. translators: 1: the stored value, 2: options source, e.g. "posts".
+#: build/index.js:22
+#, js-format
+msgid "Saved value: %1$s. Options from “%2$s” cannot be chosen in this interface yet; it is kept as it is."
+msgstr ""
+
+#: build/index.js:22
+msgid "Select All"
+msgstr ""
+
+#: build/index.js:22
+msgid "Deselect All"
+msgstr ""
+
+#: build/index.js:22
+msgid "Select Color"
+msgstr ""
+
+#: build/index.js:22
+msgid "Width"
+msgstr ""
+
+#: build/index.js:22
+msgid "Height"
+msgstr ""
+
+#: build/index.js:22
+msgid "Keep width and height in proportion"
+msgstr ""
+
+#: build/index.js:22
+msgid "Select file"
+msgstr ""
+
+#: build/index.js:22
+msgid "No image selected"
+msgstr ""
+
+#: build/index.js:23
+msgid "JPG, PNG, WebP or SVG"
+msgstr ""
+
+#: build/index.js:23
+msgid "General"
+msgstr ""
+
+#: build/index.js:23
+msgid "Add New"
+msgstr ""
+
+#. translators: 1: row title, 2: new position, 3: number of rows.
+#: build/index.js:24
+#, js-format
+msgid "%1$s moved to position %2$d of %3$d."
+msgstr ""
+
+#: build/index.js:24
+msgid "Reorder cancelled."
+msgstr ""
+
+#. translators: 1: row title, 2: its position, 3: number of rows.
+#: build/index.js:25
+#, js-format
+msgid "%1$s added, item %2$d of %3$d."
+msgstr ""
+
+#. translators: %d: the fewest rows the list may hold.
+#: build/index.js:26
+#, js-format
+msgid "Add at least %d item."
+msgid_plural "Add at least %d items."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: the most rows the list may hold.
+#: build/index.js:27
+#, js-format
+msgid "You cannot add more than %d item."
+msgid_plural "You cannot add more than %d items."
+msgstr[0] ""
+msgstr[1] ""
+
+#: build/index.js:27
+msgid "Drag, or press the up and down arrow keys, to reorder."
+msgstr ""
+
+#. translators: %s: the add button's label, e.g. "Add New Model".
+#: build/index.js:28
+#, js-format
+msgid "Nothing here yet. Use “%s” to add the first one."
+msgstr ""
+
+#. translators: %s: row title.
+#: build/index.js:29
+#, js-format
+msgid "Reorder %s"
+msgstr ""
+
+#: build/index.js:29
+msgid "Drag to reorder"
+msgstr ""
+
+#. translators: %s: row title.
+#: build/index.js:30
+#, js-format
+msgid "Move %s up"
+msgstr ""
+
+#: build/index.js:30
+msgid "Move up"
+msgstr ""
+
+#. translators: %s: row title.
+#: build/index.js:31
+#, js-format
+msgid "Move %s down"
+msgstr ""
+
+#: build/index.js:31
+msgid "Move down"
+msgstr ""
+
+#. translators: %s: row title.
+#: build/index.js:32
+#, js-format
+msgid "Duplicate %s"
+msgstr ""
+
+#: build/index.js:32
+msgid "Duplicate"
+msgstr ""
+
+#. translators: 1: row title, 2: position of the copy.
+#: build/index.js:33
+#, js-format
+msgid "%1$s duplicated as item %2$d."
+msgstr ""
+
+#: build/index.js:34
+msgid "Are you sure to delete this item?"
+msgstr ""
+
+#. translators: 1: row title, 2: number of rows left.
+#: build/index.js:35
+#, js-format
+msgid "%1$s removed, %2$d item left."
+msgid_plural "%1$s removed, %2$d items left."
+msgstr[0] ""
+msgstr[1] ""
+
+#: build/index.js:35
+msgid "In the editor, Tab indents. Press Escape, then Tab, to move on."
+msgstr ""
+
+#: build/index.js:35
+msgid "unit"
+msgstr ""
+
+#: build/index.js:35
+msgid "Unlink sides"
+msgstr ""
+
+#: build/index.js:35
+msgid "Link sides"
+msgstr ""
+
+#: build/index.js:35
+msgid "URL"
+msgstr ""
+
+#: build/index.js:35
+msgid "Link text"
+msgstr ""
+
+#: build/index.js:35
+msgid "New tab"
+msgstr ""
